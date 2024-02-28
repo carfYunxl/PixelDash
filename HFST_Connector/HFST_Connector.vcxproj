@@ -102,8 +102,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\RawData</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -171,6 +171,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\CommandIO\HFST_CommandIO.hpp" />
     <ClInclude Include="src\HFST_APICenter.hpp" />
     <ClInclude Include="src\HFST_CommonHeader.hpp" />
     <ClInclude Include="src\HFST_DeviceManager.hpp" />
@@ -187,11 +188,13 @@
     <ClInclude Include="Dependency\include\Win_USB_Driver.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\HFST_Connector.hpp" />
-    <ClInclude Include="src\HFST_RawData.hpp" />
+    <ClInclude Include="src\RawData\HFST_IRawFormat.hpp" />
+    <ClInclude Include="src\RawData\HFST_RawManager.hpp" />
     <ClInclude Include="src\HFST_StaticTemplateFunctions.hpp" />
     <ClInclude Include="src\HFST_TouchDevice.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CommandIO\HFST_CommandIO.cpp" />
     <ClCompile Include="src\HFST_DeviceManager.cpp" />
     <ClCompile Include="src\HFST_DummyWindow.cpp" />
     <ClCompile Include="src\HFST_Exception.cpp" />
@@ -204,7 +207,8 @@
     </ClCompile>
     <ClCompile Include="src\HFST_Connector.cpp" />
     <ClCompile Include="src\HFST_DllLoader.cpp" />
-    <ClCompile Include="src\HFST_RawData.cpp" />
+    <ClCompile Include="src\RawData\HFST_IRawFormat.cpp" />
+    <ClCompile Include="src\RawData\HFST_RawManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

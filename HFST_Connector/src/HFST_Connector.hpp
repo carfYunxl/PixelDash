@@ -4,7 +4,8 @@
 #include <memory>
 #include "HFST_APICenter.hpp"
 #include "HFST_CommonHeader.hpp"
-#include "HFST_RawData.hpp"
+#include "HFST_RawManager.hpp"
+
 namespace HFST
 {
     class USB_Manager;
@@ -39,7 +40,6 @@ namespace HFST
         std::pair<int, int>  GetRxTxCnt()       const { return { m_IcInfo.nNumX,m_IcInfo.nNumY };   }
         int                  GetStatus()        const { return m_IcInfo.nStatus;                  }
         std::vector<I2CAddr> GetI2CAddr()       const { return m_vI2CAddr;                        }
-
         IC_Info              IC_GetInfo()       const { return m_IcInfo; }
         std::pair<int, int>  GetResXY()         const { return { m_IcInfo.nResX, m_IcInfo .nResY};}
         std::string          GetFwRevision()    const { return m_IcInfo.strRevision; }
@@ -49,7 +49,7 @@ namespace HFST
         std::vector<I2CAddr>    m_vI2CAddr;
 
     private:
-        HFST_Library  m_API;
+        HFST_API  m_API;
         GUID      m_Guid;
         int       m_nCurrentI2CAddr;
         double    m_dCurrentVDD;
@@ -57,7 +57,8 @@ namespace HFST
         TL_Info   m_TLInfo;
         IC_Status m_ICStatus;
         IC_Info   m_IcInfo;
-        RawData*   m_Raw;
+
+        RawData*  m_Raw;
     };
 }
 

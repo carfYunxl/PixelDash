@@ -1,6 +1,7 @@
 #include "QCMNR.h"
 #include "HFST_Connector.hpp"
 #include "HFST_Exception.hpp"
+#include "HFST_APICenter.hpp"
 #include "InfoDialog.h"
 #include <QToolButton>
 #include <Dbt.h>
@@ -22,7 +23,7 @@ QCMNR::QCMNR(QWidget *parent)
     ui.setupUi(this);
     resize(1920, 1080);
 
-    /*if ( !m_Connector->Connect() )
+    if ( !m_Connector->Connect() )
     {
         throw HFST::HFST_Exception("Connected Failed!");
     }
@@ -31,7 +32,7 @@ QCMNR::QCMNR(QWidget *parent)
     if ( !RegisterUSBDevice() )
     {
         throw HFST::HFST_Exception("Register USB Device Failed!");
-    }*/
+    }
     ui.textEdit_Log->append("Register USB Device Success!");
 
     InitUI_ICInfomation();

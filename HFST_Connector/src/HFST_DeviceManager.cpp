@@ -5,8 +5,9 @@
 
 namespace HFST
 {
-	USB_Manager::USB_Manager()
+	USB_Manager::USB_Manager(const HFST_API& api)
 		: m_hUSBDevNotify(NULL)
+		, m_Api(api)
 	{
 	}
 
@@ -49,23 +50,22 @@ namespace HFST
 
 	bool USB_Manager::Check_USB_BULK_Status(int device_index) const
 	{
-		auto& API = HFST_Library::GetAPI();
-		int retNum = API.BULK.USBComm_InitEx(1500, device_index);
+		int retNum = m_Api.BULK.USBComm_InitEx(1500, device_index);
 		if (retNum < 0) {
-			API.BULK.USBComm_FinishEx();
+			m_Api.BULK.USBComm_FinishEx();
 			return false;
 		}
 
-		retNum = API.BULK.USBComm_CheckBulkInEx();
+		retNum = m_Api.BULK.USBComm_CheckBulkInEx();
 		if (retNum == 0) {
-			API.BULK.USBComm_FinishEx();
+			m_Api.BULK.USBComm_FinishEx();
 			return false;
 		}
 
-		retNum = API.BULK.USBComm_CheckBulkOutEx();
+		retNum = m_Api.BULK.USBComm_CheckBulkOutEx();
 		if (retNum == 0)
 		{
-			API.BULK.USBComm_FinishEx();
+			m_Api.BULK.USBComm_FinishEx();
 			return false;
 		}
 		return true;

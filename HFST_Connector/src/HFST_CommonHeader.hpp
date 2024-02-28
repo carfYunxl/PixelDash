@@ -86,6 +86,7 @@ namespace HFST
         constexpr size_t GESTURE    = 0x10;
         constexpr size_t KEYS       = 0x11;
         constexpr size_t COORD      = 0x12;
+        constexpr size_t RAW        = 0x40;
 
         constexpr size_t MISC_INFO  = 0xF0;
         constexpr size_t MISC_CTL   = 0xF1;
@@ -95,6 +96,63 @@ namespace HFST
         constexpr size_t NUM_X      = 0xF5;
         constexpr size_t NUM_Y      = 0xF6;
         constexpr size_t NUM_KEY    = 0xF7;
+
+        constexpr size_t CMDIO_CTRL    = 0xF8;
+    }
+
+    namespace RAW
+    {
+        // some definition
+        template<typename T>
+        using Vec = std::vector<T>;
+
+        template<typename T>
+        using DualVec = std::vector<std::vector<T>>;
+
+        // some structure
+        enum class RawMode {
+            RAW = 0,
+            DELTA,
+            DIST
+        };
+
+        template<typename T>
+        struct Frame
+        {
+            void Clear()
+            {
+                vctHeader.clear();
+                vctKey.clear();
+                vctKeyNs.clear();
+                vctMutual.clear();
+                vctMuNoise.clear();
+                vctXSelf.clear();
+                vctXSelfNs.clear();
+                vctYSelf.clear();
+                vctYSelfNs.clear();
+            }
+
+            Vec<T>      vctHeader;
+            Vec<T>      vctKey;
+            Vec<T>      vctKeyNs;
+            DualVec<T>  vctMutual;
+            DualVec<T>  vctMuNoise;
+            DualVec<T>  vctXSelf;
+            DualVec<T>  vctXSelfNs;
+            DualVec<T>  vctYSelf;
+            DualVec<T>  vctYSelfNs;
+        };
+    }
+
+    namespace COMMAND_IO
+    {
+        enum State
+        {
+            OK = 0x00,
+            PROCESSING = 0x01,
+            UNKNOWN_ID = 0x80,
+            CHECKSUM_ERROR = 0x81
+        };
     }
 }
 

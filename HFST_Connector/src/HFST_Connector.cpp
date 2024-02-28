@@ -24,7 +24,7 @@ namespace HFST
             return false;
         std::cout << "Load dll success!\n";
 
-        USB_Manager usbManager;
+        USB_Manager usbManager(m_API);
         SetGUID(usbManager.GetGUID());
 
         // ¼ì²éBULKµÄ×´Ì¬

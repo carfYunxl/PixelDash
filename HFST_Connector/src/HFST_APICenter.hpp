@@ -8,7 +8,7 @@
 
 namespace HFST
 {
-    struct HFST_Library
+    struct HFST_API
     {
         TTK_Communication_API   TTK;
         Bulk_API                BULK;
@@ -38,13 +38,6 @@ namespace HFST
 
             return true;
         }
-
-        static HFST_Library& GetAPI() {
-            return m_API;
-        }
-
-    private:
-        static HFST_Library m_API;
     };
 }
 

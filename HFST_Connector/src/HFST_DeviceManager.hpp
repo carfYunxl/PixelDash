@@ -3,12 +3,11 @@
 
 namespace HFST
 {
-
-    struct HFST_Library;
+    struct HFST_API;
     class USB_Manager
     {
     public:
-        USB_Manager();
+        USB_Manager(const HFST_API& api);
         void Register();
 
         int  DetectUSBConnectCount() const;
@@ -25,6 +24,8 @@ namespace HFST
                             0x4B2D,
                             {0xA1, 0xA3, 0x55, 0xEA, 0x7B, 0xB2, 0xAE, 0x60}
                         };
+
+        const HFST_API& m_Api;
     };
 }
 

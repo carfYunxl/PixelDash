@@ -69,7 +69,13 @@
     <ClInclude Include="src\HFST_CommonHeader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_RawData.hpp">
+    <ClInclude Include="src\RawData\HFST_RawManager.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RawData\HFST_IRawFormat.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CommandIO\HFST_CommandIO.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +101,13 @@
     <ClCompile Include="src\HFST_DummyWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_RawData.cpp">
+    <ClCompile Include="src\RawData\HFST_RawManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RawData\HFST_IRawFormat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommandIO\HFST_CommandIO.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
