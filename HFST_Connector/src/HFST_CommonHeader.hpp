@@ -88,6 +88,8 @@ namespace HFST
         constexpr size_t COORD      = 0x12;
         constexpr size_t RAW        = 0x40;
 
+        constexpr size_t CMDIO_PORT = 0xD0;
+
         constexpr size_t MISC_INFO  = 0xF0;
         constexpr size_t MISC_CTL   = 0xF1;
 
@@ -146,12 +148,29 @@ namespace HFST
 
     namespace COMMAND_IO
     {
+        constexpr size_t CMDIO_PACK_SIZE = 30;
         enum State
         {
             OK = 0x00,
             PROCESSING = 0x01,
             UNKNOWN_ID = 0x80,
             CHECKSUM_ERROR = 0x81
+        };
+
+        enum CmdID
+        {
+            WRITE = 0x01,
+            READ,
+            GET_INFO = 0x04
+        };
+
+        enum MEMORY_TYPE
+        {
+            MCU_MEM = 0,
+            MCU_SFRs,
+            MCU_ROM,
+            AFE_MEM,
+            AFE_REG
         };
     }
 }

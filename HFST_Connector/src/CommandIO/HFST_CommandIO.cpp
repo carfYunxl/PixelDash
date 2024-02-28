@@ -21,7 +21,7 @@ namespace HFST
 		return true;
 	}
 
-	bool CommandIO::IsCommandFinished()
+	bool CommandIO::GetCommandReady()
 	{
 		unsigned char bufferFinish = 0xFF;
 
@@ -60,43 +60,46 @@ namespace HFST
 
 		if ( nRetry <= 0 )
 			return false;
+
 		return true;
 	}
 
-	bool TDU_ReadIOCommand(CommandIoPacket* packet) {
-		bool bRet = FALSE;
-		int ret;
-		unsigned char tmp[A8008_CMD_IO_PKT_SIZE];
-		//process commmand
-		memset(tmp, 0, A8008_CMD_IO_PKT_SIZE);
-		ret = ReadI2CReg(tmp, TDU_A8008_DP_CMD_IO_PORT, A8008_CMD_IO_PKT_SIZE);
-		if (ret <= 0) {
-			TRACE("TDU_ReadIOCommand: read packet error.\n");
-			bRet = FALSE;
-		}
-		else {
-			memcpy((void*)packet, (const void*)tmp, A8008_CMD_IO_PKT_SIZE);
-			bRet = TRUE;
-		}
-		return bRet;
+	bool CommandIO::Read_Packet( CommandIO_Packet& packet )
+	{
+		unsigned char buffer[COMMAND_IO::CMDIO_PACK_SIZE + 2]{0};
+
+		int ret = m_Api.TTK.ReadI2CReg( buffer, ADDR_MAP::CMDIO_PORT, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
+
+		if ( ret <= 0 )
+			return false;
+
+		packet.nCmdID = buffer[0];
+		packet.nDataSize = buffer[1];
+		memcpy( packet.Data, &buffer[2], COMMAND_IO::CMDIO_PACK_SIZE );
+
+		return true;
 	}
 
-	bool TDU_WriteIOCommand(CommandIoPacket* packet) {
-		bool bRet = FALSE;
-		int ret;
-		unsigned char tmp[A8008_CMD_IO_PKT_SIZE];
-		memset(tmp, 0x00, A8008_CMD_IO_PKT_SIZE);
-		memcpy((void*)tmp, (const void*)packet, A8008_CMD_IO_PKT_SIZE);
+	bool CommandIO::Write_Packet( const CommandIO_Packet& packet )
+	{
+		unsigned char buffer[COMMAND_IO::CMDIO_PACK_SIZE + 2]{ 0 };
 
-		ret = WriteI2CReg(tmp, TDU_A8008_DP_CMD_IO_PORT, 32);
-		if (ret <= 0) {
-			TRACE("TDU_WriteIOCommand: write packet error.\n");
-			bRet = FALSE;
-		}
-		else {
-			bRet = TRUE;
-		}
+		memcpy_s( buffer, COMMAND_IO::CMDIO_PACK_SIZE + 2, &packet, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
 
-		return bRet;
+		int ret = m_Api.TTK.WriteI2CReg( buffer, ADDR_MAP::CMDIO_PORT, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
+
+		if (ret < 0)
+			return false;
+
+		return true;
+	}
+
+	void CommandIO::Read(int type, int address, unsigned char* buf, int len, unsigned char ChipId)
+	{
+
+	}
+	void CommandIO::Write(int type, int address, unsigned char* buf, int len, unsigned char ChipId)
+	{
+
 	}
 }
