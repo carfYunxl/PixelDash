@@ -57,10 +57,10 @@
     <ClInclude Include="src\HFST_APICenter.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_TouchDevice.hpp">
+    <ClInclude Include="src\TouchDevice\HFST_TouchDevice.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_StaticTemplateFunctions.hpp">
+    <ClInclude Include="src\TouchDevice\HFST_StaticTemplateFunctions.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\HFST_DummyWindow.hpp">

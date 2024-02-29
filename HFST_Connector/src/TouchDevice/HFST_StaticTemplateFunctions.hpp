@@ -26,6 +26,19 @@ namespace HFST
     {
         return device.JumpToSWISP(protocol);
     }
+
+    unsigned short CalculateChecksum( unsigned char* pInData, unsigned long Len )
+    {
+        unsigned char LowByteChecksum;
+        int nCheckSum = 0;
+        for (unsigned long i = 0; i < Len; i++)
+        {
+            nCheckSum += (unsigned short)pInData[i];
+            LowByteChecksum = (unsigned char)(nCheckSum & 0xFF);
+            LowByteChecksum = (LowByteChecksum) >> 7 | (LowByteChecksum) << 1;
+            nCheckSum = (nCheckSum & 0xFF00) | LowByteChecksum;
+        }
+    }
 }
 
 
