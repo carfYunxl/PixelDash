@@ -57,8 +57,6 @@ namespace HFST
         TL_Info   m_TLInfo;
         IC_Status m_ICStatus;
         IC_Info   m_IcInfo;
-
-        RawData*  m_Raw;
     };
 }
 

@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "HFST_CommandIO.hpp"
 #include "HFST_APICenter.hpp"
-#include "TouchDevice/HFST_TouchDevice.hpp"
-#include "TouchDevice/HFST_StaticTemplateFunctions.hpp"
+#include "HFST_TouchDevice.hpp"
+#include "HFST_StaticTemplateFunctions.hpp"
 
 namespace HFST
 {
-	CommandIO::CommandIO(const HFST_API& api, ChipID nChipID)
+	CommandIO::CommandIO(const HFST_API& api, int nChipID)
 		: m_Api(api) 
-		, m_ChipID(nChipID){
+		, m_ChipID( static_cast<ChipID>(nChipID) ){
 	}
 
 	bool CommandIO::SetCommandReady()
@@ -96,7 +96,7 @@ namespace HFST
 		return true;
 	}
 
-	bool CommandIO::Read( MEMORY_TYPE nMemType, int nAddr, unsigned char* buf, int len )
+	int CommandIO::Read( MEMORY_TYPE nMemType, int nAddr, unsigned char* buf, int len )
 	{
 		int nAddress = nAddr;
 		if ( (nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A8018 )
@@ -108,6 +108,9 @@ namespace HFST
 		int nRemain = len;
 		int nPackSize = 0;
 		int nOffset = 0;
+		int nRetry = 0;
+		int nRead = 0;
+		int nFlag = 0;
 		while ( nRemain > 0 )
 		{
 			nPackSize = ( nRemain > 24 ) ? 24 : nRemain;
@@ -128,26 +131,169 @@ namespace HFST
 			packet.Data[1] = (nAddress >> 8) & 0xFF;
 			packet.Data[2] = (nAddress & 0xFF);
 			packet.Data[3] = nPackSize;
-			packet.Data[3] = CalculateChecksum( (unsigned char*)&packet, 6 );
+			packet.Data[4] = CalculateChecksum( (unsigned char*)&packet, 6 ) & 0xFF;
 
 			if ( !Write_Packet(packet) )
-				return false;
+				return -1;
 
 			if ( !SetCommandReady() )
-				return false;
+				return -1;
 
 			if ( !GetCommandReady() )
+				return -1;
+
+			memset( &packet, 0, sizeof(CommandIO_Packet) );
+			if ( !Read_Packet(packet) )
+				return -1;
+
+			if ( packet.nCmdID != COMMAND_IO::CMD_RW_OUTPUT || packet.Data[0] != static_cast<unsigned char>(nMemType) )
+			{
+				nRetry ++;
+				if (nRetry > 10)
+					return -1;
+
+				continue;
+			}
+
+			// check checksum
+			if ( (CalculateChecksum((unsigned char*)&packet, packet.nDataSize + 1) & 0xFF) == packet.Data[packet.nDataSize-1] )
+			{
+				if ((m_ChipID == ChipID::A8018 || m_ChipID == ChipID::A2152) && nMemType == MEMORY_TYPE::AFE_REG)
+				{
+					if (nFlag == 0)
+					{
+						memcpy(buf + nRead, &(packet.Data[2]), packet.Data[1]);
+						nRead += packet.Data[1];
+						if ( nRemain > 24 )
+						{
+							nRemain -= ( packet.Data[1] - 8 );
+						}
+						else {
+							nRemain -= packet.Data[1];
+						}
+
+						nFlag = 1;
+					}
+					else
+					{
+						memcpy( buf + nRead, &(packet.Data[10]), packet.Data[1] - 8 );
+						nRead += ( packet.Data[1] - 8 );
+						if ( nRemain > 16 )
+						{
+							nRemain -= ( packet.Data[1] - 8 );	//data size
+						}
+						else 
+						{
+							nRemain = 0;
+						}
+					}
+				}
+				else
+				{
+					memcpy( buf + nOffset, &packet.Data[2], packet.Data[1] );
+
+					nRemain -= packet.Data[1];
+					nOffset += packet.Data[1];
+					nRead	+= packet.Data[1];
+				}
+			}
+		}
+
+		return nRead;
+	}
+	int CommandIO::Write( MEMORY_TYPE nMemType, int nAddr, unsigned char* buf, int len )
+	{
+		int nAddress = nAddr;
+		if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A8018)
+		{
+			nAddress = nAddr & 0x0FFF;
+		}
+
+		int nRemain = len;
+		int nPackSize = 0;
+		int nOffset = 0;
+		int nSet = 0;
+
+		CommandIO_Packet packet;
+		while (nRemain > 0)
+		{
+			nPackSize = (nRemain > 24) ? 24 : nRemain;
+
+			packet.nCmdID = static_cast<int>(COMMAND_IO::CmdID::WRITE);
+			packet.nDataSize = nPackSize + 5;
+			packet.Data[0] = static_cast<unsigned char>(nMemType);
+
+			if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A2152)
+			{
+				nAddress = nAddr + (nOffset / 2);
+			}
+			else
+			{
+				nAddress = nAddr + nOffset;
+			}
+
+			packet.Data[1] = (nAddress >> 8) & 0xFF;
+			packet.Data[2] = (nAddress & 0xFF);
+			packet.Data[3] = nPackSize;
+
+			memcpy_s(&packet.Data[4], nPackSize, buf + nOffset, nPackSize);
+			packet.Data[packet.nDataSize - 1] = CalculateChecksum((unsigned char*)&packet, packet.nDataSize + 1) & 0xFF;
+
+			if (!Write_Packet(packet))
+				return -1;
+
+			if (!SetCommandReady())
+				return -1;
+
+			if (!GetCommandReady())
+				return -1;
+
+			nRemain -= nPackSize;
+			nOffset += nPackSize;
+			nSet	+= nPackSize;
+		}
+
+		return nSet;
+	}
+
+	bool CommandIO::GetInfo( unsigned char* info, unsigned int len )
+	{
+		CommandIO_Packet packet;
+		packet.nCmdID = static_cast<int>( COMMAND_IO::CmdID::GET_INFO );
+		packet.nDataSize = 2;
+		packet.Data[0] = static_cast<int>( COMMAND_IO::INFO_ID::INFO_RAW_LINE );
+		packet.Data[1] = CalculateChecksum( (unsigned char*)&packet, packet.nDataSize + 1);
+
+		if ( !Write_Packet(packet) )
+			return false;
+
+		if ( !SetCommandReady() )
+			return false;
+
+		if ( !GetCommandReady() )
+			return false;
+
+		memset( &packet, 0, sizeof(CommandIO_Packet) );
+		if ( !Read_Packet(packet) )
+			return false;
+
+		int nRetry = 0;
+		while ( 1 )
+		{
+			if ( packet.nCmdID != COMMAND_IO::CMD_INFO_OUTPUT )
+				nRetry++;
+
+			if (nRetry > 5)
 				return false;
 
 			memset( &packet, 0, sizeof(CommandIO_Packet) );
 			if ( !Read_Packet(packet) )
 				return false;
-
-			nRemain -= nPackSize;
 		}
-	}
-	bool CommandIO::Write( MEMORY_TYPE nMemType, int nAddr, unsigned char* buf, int len )
-	{
 
+		int nLen = ( len > COMMAND_IO::CMDIO_PACK_SIZE ) ? COMMAND_IO::CMDIO_PACK_SIZE : len;
+		memcpy_s( info, nLen, packet.Data, nLen );
+
+		return true;
 	}
 }

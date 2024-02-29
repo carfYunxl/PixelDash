@@ -141,7 +141,10 @@ namespace HFST
 
     namespace COMMAND_IO
     {
-        constexpr size_t CMDIO_PACK_SIZE = 30;
+        constexpr size_t        CMDIO_PACK_SIZE = 30;
+        constexpr unsigned char CMD_RW_OUTPUT   = 0x82;
+        constexpr unsigned char CMD_INFO_OUTPUT = 0x84;
+
         enum class State
         {
             OK = 0x00,
@@ -164,6 +167,13 @@ namespace HFST
             MCU_ROM,
             AFE_MEM,
             AFE_REG
+        };
+
+        enum class INFO_ID
+        {
+            INFO_RAWDATA_FORMAT = 1,    // Not support yet
+            INFO_CHANNEL = 2,           // Not support yet
+            INFO_RAW_LINE = 3           // support
         };
     }
 

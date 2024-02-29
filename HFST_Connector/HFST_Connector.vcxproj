@@ -102,7 +102,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\RawData</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -121,7 +121,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -140,7 +140,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -159,7 +159,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>

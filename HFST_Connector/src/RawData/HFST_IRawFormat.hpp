@@ -10,9 +10,9 @@ namespace HFST
         IRawFormat(int nID);
 
         virtual int  GetMaxBufferLength() = 0;
-        virtual int  IndexOfDatatype() { return 0; }
-        virtual int  IndexOfValidDataSize() { return 1; }
-        virtual bool HasTagInfomation() { return false; }
+        virtual int  IndexOfDatatype()          { return 0; }
+        virtual int  IndexOfValidDataSize()     { return 1; }
+        virtual bool HasTagInfomation()         { return false; }
         virtual int  IndexOfData() = 0;
     private:
     };
@@ -41,6 +41,7 @@ namespace HFST
         virtual bool HasTagInfomation() override;
         virtual int  IndexOfData() override;
     };
+
 }
 
 #endif //__HFST_IRAW_ANALYSIS_HPP__
