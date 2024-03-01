@@ -4,6 +4,7 @@
 #include "HFST_Exception.hpp"
 #include "HFST_DeviceManager.hpp"
 #include "HFST_TouchDevice.hpp"
+#include "HFST_CommandIO.hpp"
 
 namespace HFST
 {
@@ -11,7 +12,7 @@ namespace HFST
         : m_nCurrentI2CAddr{ -1 }
         , m_dCurrentVDD{2.8}
         , m_dCurrentIOVDD{1.8}
-        , m_ICStatus{ IC_Status::NOT_CONNECT }
+        , m_IcStatus{ IC_Status::NOT_CONNECT }
     {
     }
 
@@ -19,7 +20,6 @@ namespace HFST
 
     bool Connector::Connect()
     {
-        // 初始化API
         if ( !m_API.Init() )
             return false;
         std::cout << "Load dll success!\n";
@@ -27,34 +27,37 @@ namespace HFST
         USB_Manager usbManager(m_API);
         SetGUID(usbManager.GetGUID());
 
-        // 检查BULK的状态
-        // detect usb connect, but bulk not ok, install the driver
         if ( !CheckAndInstallTLDriver(usbManager) )
             return false;
 
-        // 获取及设置TouchLink信息     
         if ( !TL_GetInfomation() )
             return false;
 
-        // 设置TouchLink电压
         if ( !TL_SetVoltage(2.8, 1.8) )
             return false;
 
-        // 扫描I2C地址
         I2C_ScanAddr();
 
-        // 设置I2C地址
-        m_API.TTK.SetI2CAddr( m_nCurrentI2CAddr, 2, false );
+        if ( !IC_SetI2CAddr(m_nCurrentI2CAddr) )
+            return false;
 
-        // 获取Protocol
         if ( !IC_GetProtocol() )
             return false;
 
-        // 获取IC的状态码
+        if ( m_IcInfo.nProtocol == PROROCOL::PROTOCOL_STNA || m_IcInfo.nProtocol == PROROCOL::PROTOCOL_STND ) {
+            m_I2cFlag = true;
+
+            if (!IC_SetI2CAddr(m_nCurrentI2CAddr))
+                return false;
+        }
+
+        if ( !IC_GetChipID() )
+            return false;
+
         if ( !IC_GetStatus() )
             return false;
 
-        switch (m_ICStatus)
+        switch (m_IcStatus)
         {
             case IC_Status::NOT_CONNECT:
                 break;
@@ -64,6 +67,12 @@ namespace HFST
                 break;
             case IC_Status::CONNECT:
             {
+                if ( m_IcInfo.nChipID == static_cast<int>(ChipID::A8018) )
+                {
+                    CommandIO cmd_io( m_API, m_IcInfo.nChipID );
+                    //cmd_io.GetInfo();
+                }
+
                 if ( !IC_GetInformation() )
                     return false;
             }
@@ -193,7 +202,7 @@ namespace HFST
         int ret = m_API.TTK.ReadI2CReg( &buffer, 0x01, 1 );
         if (ret <= 0)
         {
-            m_ICStatus = IC_Status::NOT_CONNECT;
+            m_IcStatus = IC_Status::NOT_CONNECT;
             return false;
         }
 
@@ -201,16 +210,16 @@ namespace HFST
         int nErrorCode = ( (buffer & 0xF0) >> 4 );
 
         if ( (nStatus & 0x0F) == 0x06 )
-            m_ICStatus = IC_Status::BOOT_LOADER;
+            m_IcStatus = IC_Status::BOOT_LOADER;
         else
         {
             if ( nErrorCode != 0 )
             {
-                m_ICStatus = IC_Status::FW_ERROR;
+                m_IcStatus = IC_Status::FW_ERROR;
             }
             else
             {
-                m_ICStatus = IC_Status::CONNECT;
+                m_IcStatus = IC_Status::CONNECT;
             }
         }
 
@@ -274,6 +283,19 @@ namespace HFST
         return true;
     }
 
+    bool Connector::IC_GetChipID()
+    {
+        constexpr size_t READ_LEN = 1;
+        unsigned char buffer[READ_LEN]{ 0 };
+
+        int ret = m_API.TTK.ReadI2CReg( buffer, ADDR_MAP::CHIPID, READ_LEN );
+        if (ret <= 0)
+            return false;
+
+        m_IcInfo.nChipID = buffer[0];
+        return true;
+    }
+
     std::string Connector::Protocol()
     {
         switch ( m_IcInfo.nProtocol )
@@ -311,30 +333,12 @@ namespace HFST
         return "UnKnown";
     }
 
-    std::string Connector::ReadRawData()
+    bool Connector::IC_SetI2CAddr(int nAddr)
     {
-#if 1
-        std::string str;
-        str.resize(20);
-        m_API.TTK.ReadI2CReg((unsigned char*)str.data(), 0x40, 20);
+        int ret = m_API.TTK.SetI2CAddr( m_nCurrentI2CAddr, 2, m_I2cFlag );
+        if (ret < 0)
+            return false;
 
-        return str;
-#else
-        unsigned char buffer[20]{ 0 };
-        m_API.TTK.ReadI2CReg( buffer, 0x40, 20 );
-
-        int nValidSize = buffer[1];
-        int nLength = nValidSize / 2;
-
-        std::vector<short> back;
-
-        for ( int i = 0; i < nLength; ++i )
-        {
-            short raw = buffer[2 + 2 * i] << 8 | buffer[2 + 2 * i + 1];
-            back.emplace_back(raw);
-        }
-
-        return back;
-#endif
-    }    
+        return true;
+    }
 }

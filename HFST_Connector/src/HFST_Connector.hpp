@@ -29,12 +29,12 @@ namespace HFST
         bool IC_GetStatus();
         bool IC_GetInformation();
         bool IC_GetProtocol();
+        bool IC_GetChipID();
+        bool IC_SetI2CAddr( int nAddr );
 
         std::string Protocol();
 
         bool SW_Reset();
-
-        std::string  ReadRawData();
     public:
         int                  GetChipID()        const { return m_IcInfo.nChipID;                  }
         std::pair<int, int>  GetRxTxCnt()       const { return { m_IcInfo.nNumX,m_IcInfo.nNumY };   }
@@ -55,8 +55,9 @@ namespace HFST
         double    m_dCurrentVDD;
         double    m_dCurrentIOVDD;
         TL_Info   m_TLInfo;
-        IC_Status m_ICStatus;
+        IC_Status m_IcStatus;
         IC_Info   m_IcInfo;
+        bool      m_I2cFlag{ false };
     };
 }
 

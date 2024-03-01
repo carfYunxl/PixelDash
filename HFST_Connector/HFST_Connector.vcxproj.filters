@@ -78,6 +78,9 @@
     <ClInclude Include="src\CommandIO\HFST_CommandIO.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\RawData\HFST_RawFormatA8018_Mutual.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -108,6 +111,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\CommandIO\HFST_CommandIO.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RawData\HFST_RawFormatA8018_Mutual.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

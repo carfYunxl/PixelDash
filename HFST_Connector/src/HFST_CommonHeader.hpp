@@ -6,6 +6,8 @@
 
 namespace HFST
 {
+    using uchar = unsigned char;
+
     struct I2CAddr
     {
         bool    bICP{ false };
@@ -39,6 +41,42 @@ namespace HFST
         int         nResX;
         int         nResY;
         std::string strRevision;
+
+        virtual void info() {};
+    };
+
+    struct A8018_IC_Info : public IC_Info
+    {
+        bool TagTypeSel;
+        bool bNoiseMergEn;
+
+        bool    Mutual_Axis;
+        bool    Mutual_ChnType;
+        bool    Mutual_MultiLineEnable;
+        uchar   Mutual_MultiLineNum;
+        uchar   Mutual_MultiNoiseLineNum;
+
+        bool    Self_1_Axis;
+        bool    Self_1_ChnType;
+        bool    Self_1_MultiLineEnable;
+        uchar   Self_1_MultiLineNum;
+        uchar   Self_1_MultiNoiseLineNum;
+
+        bool    Self_2_Axis;
+        bool    Self_2_ChnType;
+        bool    Self_2_MultiLineEnable;
+        uchar   Self_2_MultiLineNum;
+        uchar   Self_2_MultiNoiseLineNum;
+
+        bool    Key_Axis;
+        bool    Key_ChnType;
+        bool    Key_MultiLineEnable;
+        uchar   Key_MultiLineNum;
+        uchar   Key_MultiNoiseLineNum;
+
+        bool    bSlfTP = false;
+        bool    bSlfTP_Tri = false;
+        uchar   nValidSelfLen;
     };
 
     namespace PROROCOL
