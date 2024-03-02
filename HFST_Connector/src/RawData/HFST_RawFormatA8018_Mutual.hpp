@@ -8,12 +8,13 @@ namespace HFST
     class A8018_RawFormat_Mutual : public IRawFormat
     {
     public:
-        A8018_RawFormat_Mutual(IC_Info* info);
+        A8018_RawFormat_Mutual(const IC_Info& info);
+        ~A8018_RawFormat_Mutual() {}
 
-        virtual int  GetMaxBufferLength() override;
-        virtual int  IndexOfTag() override;
-        virtual int  IndexOfChannel() override;
-        virtual int  IndexOfData() override;
+        virtual int  GetReadLength()    override;
+        virtual int  IndexOfTag()       override;
+        virtual int  IndexOfChannel()   override;
+        virtual int  IndexOfData()      override;
     };
 }
 

@@ -4,7 +4,7 @@
 #include <memory>
 #include "HFST_APICenter.hpp"
 #include "HFST_CommonHeader.hpp"
-#include "HFST_RawManager.hpp"
+#include "HFST_RawCollector.hpp"
 
 namespace HFST
 {
@@ -35,29 +35,31 @@ namespace HFST
         std::string Protocol();
 
         bool SW_Reset();
-    public:
+    public: // Get infomation
         int                  GetChipID()        const { return m_IcInfo.nChipID;                  }
         std::pair<int, int>  GetRxTxCnt()       const { return { m_IcInfo.nNumX,m_IcInfo.nNumY };   }
         int                  GetStatus()        const { return m_IcInfo.nStatus;                  }
         std::vector<I2CAddr> GetI2CAddr()       const { return m_vI2CAddr;                        }
         IC_Info              IC_GetInfo()       const { return m_IcInfo; }
-        std::pair<int, int>  GetResXY()         const { return { m_IcInfo.nResX, m_IcInfo .nResY};}
+        std::pair<int, int>  GetResXY()         const { return { m_IcInfo.nResX, m_IcInfo.nResY};}
         std::string          GetFwRevision()    const { return m_IcInfo.strRevision; }
         int                  GetFwVersion()     const { return m_IcInfo.nFwVersion; }
         int                  GetNumKey()        const { return m_IcInfo.nNumKey; }
+    public: // Set method
+        bool                 IC_SwitchPage( RAW::PageType type );
     private:
         std::vector<I2CAddr>    m_vI2CAddr;
 
     private:
-        HFST_API  m_API;
-        GUID      m_Guid;
-        int       m_nCurrentI2CAddr;
-        double    m_dCurrentVDD;
-        double    m_dCurrentIOVDD;
-        TL_Info   m_TLInfo;
-        IC_Status m_IcStatus;
-        IC_Info   m_IcInfo;
-        bool      m_I2cFlag{ false };
+        HFST_API   m_API;
+        GUID       m_Guid;
+        int        m_nCurrentI2CAddr;
+        double     m_dCurrentVDD;
+        double     m_dCurrentIOVDD;
+        TL_Info    m_TLInfo;
+        IC_Status  m_IcStatus;
+        IC_Info    m_IcInfo;
+        bool       m_I2cFlag{ false };
     };
 }
 

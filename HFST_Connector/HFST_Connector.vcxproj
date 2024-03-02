@@ -190,7 +190,8 @@
     <ClInclude Include="src\HFST_Connector.hpp" />
     <ClInclude Include="src\RawData\HFST_IRawFormat.hpp" />
     <ClInclude Include="src\RawData\HFST_RawFormatA8018_Mutual.hpp" />
-    <ClInclude Include="src\RawData\HFST_RawManager.hpp" />
+    <ClInclude Include="src\RawData\HFST_RawFormatA8018_Self.hpp" />
+    <ClInclude Include="src\RawData\HFST_RawCollector.hpp" />
     <ClInclude Include="src\TouchDevice\HFST_StaticTemplateFunctions.hpp" />
     <ClInclude Include="src\TouchDevice\HFST_TouchDevice.hpp" />
   </ItemGroup>
@@ -210,7 +211,8 @@
     <ClCompile Include="src\HFST_DllLoader.cpp" />
     <ClCompile Include="src\RawData\HFST_IRawFormat.cpp" />
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Mutual.cpp" />
-    <ClCompile Include="src\RawData\HFST_RawManager.cpp" />
+    <ClCompile Include="src\RawData\HFST_RawFormatA8018_Self.cpp" />
+    <ClCompile Include="src\RawData\HFST_RawCollector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

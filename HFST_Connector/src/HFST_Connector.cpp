@@ -41,6 +41,9 @@ namespace HFST
         if ( !IC_SetI2CAddr(m_nCurrentI2CAddr) )
             return false;
 
+        if ( !IC_GetChipID() )
+            return false;
+
         if ( !IC_GetProtocol() )
             return false;
 
@@ -51,8 +54,6 @@ namespace HFST
                 return false;
         }
 
-        if ( !IC_GetChipID() )
-            return false;
 
         if ( !IC_GetStatus() )
             return false;
@@ -252,7 +253,6 @@ namespace HFST
         m_IcInfo.nNumX = buffer[ADDR_MAP::NUM_X];
         m_IcInfo.nNumY = buffer[ADDR_MAP::NUM_Y];
         m_IcInfo.nNumKey = buffer[ADDR_MAP::NUM_KEY] & 0x0F;
-
         m_IcInfo.nStatus = buffer[ADDR_MAP::STATUS];
         m_IcInfo.nChipID = buffer[ADDR_MAP::CHIPID];
         m_IcInfo.nFwVersion = buffer[ADDR_MAP::FW_VERSION];
@@ -291,6 +291,8 @@ namespace HFST
         int ret = m_API.TTK.ReadI2CReg( buffer, ADDR_MAP::CHIPID, READ_LEN );
         if (ret <= 0)
             return false;
+
+        int nChipID = buffer[0];
 
         m_IcInfo.nChipID = buffer[0];
         return true;
@@ -338,6 +340,19 @@ namespace HFST
         int ret = m_API.TTK.SetI2CAddr( m_nCurrentI2CAddr, 2, m_I2cFlag );
         if (ret < 0)
             return false;
+
+        return true;
+    }
+
+    bool Connector::IC_SwitchPage( RAW::PageType type )
+    {
+        switch ( type )
+        {
+        case RAW::PageType::REPORT:
+            break;
+        case RAW::PageType::DEVELOP:
+            break;
+        }
 
         return true;
     }

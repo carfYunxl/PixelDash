@@ -31,52 +31,43 @@ namespace HFST
 
     struct IC_Info
     {
-        int         nFwVersion;
-        int         nChipID{ -1 };
-        int         nNumX{ -1 };
-        int         nNumY{ -1 };
-        int         nNumKey{ -1 };
-        int         nStatus{ -1 };
-        size_t      nProtocol;
-        int         nResX;
-        int         nResY;
+        int         nFwVersion  {-1};
+        int         nChipID     {-1};
+        int         nNumX       {-1};
+        int         nNumY       {-1};
+        int         nNumKey     {-1};
+        int         nStatus     {-1};
+        size_t      nProtocol   { 0};
+        int         nResX       {-1};
+        int         nResY       {-1};
         std::string strRevision;
 
-        virtual void info() {};
-    };
-
-    struct A8018_IC_Info : public IC_Info
-    {
-        bool TagTypeSel;
-        bool bNoiseMergEn;
-
-        bool    Mutual_Axis;
-        bool    Mutual_ChnType;
-        bool    Mutual_MultiLineEnable;
-        uchar   Mutual_MultiLineNum;
-        uchar   Mutual_MultiNoiseLineNum;
-
-        bool    Self_1_Axis;
-        bool    Self_1_ChnType;
-        bool    Self_1_MultiLineEnable;
-        uchar   Self_1_MultiLineNum;
-        uchar   Self_1_MultiNoiseLineNum;
-
-        bool    Self_2_Axis;
-        bool    Self_2_ChnType;
-        bool    Self_2_MultiLineEnable;
-        uchar   Self_2_MultiLineNum;
-        uchar   Self_2_MultiNoiseLineNum;
-
-        bool    Key_Axis;
-        bool    Key_ChnType;
-        bool    Key_MultiLineEnable;
-        uchar   Key_MultiLineNum;
-        uchar   Key_MultiNoiseLineNum;
-
-        bool    bSlfTP = false;
-        bool    bSlfTP_Tri = false;
-        uchar   nValidSelfLen;
+        // for A8018
+        bool        TagTypeSel                  {false};
+        bool        bNoiseMergEn                {false};
+        bool        Mutual_Axis                 {false};
+        bool        Mutual_ChnType              {false};
+        bool        Mutual_MultiLineEnable      {false};
+        uchar       Mutual_MultiLineNum         {0};
+        uchar       Mutual_MultiNoiseLineNum    {0};
+        bool        Self_1_Axis                 {false};
+        bool        Self_1_ChnType              {false};
+        bool        Self_1_MultiLineEnable      {false};
+        uchar       Self_1_MultiLineNum         {0};
+        uchar       Self_1_MultiNoiseLineNum    {0};
+        bool        Self_2_Axis                 {false};
+        bool        Self_2_ChnType              {false};
+        bool        Self_2_MultiLineEnable      {false};
+        uchar       Self_2_MultiLineNum         {0};
+        uchar       Self_2_MultiNoiseLineNum    {0};
+        bool        Key_Axis                    {false};
+        bool        Key_ChnType                 {false};
+        bool        Key_MultiLineEnable         {false};
+        uchar       Key_MultiLineNum            {0};
+        uchar       Key_MultiNoiseLineNum       {0};
+        bool        bSlfTP                      {false};
+        bool        bSlfTP_Tri                  {false};
+        uchar       nValidSelfLen               {0};
     };
 
     namespace PROROCOL
@@ -135,12 +126,25 @@ namespace HFST
 
     namespace RAW
     {
+        enum class TAG_TYPE
+        {
+            AG = 0,
+            AG_FLUSH,
+            GND,
+            GND_FLUSH
+        };
         // some definition
         template<typename T>
         using Vec = std::vector<T>;
 
         template<typename T>
-        using DualVec = std::vector<std::vector<T>>;
+        struct ChannelRaw
+        {
+            uchar       nDataType;        // Raw type
+            uchar       nChannelIdx;      // which channel
+            TAG_TYPE    Type;             // tell the tag info
+            Vec<T>&     vecRaw;           // Raw
+        };
 
         // some structure
         enum class RawMode {
@@ -149,14 +153,21 @@ namespace HFST
             DIST
         };
 
+        enum class PageType
+        {
+            REPORT = 0,
+            DEVELOP
+        };
+
         template<typename T>
         struct Frame
         {
             void Clear()
             {
-                vctHeader.clear();
-                vctKey.clear();
-                vctKeyNs.clear();
+                vctHeader.vecRaw.clear();
+                vctKey.vecRaw.clear();
+                vctKeyNs.vecRaw.clear();
+
                 vctMutual.clear();
                 vctMuNoise.clear();
                 vctXSelf.clear();
@@ -165,15 +176,15 @@ namespace HFST
                 vctYSelfNs.clear();
             }
 
-            Vec<T>      vctHeader;
-            Vec<T>      vctKey;
-            Vec<T>      vctKeyNs;
-            DualVec<T>  vctMutual;
-            DualVec<T>  vctMuNoise;
-            DualVec<T>  vctXSelf;
-            DualVec<T>  vctXSelfNs;
-            DualVec<T>  vctYSelf;
-            DualVec<T>  vctYSelfNs;
+            ChannelRaw<T>       vctHeader;
+            ChannelRaw<T>       vctKey;
+            ChannelRaw<T>       vctKeyNs;
+            Vec<ChannelRaw<T>>  vctMutual;
+            Vec<ChannelRaw<T>>  vctMuNoise;
+            Vec<ChannelRaw<T>>  vctXSelf;
+            Vec<ChannelRaw<T>>  vctXSelfNs;
+            Vec<ChannelRaw<T>>  vctYSelf;
+            Vec<ChannelRaw<T>>  vctYSelfNs;
         };
     }
 

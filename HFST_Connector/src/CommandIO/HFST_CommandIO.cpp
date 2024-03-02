@@ -262,7 +262,7 @@ namespace HFST
 		packet.nCmdID = static_cast<int>( COMMAND_IO::CmdID::GET_INFO );
 		packet.nDataSize = 2;
 		packet.Data[0] = static_cast<int>( COMMAND_IO::INFO_ID::INFO_RAW_LINE );
-		packet.Data[1] = CalculateChecksum( (unsigned char*)&packet, packet.nDataSize + 1);
+		packet.Data[1] = CalculateChecksum( (unsigned char*)&packet, packet.nDataSize + 1) & 0xFF;
 
 		if ( !Write_Packet(packet) )
 			return false;
