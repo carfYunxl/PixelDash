@@ -22,6 +22,7 @@
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">10.0.19041.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">10.0.19041.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+    <ProjectName>HFST_Widgets_QT</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
@@ -123,17 +124,37 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HFST_Connector\HFST_Connector.vcxproj">
-      <Project>{a9261353-9ac9-46df-825d-bbf7c9fabc30}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="icon\chip.png" />
     <Image Include="icon\connect.png" />
     <Image Include="icon\disconnect.png" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="InfoDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dll\BulkDll.dll" />
+    <None Include="dll\HFST_ADB_SDK.dll" />
+    <None Include="dll\HFST_HID_SDK.dll" />
+    <None Include="dll\HFST_HopGain_ST1802.dll" />
+    <None Include="dll\HFST_LCMTest_A8018.dll" />
+    <None Include="dll\HFST_LCMTest_ST1802.dll" />
+    <None Include="dll\HFST_PhaseSearch_ST1802.dll" />
+    <None Include="dll\HFST_WinUSB_Driver.dll" />
+    <None Include="dll\LCMTestTool_ST1802.dll" />
+    <None Include="dll\msvcp140.dll" />
+    <None Include="dll\PhaseSearch_ST1802.dll" />
+    <None Include="dll\PhaseSearch_ST7125.dll" />
+    <None Include="dll\TTK_Communication_API_A8008.dll" />
+    <None Include="dll\TTK_Communication_API_A8010.dll" />
+    <None Include="dll\TTK_Communication_API_A8011.dll" />
+    <None Include="dll\TTK_Communication_API_A8015.dll" />
+    <None Include="dll\TTK_Communication_API_A8018.dll" />
+    <None Include="dll\TTK_Communication_API_ST1801.dll" />
+    <None Include="dll\TTK_Communication_API_ST1802.dll" />
+    <None Include="dll\ucrtbase.dll" />
+    <None Include="dll\USBHID.dll" />
+    <None Include="dll\vcruntime140.dll" />
+    <None Include="dll\Visa32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

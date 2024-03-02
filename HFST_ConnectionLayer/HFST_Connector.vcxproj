@@ -24,6 +24,7 @@
     <ProjectGuid>{a9261353-9ac9-46df-825d-bbf7c9fabc30}</ProjectGuid>
     <RootNamespace>HFSTConnector</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>HFST_ConnectionLayer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -213,6 +214,29 @@
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Mutual.cpp" />
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Self.cpp" />
     <ClCompile Include="src\RawData\HFST_RawCollector.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dependency\dll\BulkDll.dll" />
+    <None Include="Dependency\dll\HFST_ADB_SDK.dll" />
+    <None Include="Dependency\dll\HFST_HID_SDK.dll" />
+    <None Include="Dependency\dll\HFST_HopGain_ST1802.dll" />
+    <None Include="Dependency\dll\HFST_LCMTest_A8018.dll" />
+    <None Include="Dependency\dll\HFST_LCMTest_ST1802.dll" />
+    <None Include="Dependency\dll\HFST_PhaseSearch_ST1802.dll" />
+    <None Include="Dependency\dll\HFST_WinUSB_Driver.dll" />
+    <None Include="Dependency\dll\LCMTestTool_ST1802.dll" />
+    <None Include="Dependency\dll\LCMTestTool_ST7125.dll" />
+    <None Include="Dependency\dll\PhaseSearch_ST1802.dll" />
+    <None Include="Dependency\dll\PhaseSearch_ST7125.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8008.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8010.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8011.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8015.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8018.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_ST1801.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_ST1802.dll" />
+    <None Include="Dependency\dll\USBHID.dll" />
+    <None Include="Dependency\dll\Visa32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

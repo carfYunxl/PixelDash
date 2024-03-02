@@ -123,4 +123,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Dependency\dll\BulkDll.dll" />
+    <None Include="Dependency\dll\HFST_ADB_SDK.dll" />
+    <None Include="Dependency\dll\HFST_HID_SDK.dll" />
+    <None Include="Dependency\dll\HFST_HopGain_ST1802.dll" />
+    <None Include="Dependency\dll\HFST_LCMTest_A8018.dll" />
+    <None Include="Dependency\dll\HFST_LCMTest_ST1802.dll" />
+    <None Include="Dependency\dll\HFST_PhaseSearch_ST1802.dll" />
+    <None Include="Dependency\dll\HFST_WinUSB_Driver.dll" />
+    <None Include="Dependency\dll\LCMTestTool_ST1802.dll" />
+    <None Include="Dependency\dll\LCMTestTool_ST7125.dll" />
+    <None Include="Dependency\dll\PhaseSearch_ST1802.dll" />
+    <None Include="Dependency\dll\PhaseSearch_ST7125.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8008.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8010.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8011.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8015.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_A8018.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_ST1801.dll" />
+    <None Include="Dependency\dll\TTK_Communication_API_ST1802.dll" />
+    <None Include="Dependency\dll\USBHID.dll" />
+    <None Include="Dependency\dll\Visa32.dll" />
+  </ItemGroup>
 </Project>
