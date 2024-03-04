@@ -3,18 +3,21 @@
 
 namespace HFST
 {
-    RawCollector::RawCollector(const IC_Info& info, const HFST_API& api)
+    RawCollector::RawCollector(const IC_Info& info)
         : m_IcInfo(info)
-        , m_Api(api)
         , m_RawFormat(IRawFormat::CreateRawFormat(info)){
     }
 
     int RawCollector::ReadChannelRaw( RAW::ChannelRaw<short>& channel )
     {
+        auto pApi = HFST_API::GetAPI();
+        if (!pApi)
+            return -1;
+
         int nBufferLen = m_RawFormat->GetReadLength();
         std::unique_ptr<unsigned char[]> pBuffer = std::make_unique<unsigned char[]>(nBufferLen);
 
-        int ret = m_Api.TTK.ReadI2CReg( pBuffer.get(), ADDR_MAP::RAW, nBufferLen );
+        int ret = pApi->TTK.ReadI2CReg( pBuffer.get(), ADDR_MAP::RAW, nBufferLen );
         if (ret <= 0)
         {
             return ret;

@@ -38,14 +38,14 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
-    <QtInstall>Q5.15.2_msvc2019_32</QtInstall>
+    <QtInstall>5.15.2_msvc2019_32</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019_32</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
-    <QtBuildConfig>release</QtBuildConfig>
+    <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -70,7 +70,7 @@
     <IntDir>$(SolutionDir)bin\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <QtDeploy>true</QtDeploy>
+    <QtDeploy>false</QtDeploy>
     <QtDeployDebugRelease>release</QtDeployDebugRelease>
   </PropertyGroup>
   <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,13 +79,13 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)HFST_Connector\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)HFST_ConnectionLayer\src\Core;$(SolutionDir)HFST_ConnectionLayer\src\Connector;$(SolutionDir)HFST_ConnectionLayer\src\DLL;$(SolutionDir)HFST_ConnectionLayer\src\RawData;$(SolutionDir)HFST_ConnectionLayer\src\Connector\Bridge;$(SolutionDir)HFST_ConnectionLayer\src\Connector\IC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)HFST_Connector\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)HFST_ConnectionLayer\src\Core;$(SolutionDir)HFST_ConnectionLayer\src\Connector;$(SolutionDir)HFST_ConnectionLayer\src\DLL;$(SolutionDir)HFST_ConnectionLayer\src\RawData;$(SolutionDir)HFST_ConnectionLayer\src\Connector\Bridge;$(SolutionDir)HFST_ConnectionLayer\src\Connector\IC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -155,6 +155,11 @@
     <None Include="dll\USBHID.dll" />
     <None Include="dll\vcruntime140.dll" />
     <None Include="dll\Visa32.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HFST_ConnectionLayer\HFST_Connector.vcxproj">
+      <Project>{a9261353-9ac9-46df-825d-bbf7c9fabc30}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

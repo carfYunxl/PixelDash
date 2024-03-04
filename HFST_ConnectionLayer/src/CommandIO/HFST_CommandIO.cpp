@@ -6,15 +6,19 @@
 
 namespace HFST
 {
-	CommandIO::CommandIO(const HFST_API& api, int nChipID)
-		: m_Api(api) 
-		, m_ChipID( static_cast<ChipID>(nChipID) ){
+	CommandIO::CommandIO(int nChipID)
+		: m_ChipID( static_cast<ChipID>(nChipID) )
+	{
 	}
 
 	bool CommandIO::SetCommandReady()
 	{
+		auto api = HFST_API::GetAPI();
+		if (!api)
+			return false;
+
 		unsigned char bufferReady = 0x01;
-		int ret = m_Api.TTK.WriteI2CReg(&bufferReady, ADDR_MAP::CMDIO_CTRL, 1);
+		int ret = api->TTK.WriteI2CReg(&bufferReady, ADDR_MAP::CMDIO_CTRL, 1);
 		if ( ret <= 0 )
 		{
 			return false;
@@ -27,7 +31,11 @@ namespace HFST
 	{
 		unsigned char bufferFinish = 0xFF;
 
-		int ret = m_Api.TTK.ReadI2CReg( &bufferFinish, ADDR_MAP::CMDIO_CTRL, 1 );
+		auto api = HFST_API::GetAPI();
+		if (!api)
+			return false;
+
+		int ret = api->TTK.ReadI2CReg( &bufferFinish, ADDR_MAP::CMDIO_CTRL, 1 );
 		if ( ret <= 0 )
 			return false;
 
@@ -38,7 +46,7 @@ namespace HFST
 			{
 				while (nRetry > 0)
 				{
-					ret = m_Api.TTK.ReadI2CReg( &bufferFinish, ADDR_MAP::CMDIO_CTRL, 1 );
+					ret = api->TTK.ReadI2CReg( &bufferFinish, ADDR_MAP::CMDIO_CTRL, 1 );
 					if ( ret <= 0 )
 						return false;
 
@@ -68,9 +76,13 @@ namespace HFST
 
 	bool CommandIO::Read_Packet( CommandIO_Packet& packet )
 	{
+		auto api = HFST_API::GetAPI();
+		if (!api)
+			return false;
+
 		unsigned char buffer[COMMAND_IO::CMDIO_PACK_SIZE + 2]{0};
 
-		int ret = m_Api.TTK.ReadI2CReg( buffer, ADDR_MAP::CMDIO_PORT, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
+		int ret = api->TTK.ReadI2CReg( buffer, ADDR_MAP::CMDIO_PORT, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
 
 		if ( ret <= 0 )
 			return false;
@@ -84,11 +96,15 @@ namespace HFST
 
 	bool CommandIO::Write_Packet( const CommandIO_Packet& packet )
 	{
+		auto api = HFST_API::GetAPI();
+		if (!api)
+			return false;
+
 		unsigned char buffer[COMMAND_IO::CMDIO_PACK_SIZE + 2]{ 0 };
 
 		memcpy_s( buffer, COMMAND_IO::CMDIO_PACK_SIZE + 2, &packet, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
 
-		int ret = m_Api.TTK.WriteI2CReg( buffer, ADDR_MAP::CMDIO_PORT, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
+		int ret = api->TTK.WriteI2CReg( buffer, ADDR_MAP::CMDIO_PORT, COMMAND_IO::CMDIO_PACK_SIZE + 2 );
 
 		if (ret < 0)
 			return false;

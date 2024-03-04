@@ -30,7 +30,6 @@ private slots:
     void ShowICInfo();
 
 private:
-    bool RegisterUSBDevice();
     void InitUI_ICInfomation();
     void InitUI_ToolBar();
     void InitUI_StatusBar();

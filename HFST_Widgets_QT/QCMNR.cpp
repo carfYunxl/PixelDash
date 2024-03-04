@@ -23,17 +23,18 @@ QCMNR::QCMNR(QWidget *parent)
     ui.setupUi(this);
     resize(1920, 1080);
 
+    if ( !m_Connector->RegisterDevice( HWND(this->winId())) )
+    {
+        throw HFST::HFST_Exception("Register Device Failed!");
+    }
+    ui.textEdit_Log->append("Register USB/HID/ABT Device Success!");
+
     if ( !m_Connector->Connect() )
     {
         throw HFST::HFST_Exception("Connected Failed!");
     }
     ui.textEdit_Log->append("Connect Success!");
 
-    if ( !RegisterUSBDevice() )
-    {
-        throw HFST::HFST_Exception("Register USB Device Failed!");
-    }
-    ui.textEdit_Log->append("Register USB Device Success!");
 
     InitUI_ICInfomation();
 
@@ -71,29 +72,6 @@ bool QCMNR::nativeEvent(const QByteArray& eventType, void* message, long* result
         }
     }
     return false;
-}
-
-bool QCMNR::RegisterUSBDevice()
-{
-    HDEVNOTIFY hDeviceNotify;
-
-    GUID tmpGuid{
-        0x8D98FC49,
-        0x7A37,
-        0x4B2D,
-        {0xA1, 0xA3, 0x55, 0xEA, 0x7B, 0xB2, 0xAE, 0x60}
-    };
-
-    DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
-
-    HWND hWnd = (HWND)(this->winId()); //获取当前窗口句柄
-    ZeroMemory(&NotificationFilter, sizeof(NotificationFilter));
-    NotificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
-    NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
-    NotificationFilter.dbcc_classguid = tmpGuid;
-    hDeviceNotify = RegisterDeviceNotification(hWnd, &NotificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE);
-
-    return (hDeviceNotify != NULL);
 }
 
 void QCMNR::InitUI_ICInfomation()

@@ -18,10 +18,10 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_FuncLoader.hpp">
+    <ClInclude Include="src\DLL\HFST_FuncLoader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_Exception.hpp">
+    <ClInclude Include="src\Core\HFST_Exception.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Dependency\include\BulkDll.h">
@@ -39,34 +39,34 @@
     <ClInclude Include="Dependency\include\USBHID.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_FunctionExport.hpp">
+    <ClInclude Include="src\DLL\HFST_FunctionExport.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Dependency\include\Win_USB_Driver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_DeviceManager.hpp">
+    <ClInclude Include="src\Connector\Bridge\HFST_DeviceManager.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_Connector.hpp">
+    <ClInclude Include="src\Connector\HFST_Connector.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_DllLoader.hpp">
+    <ClInclude Include="src\DLL\HFST_DllLoader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_APICenter.hpp">
+    <ClInclude Include="src\DLL\HFST_APICenter.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\TouchDevice\HFST_TouchDevice.hpp">
+    <ClInclude Include="src\Connector\IC\HFST_TouchDevice.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\TouchDevice\HFST_StaticTemplateFunctions.hpp">
+    <ClInclude Include="src\Connector\IC\HFST_StaticTemplateFunctions.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_DummyWindow.hpp">
+    <ClInclude Include="src\UI\HFST_DummyWindow.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\HFST_CommonHeader.hpp">
+    <ClInclude Include="src\Core\HFST_CommonHeader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\RawData\HFST_RawCollector.hpp">
@@ -84,27 +84,42 @@
     <ClInclude Include="src\RawData\HFST_RawFormatA8018_Self.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Connector\Bridge\HFST_TouchLink.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Connector\Bridge\HFST_Bridge.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Connector\IC\HFST_CFG.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Connector\HFST_FW.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Connector\IC\HFST_Flash.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_FuncLoader.cpp">
+    <ClCompile Include="src\DLL\HFST_FuncLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_Exception.cpp">
+    <ClCompile Include="src\Core\HFST_Exception.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_Connector.cpp">
+    <ClCompile Include="src\Connector\HFST_Connector.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_DllLoader.cpp">
+    <ClCompile Include="src\DLL\HFST_DllLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_DeviceManager.cpp">
+    <ClCompile Include="src\Connector\Bridge\HFST_DeviceManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\HFST_DummyWindow.cpp">
+    <ClCompile Include="src\UI\HFST_DummyWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\RawData\HFST_RawCollector.cpp">
@@ -120,6 +135,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Self.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Connector\Bridge\HFST_TouchLink.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DLL\HFST_APICenter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Connector\Bridge\HFST_Bridge.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Connector\IC\HFST_CFG.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Connector\HFST_FW.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Connector\IC\HFST_Flash.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

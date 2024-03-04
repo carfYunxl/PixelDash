@@ -1,0 +1,8 @@
+LIBRARY
+EXPORTS
+
+HFST_ADB_SDK_Open       @1      NONAME
+HFST_ADB_SDK_Close      @2      NONAME
+HFST_ADB_SDK_Read       @3      NONAME
+HFST_ADB_SDK_Write      @4      NONAME
+HFST_ADB_SDK_RunCmd     @5      NONAME

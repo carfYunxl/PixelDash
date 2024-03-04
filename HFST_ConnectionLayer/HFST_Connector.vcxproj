@@ -103,7 +103,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -141,7 +141,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -160,7 +160,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\TouchDevice</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -173,14 +173,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\CommandIO\HFST_CommandIO.hpp" />
-    <ClInclude Include="src\HFST_APICenter.hpp" />
-    <ClInclude Include="src\HFST_CommonHeader.hpp" />
-    <ClInclude Include="src\HFST_DeviceManager.hpp" />
-    <ClInclude Include="src\HFST_DllLoader.hpp" />
-    <ClInclude Include="src\HFST_DummyWindow.hpp" />
-    <ClInclude Include="src\HFST_Exception.hpp" />
-    <ClInclude Include="src\HFST_FunctionExport.hpp" />
-    <ClInclude Include="src\HFST_FuncLoader.hpp" />
+    <ClInclude Include="src\Connector\Bridge\HFST_Bridge.hpp" />
+    <ClInclude Include="src\Connector\Bridge\HFST_TouchLink.hpp" />
+    <ClInclude Include="src\Connector\HFST_FW.hpp" />
+    <ClInclude Include="src\Connector\IC\HFST_CFG.hpp" />
+    <ClInclude Include="src\Connector\IC\HFST_Flash.hpp" />
+    <ClInclude Include="src\DLL\HFST_APICenter.hpp" />
+    <ClInclude Include="src\Core\HFST_CommonHeader.hpp" />
+    <ClInclude Include="src\Connector\Bridge\HFST_DeviceManager.hpp" />
+    <ClInclude Include="src\DLL\HFST_DllLoader.hpp" />
+    <ClInclude Include="src\UI\HFST_DummyWindow.hpp" />
+    <ClInclude Include="src\Core\HFST_Exception.hpp" />
+    <ClInclude Include="src\DLL\HFST_FunctionExport.hpp" />
+    <ClInclude Include="src\DLL\HFST_FuncLoader.hpp" />
     <ClInclude Include="Dependency\include\BulkDll.h" />
     <ClInclude Include="Dependency\include\TestLibA8008.h" />
     <ClInclude Include="Dependency\include\TPTST6.h" />
@@ -188,28 +193,34 @@
     <ClInclude Include="Dependency\include\USBHID.h" />
     <ClInclude Include="Dependency\include\Win_USB_Driver.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="src\HFST_Connector.hpp" />
+    <ClInclude Include="src\Connector\HFST_Connector.hpp" />
     <ClInclude Include="src\RawData\HFST_IRawFormat.hpp" />
     <ClInclude Include="src\RawData\HFST_RawFormatA8018_Mutual.hpp" />
     <ClInclude Include="src\RawData\HFST_RawFormatA8018_Self.hpp" />
     <ClInclude Include="src\RawData\HFST_RawCollector.hpp" />
-    <ClInclude Include="src\TouchDevice\HFST_StaticTemplateFunctions.hpp" />
-    <ClInclude Include="src\TouchDevice\HFST_TouchDevice.hpp" />
+    <ClInclude Include="src\Connector\IC\HFST_StaticTemplateFunctions.hpp" />
+    <ClInclude Include="src\Connector\IC\HFST_TouchDevice.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommandIO\HFST_CommandIO.cpp" />
-    <ClCompile Include="src\HFST_DeviceManager.cpp" />
-    <ClCompile Include="src\HFST_DummyWindow.cpp" />
-    <ClCompile Include="src\HFST_Exception.cpp" />
-    <ClCompile Include="src\HFST_FuncLoader.cpp" />
+    <ClCompile Include="src\Connector\Bridge\HFST_Bridge.cpp" />
+    <ClCompile Include="src\Connector\Bridge\HFST_DeviceManager.cpp" />
+    <ClCompile Include="src\Connector\Bridge\HFST_TouchLink.cpp" />
+    <ClCompile Include="src\Connector\HFST_FW.cpp" />
+    <ClCompile Include="src\Connector\IC\HFST_CFG.cpp" />
+    <ClCompile Include="src\Connector\IC\HFST_Flash.cpp" />
+    <ClCompile Include="src\DLL\HFST_APICenter.cpp" />
+    <ClCompile Include="src\UI\HFST_DummyWindow.cpp" />
+    <ClCompile Include="src\Core\HFST_Exception.cpp" />
+    <ClCompile Include="src\DLL\HFST_FuncLoader.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\HFST_Connector.cpp" />
-    <ClCompile Include="src\HFST_DllLoader.cpp" />
+    <ClCompile Include="src\Connector\HFST_Connector.cpp" />
+    <ClCompile Include="src\DLL\HFST_DllLoader.cpp" />
     <ClCompile Include="src\RawData\HFST_IRawFormat.cpp" />
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Mutual.cpp" />
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Self.cpp" />

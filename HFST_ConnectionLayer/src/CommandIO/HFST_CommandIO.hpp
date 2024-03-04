@@ -5,8 +5,6 @@
 
 namespace HFST
 {
-    struct HFST_API;
-
     struct CommandIO_Packet
     {
         int nCmdID;
@@ -19,7 +17,7 @@ namespace HFST
     class CommandIO
     {
     public:
-        CommandIO(const HFST_API& api, int nChipID);
+        explicit CommandIO(int nChipID);
 
         int Read(
             MEMORY_TYPE nMemType, 
@@ -42,7 +40,6 @@ namespace HFST
         bool Read_Packet( CommandIO_Packet& packet );
         bool Write_Packet( const CommandIO_Packet& packet );
     private:
-        const HFST_API& m_Api;
         ChipID          m_ChipID;
     };
 }

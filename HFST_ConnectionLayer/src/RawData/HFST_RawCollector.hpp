@@ -10,12 +10,10 @@
 
 namespace HFST
 {
-    struct HFST_API;
-
     class RawCollector
     {
     public:
-        RawCollector( const IC_Info& info, const HFST_API& api);
+        RawCollector( const IC_Info& info);
 
         int ReadChannelRaw( RAW::ChannelRaw<short>& channel );
         int ReadFrame(  RAW::Frame<short>& frame );
@@ -26,7 +24,6 @@ namespace HFST
     private:
         RAW::RawMode                    m_RawMode{ RAW::RawMode::DIST };
         const IC_Info&                  m_IcInfo;
-        const HFST_API&                 m_Api;
 
         std::unique_ptr<IRawFormat>     m_RawFormat;
     };

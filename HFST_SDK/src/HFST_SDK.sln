@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33328.57
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_ADB_SDK", "HFST_ADB_SDK\HFST_ADB_SDK.vcxproj", "{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_HID_SDK", "HFST_HID_SDK\HFST_HID_SDK.vcxproj", "{FE580ECC-A511-447F-9EE4-CB64A3A303E1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_SDK_Test", "HFST_SDK_Test\HFST_SDK_Test.vcxproj", "{66DFAF48-C2C5-4895-9899-E4B87C717ADA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_Dynamic|x86 = Debug_Dynamic|x86
+		Debug_Static|x86 = Debug_Static|x86
+		Release_Dynamic|x86 = Release_Dynamic|x86
+		Release_Static|x86 = Release_Static|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Debug_Dynamic|x86.ActiveCfg = Debug|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Debug_Dynamic|x86.Build.0 = Debug|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Debug_Static|x86.ActiveCfg = Debug_Static|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Debug_Static|x86.Build.0 = Debug_Static|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Release_Dynamic|x86.ActiveCfg = Debug|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Release_Dynamic|x86.Build.0 = Debug|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Release_Static|x86.ActiveCfg = Release_Static|Win32
+		{E2CC0627-6EB2-4393-9EE6-5937849DFBFE}.Release_Static|x86.Build.0 = Release_Static|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Debug_Dynamic|x86.ActiveCfg = Debug|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Debug_Dynamic|x86.Build.0 = Debug|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Debug_Static|x86.ActiveCfg = Debug_Static|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Debug_Static|x86.Build.0 = Debug_Static|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Release_Dynamic|x86.ActiveCfg = Release|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Release_Dynamic|x86.Build.0 = Release|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Release_Static|x86.ActiveCfg = Release_Static|Win32
+		{FE580ECC-A511-447F-9EE4-CB64A3A303E1}.Release_Static|x86.Build.0 = Release_Static|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Debug_Dynamic|x86.ActiveCfg = Debug|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Debug_Dynamic|x86.Build.0 = Debug|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Debug_Static|x86.ActiveCfg = Debug_Static|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Debug_Static|x86.Build.0 = Debug_Static|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Release_Dynamic|x86.ActiveCfg = Release|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Release_Dynamic|x86.Build.0 = Release|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Release_Static|x86.ActiveCfg = Release_Static|Win32
+		{66DFAF48-C2C5-4895-9899-E4B87C717ADA}.Release_Static|x86.Build.0 = Release_Static|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D777F4CF-F0DE-410D-A5B8-F7F47040FDB9}
+	EndGlobalSection
+EndGlobal
