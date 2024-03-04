@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #include "HFST_APICenter.hpp"
 
 namespace HFST

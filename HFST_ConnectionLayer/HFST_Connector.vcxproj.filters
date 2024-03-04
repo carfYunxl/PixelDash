@@ -93,10 +93,13 @@
     <ClInclude Include="src\Connector\IC\HFST_CFG.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Connector\HFST_FW.hpp">
+    <ClInclude Include="src\Connector\IC\HFST_FW.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Connector\IC\HFST_Flash.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\HFST_TimeLogger.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,10 +152,13 @@
     <ClCompile Include="src\Connector\IC\HFST_CFG.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Connector\HFST_FW.cpp">
+    <ClCompile Include="src\Connector\IC\HFST_FW.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Connector\IC\HFST_Flash.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\HFST_TimeLogger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -77,12 +77,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin-tmp\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin-tmp\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -175,7 +175,7 @@
     <ClInclude Include="src\CommandIO\HFST_CommandIO.hpp" />
     <ClInclude Include="src\Connector\Bridge\HFST_Bridge.hpp" />
     <ClInclude Include="src\Connector\Bridge\HFST_TouchLink.hpp" />
-    <ClInclude Include="src\Connector\HFST_FW.hpp" />
+    <ClInclude Include="src\Connector\IC\HFST_FW.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_CFG.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_Flash.hpp" />
     <ClInclude Include="src\DLL\HFST_APICenter.hpp" />
@@ -200,13 +200,14 @@
     <ClInclude Include="src\RawData\HFST_RawCollector.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_StaticTemplateFunctions.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_TouchDevice.hpp" />
+    <ClInclude Include="src\Utils\HFST_TimeLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommandIO\HFST_CommandIO.cpp" />
     <ClCompile Include="src\Connector\Bridge\HFST_Bridge.cpp" />
     <ClCompile Include="src\Connector\Bridge\HFST_DeviceManager.cpp" />
     <ClCompile Include="src\Connector\Bridge\HFST_TouchLink.cpp" />
-    <ClCompile Include="src\Connector\HFST_FW.cpp" />
+    <ClCompile Include="src\Connector\IC\HFST_FW.cpp" />
     <ClCompile Include="src\Connector\IC\HFST_CFG.cpp" />
     <ClCompile Include="src\Connector\IC\HFST_Flash.cpp" />
     <ClCompile Include="src\DLL\HFST_APICenter.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Mutual.cpp" />
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Self.cpp" />
     <ClCompile Include="src\RawData\HFST_RawCollector.cpp" />
+    <ClCompile Include="src\Utils\HFST_TimeLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependency\dll\BulkDll.dll" />

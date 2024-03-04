@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_ConnectionLayer", "HFS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_Widgets_QT", "HFST_Widgets_QT\QCMNR.vcxproj", "{94F4EBF1-36A1-4046-BEA3-A30D908E95CD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_WIFI_SDK", "HFST_WIFI_SDK\HFST_WIFI_SDK.vcxproj", "{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,6 +41,14 @@ Global
 		{94F4EBF1-36A1-4046-BEA3-A30D908E95CD}.Release|x64.ActiveCfg = Release|Win32
 		{94F4EBF1-36A1-4046-BEA3-A30D908E95CD}.Release|x86.ActiveCfg = Release|Win32
 		{94F4EBF1-36A1-4046-BEA3-A30D908E95CD}.Release|x86.Build.0 = Release|Win32
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Debug|x64.ActiveCfg = Debug|x64
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Debug|x64.Build.0 = Debug|x64
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Debug|x86.ActiveCfg = Debug|Win32
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Debug|x86.Build.0 = Debug|Win32
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Release|x64.ActiveCfg = Release|x64
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Release|x64.Build.0 = Release|x64
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Release|x86.ActiveCfg = Release|Win32
+		{ADCBC509-619E-4C83-BAE0-8D2025BDF8C0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

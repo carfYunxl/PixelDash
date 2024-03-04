@@ -4,13 +4,12 @@
 namespace HFST
 {
     TouchLink::TouchLink(const USB_Manager& manager)
-    : m_UsbManager(manager){
+        : m_UsbManager(manager){
     }
 
     bool TouchLink::GetInfomation()
     {
         HFST_API* pApi = HFST_API::GetAPI();
-
         if (!pApi)
             return false;
 
@@ -27,7 +26,6 @@ namespace HFST
     bool TouchLink::SetVoltage(double vdd, double iovdd)
     {
         HFST_API* pApi = HFST_API::GetAPI();
-
         if (!pApi)
             return false;
 
@@ -52,7 +50,6 @@ namespace HFST
     bool TouchLink::CheckInstallDriver()
     {
         HFST_API* pApi = HFST_API::GetAPI();
-
         if (!pApi)
             return false;
 

@@ -72,12 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin-tmp\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Platform)-$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\$(Platform)-$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin-tmp\$(ProjectName)\$(Platform)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,7 +97,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)HFST_Connector\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Connector;$(SolutionDir)HFST_ConnectionLayer\src\Connector\Bridge;$(SolutionDir)HFST_ConnectionLayer\src\Connector\IC;$(SolutionDir)HFST_ConnectionLayer\src\UI;$(SolutionDir)HFST_ConnectionLayer\src\DLL;$(SolutionDir)HFST_ConnectionLayer\src\RawData;$(SolutionDir)HFST_ConnectionLayer\src\Canvas;$(SolutionDir)HFST_ConnectionLayer\src\CommandIO;$(SolutionDir)HFST_ConnectionLayer\src\Core</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)HFST_Connector\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Connector;$(SolutionDir)HFST_ConnectionLayer\src\Connector\Bridge;$(SolutionDir)HFST_ConnectionLayer\src\Connector\IC;$(SolutionDir)HFST_ConnectionLayer\src\UI;$(SolutionDir)HFST_ConnectionLayer\src\DLL;$(SolutionDir)HFST_ConnectionLayer\src\RawData;$(SolutionDir)HFST_ConnectionLayer\src\Canvas;$(SolutionDir)HFST_ConnectionLayer\src\CommandIO;$(SolutionDir)HFST_ConnectionLayer\src\Core</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)HFST_Connector\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Connector;$(SolutionDir)HFST_ConnectionLayer\src\Connector\Bridge;$(SolutionDir)HFST_ConnectionLayer\src\Connector\IC;$(SolutionDir)HFST_ConnectionLayer\src\UI;$(SolutionDir)HFST_ConnectionLayer\src\DLL;$(SolutionDir)HFST_ConnectionLayer\src\RawData;$(SolutionDir)HFST_ConnectionLayer\src\Canvas;$(SolutionDir)HFST_ConnectionLayer\src\CommandIO;$(SolutionDir)HFST_ConnectionLayer\src\Core</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -144,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)HFST_Connector\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Connector;$(SolutionDir)HFST_ConnectionLayer\src\Connector\Bridge;$(SolutionDir)HFST_ConnectionLayer\src\Connector\IC;$(SolutionDir)HFST_ConnectionLayer\src\UI;$(SolutionDir)HFST_ConnectionLayer\src\DLL;$(SolutionDir)HFST_ConnectionLayer\src\RawData;$(SolutionDir)HFST_ConnectionLayer\src\Canvas;$(SolutionDir)HFST_ConnectionLayer\src\CommandIO;$(SolutionDir)HFST_ConnectionLayer\src\Core</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
