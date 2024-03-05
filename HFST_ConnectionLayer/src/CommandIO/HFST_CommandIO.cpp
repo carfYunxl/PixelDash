@@ -6,8 +6,8 @@
 
 namespace HFST
 {
-	CommandIO::CommandIO(int nChipID)
-		: m_ChipID( static_cast<ChipID>(nChipID) )
+	CommandIO::CommandIO(IC_Info& info)
+		: m_Info( info )
 	{
 	}
 
@@ -115,7 +115,7 @@ namespace HFST
 	int CommandIO::Read( MEMORY_TYPE nMemType, int nAddr, unsigned char* buf, int len )
 	{
 		int nAddress = nAddr;
-		if ( (nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A8018 )
+		if ( (nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_Info.nChipID == static_cast<int>(ChipID::A8018) )
 		{
 			nAddress = nAddr & 0x0FFF;
 		}
@@ -135,7 +135,7 @@ namespace HFST
 			packet.nDataSize = 5;
 			packet.Data[0] = static_cast<unsigned char>(nMemType);
 
-			if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A2152)
+			if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_Info.nChipID == static_cast<int>(ChipID::A2152) )
 			{
 				nAddress = nAddr + ( nOffset / 2 );
 			}
@@ -174,7 +174,7 @@ namespace HFST
 			// check checksum
 			if ( (CalculateChecksum((unsigned char*)&packet, packet.nDataSize + 1) & 0xFF) == packet.Data[packet.nDataSize-1] )
 			{
-				if ((m_ChipID == ChipID::A8018 || m_ChipID == ChipID::A2152) && nMemType == MEMORY_TYPE::AFE_REG)
+				if ((m_Info.nChipID == static_cast<int>(ChipID::A8018) || m_Info.nChipID == static_cast<int>(ChipID::A2152)) && nMemType == MEMORY_TYPE::AFE_REG)
 				{
 					if (nFlag == 0)
 					{
@@ -220,7 +220,7 @@ namespace HFST
 	int CommandIO::Write( MEMORY_TYPE nMemType, int nAddr, unsigned char* buf, int len )
 	{
 		int nAddress = nAddr;
-		if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A8018)
+		if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_Info.nChipID == static_cast<int>(ChipID::A8018))
 		{
 			nAddress = nAddr & 0x0FFF;
 		}
@@ -239,7 +239,7 @@ namespace HFST
 			packet.nDataSize = nPackSize + 5;
 			packet.Data[0] = static_cast<unsigned char>(nMemType);
 
-			if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_ChipID == ChipID::A2152)
+			if ((nMemType == MEMORY_TYPE::AFE_MEM || nMemType == MEMORY_TYPE::AFE_REG) && m_Info.nChipID == static_cast<int>(ChipID::A2152))
 			{
 				nAddress = nAddr + (nOffset / 2);
 			}
@@ -272,7 +272,7 @@ namespace HFST
 		return nSet;
 	}
 
-	bool CommandIO::GetInfo( unsigned char* info, unsigned int len )
+	bool CommandIO::GetInfo()
 	{
 		CommandIO_Packet packet;
 		packet.nCmdID = static_cast<int>( COMMAND_IO::CmdID::GET_INFO );
@@ -296,8 +296,10 @@ namespace HFST
 		int nRetry = 0;
 		while ( 1 )
 		{
-			if ( packet.nCmdID != COMMAND_IO::CMD_INFO_OUTPUT )
+			if (packet.nCmdID != COMMAND_IO::CMD_INFO_OUTPUT)
 				nRetry++;
+			else
+				break;
 
 			if (nRetry > 5)
 				return false;
@@ -307,8 +309,34 @@ namespace HFST
 				return false;
 		}
 
-		int nLen = ( len > COMMAND_IO::CMDIO_PACK_SIZE ) ? COMMAND_IO::CMDIO_PACK_SIZE : len;
-		memcpy_s( info, nLen, packet.Data, nLen );
+		const int TAGTYPESEL_OFFSET = 5;
+		const int MUTUAL_MULTILINEENABLE_OFFSET = 6;
+		const int SELF_1_MULTILINEENABLE_OFFSET = 9;
+		const int SELF_2_MULTILINEENABLE_OFFSET = 12;
+		const int KEY_MULTILINEENABLE_OFFSET = 15;
+
+		m_Info.nValidSelfLen			= packet.Data[0x02];
+		m_Info.TagTypeSel				= packet.Data[TAGTYPESEL_OFFSET];
+		m_Info.Mutual_Axis				= (packet.Data[MUTUAL_MULTILINEENABLE_OFFSET] >> 7) & 0x01;
+		m_Info.Mutual_ChnType			= (packet.Data[MUTUAL_MULTILINEENABLE_OFFSET] >> 6) & 0x01;
+		m_Info.Mutual_MultiLineEnable	= packet.Data[MUTUAL_MULTILINEENABLE_OFFSET] & 0x01;
+		m_Info.Mutual_MultiLineNum		= packet.Data[MUTUAL_MULTILINEENABLE_OFFSET + 1];
+		m_Info.Mutual_MultiNoiseLineNum = packet.Data[MUTUAL_MULTILINEENABLE_OFFSET + 2];
+		m_Info.Self_1_Axis				= (packet.Data[SELF_1_MULTILINEENABLE_OFFSET] >> 7) & 0x01;
+		m_Info.Self_1_ChnType			= (packet.Data[SELF_1_MULTILINEENABLE_OFFSET] >> 6) & 0x01;
+		m_Info.Self_1_MultiLineEnable	= packet.Data[SELF_1_MULTILINEENABLE_OFFSET] & 0x01;
+		m_Info.Self_1_MultiLineNum		= packet.Data[SELF_1_MULTILINEENABLE_OFFSET + 1];
+		m_Info.Self_1_MultiNoiseLineNum = packet.Data[SELF_1_MULTILINEENABLE_OFFSET + 2];
+		m_Info.Self_2_Axis				= (packet.Data[SELF_2_MULTILINEENABLE_OFFSET] >> 7) & 0x01;
+		m_Info.Self_2_ChnType			= (packet.Data[SELF_2_MULTILINEENABLE_OFFSET] >> 6) & 0x01;
+		m_Info.Self_2_MultiLineEnable	= packet.Data[SELF_2_MULTILINEENABLE_OFFSET] & 0x01;
+		m_Info.Self_2_MultiLineNum		= packet.Data[SELF_2_MULTILINEENABLE_OFFSET + 1];
+		m_Info.Self_2_MultiNoiseLineNum = packet.Data[SELF_2_MULTILINEENABLE_OFFSET + 2];
+		m_Info.Key_Axis					= (packet.Data[KEY_MULTILINEENABLE_OFFSET] >> 7) & 0x01;
+		m_Info.Key_ChnType				= (packet.Data[KEY_MULTILINEENABLE_OFFSET] >> 6) & 0x01;
+		m_Info.Key_MultiLineEnable		= packet.Data[KEY_MULTILINEENABLE_OFFSET] & 0x01;
+		m_Info.Key_MultiLineNum			= packet.Data[KEY_MULTILINEENABLE_OFFSET + 1];
+		m_Info.Key_MultiNoiseLineNum	= packet.Data[KEY_MULTILINEENABLE_OFFSET + 2];
 
 		return true;
 	}

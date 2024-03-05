@@ -17,6 +17,8 @@ namespace HFST
         void SetWndProc(WNDPROC proc);
         void SetGUID(GUID guid);
 
+        HWND GetWnd() const { return m_hWnd; }
+
     private:
         HWND        m_hWnd;
         WNDCLASSEX  wx;

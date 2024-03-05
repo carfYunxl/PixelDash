@@ -29,6 +29,12 @@ protected:
 private slots:
     void ShowICInfo();
 
+public:
+    std::unique_ptr<HFST::Connector>& Get() { return m_Connector; }
+    void SetUI(const QString& str)
+    {
+        ui.textEdit_Log->append(str);
+    }
 private:
     void InitUI_ICInfomation();
     void InitUI_ToolBar();

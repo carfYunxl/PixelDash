@@ -14,6 +14,7 @@
 #include <QListWidget>
 #include <QSplitter>
 
+
 QCMNR::QCMNR(QWidget *parent)
     : QMainWindow(parent)
     , m_Connector(std::make_unique<HFST::Connector>())

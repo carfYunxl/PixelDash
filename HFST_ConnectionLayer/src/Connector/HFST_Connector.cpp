@@ -66,7 +66,6 @@ namespace HFST
                 return false;
         }
 
-
         if ( !IC_GetStatus() )
             return false;
 
@@ -80,14 +79,15 @@ namespace HFST
                 break;
             case IC_Status::CONNECT:
             {
-                if ( m_IcInfo.nChipID == static_cast<int>(ChipID::A8018) )
-                {
-                    CommandIO cmd_io( m_IcInfo.nChipID );
-                    //cmd_io.GetInfo();
-                }
-
                 if ( !IC_GetInformation() )
                     return false;
+
+                if ( m_IcInfo.nChipID == static_cast<int>(ChipID::A8018) )
+                {
+                    CommandIO cmd_io(m_IcInfo);
+                    cmd_io.GetInfo();
+                }
+
             }
         }
         

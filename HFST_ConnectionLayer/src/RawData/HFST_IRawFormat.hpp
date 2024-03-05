@@ -37,10 +37,10 @@ namespace HFST
         {}
         ~A8008_RawFormat() {}
 
-        virtual int  GetReadLength() override;
-        virtual int  IndexOfTag() override;
-        virtual int  IndexOfChannel() override;
-        virtual int  IndexOfData() override;
+        virtual int  GetReadLength() override { return 0; }
+        virtual int  IndexOfTag() override { return 0; }
+        virtual int  IndexOfChannel() override { return 0; }
+        virtual int  IndexOfData() override { return 0; }
     };
 
     class A8010_RawFormat : public IRawFormat
@@ -51,10 +51,10 @@ namespace HFST
         {}
         ~A8010_RawFormat() {}
 
-        virtual int  GetReadLength() override;
-        virtual int  IndexOfTag() override;
-        virtual int  IndexOfChannel() override;
-        virtual int  IndexOfData() override;
+        virtual int  GetReadLength() override { return 0; }
+        virtual int  IndexOfTag() override { return 0; }
+        virtual int  IndexOfChannel() override { return 0; }
+        virtual int  IndexOfData() override { return 0; }
     };
 
     class A8015_RawFormat : public IRawFormat
@@ -65,10 +65,10 @@ namespace HFST
         {}
         ~A8015_RawFormat() {}
 
-        virtual int  GetReadLength() override;
-        virtual int  IndexOfTag() override;
-        virtual int  IndexOfChannel() override;
-        virtual int  IndexOfData() override;
+        virtual int  GetReadLength() override { return 0; }
+        virtual int  IndexOfTag() override { return 0; }
+        virtual int  IndexOfChannel() override { return 0; }
+        virtual int  IndexOfData() override { return 0; }
     };
 
     class A2152_RawFormat : public IRawFormat
@@ -79,10 +79,10 @@ namespace HFST
         {}
         ~A2152_RawFormat() {}
 
-        virtual int  GetReadLength() override;
-        virtual int  IndexOfTag() override;
-        virtual int  IndexOfChannel() override;
-        virtual int  IndexOfData() override;
+        virtual int  GetReadLength() override { return 0; }
+        virtual int  IndexOfTag() override { return 0; }
+        virtual int  IndexOfChannel() override { return 0; }
+        virtual int  IndexOfData() override { return 0; }
     };
 }
 

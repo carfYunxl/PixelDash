@@ -145,10 +145,15 @@ namespace HFST
         template<typename T>
         struct ChannelRaw
         {
+            ChannelRaw() 
+                : nDataType(0)
+                , nChannelIdx(0)
+                , Type(TAG_TYPE::AG)
+            {}
             uchar       nDataType;        // Raw type
             uchar       nChannelIdx;      // which channel
             TAG_TYPE    Type;             // tell the tag info
-            Vec<T>&     vecRaw;           // Raw
+            Vec<T>      vecRaw;           // Raw
         };
 
         // some structure

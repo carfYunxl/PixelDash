@@ -25,7 +25,7 @@ namespace HFST
             auto dll_path_USB = dll_path / "HFST_WinUSB_Driver.dll";
             USB_Driver.LoadDLL(dll_path_USB.string());
 
-            auto dll_path_usbhid = dll_path / "USB_HID.dll";
+            auto dll_path_usbhid = dll_path / "USBHID.dll";
             USB_HID.LoadDLL(dll_path_usbhid.string());
         }
         catch (const HFST::HFST_Exception& exception)

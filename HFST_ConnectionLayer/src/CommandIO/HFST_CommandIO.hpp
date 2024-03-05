@@ -7,8 +7,8 @@ namespace HFST
 {
     struct CommandIO_Packet
     {
-        int nCmdID;
-        int nDataSize;
+        unsigned char nCmdID;
+        unsigned char nDataSize;
         unsigned char Data[COMMAND_IO::CMDIO_PACK_SIZE];
     };
 
@@ -17,7 +17,7 @@ namespace HFST
     class CommandIO
     {
     public:
-        explicit CommandIO(int nChipID);
+        explicit CommandIO(IC_Info& info);
 
         int Read(
             MEMORY_TYPE nMemType, 
@@ -33,14 +33,14 @@ namespace HFST
             int len
         );
 
-        bool GetInfo( unsigned char* info, unsigned int len );
+        bool GetInfo();
     private:
         bool SetCommandReady();
         bool GetCommandReady();
         bool Read_Packet( CommandIO_Packet& packet );
         bool Write_Packet( const CommandIO_Packet& packet );
     private:
-        ChipID          m_ChipID;
+        IC_Info&    m_Info;
     };
 }
 
