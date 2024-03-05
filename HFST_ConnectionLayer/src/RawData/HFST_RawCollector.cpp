@@ -29,8 +29,7 @@ namespace HFST
 
         channel.nDataType = pBuffer[m_RawFormat->IndexOfDatatype()];
 
-        bool bTag = m_RawFormat->HasTagInfomation();
-        if ( bTag )
+        if ( m_RawFormat->HasTagInfomation() )
         {
             channel.Type = ConvertToTagType(pBuffer[m_RawFormat->IndexOfTag()] );
         }
@@ -41,7 +40,7 @@ namespace HFST
 
         int nLen = nDataSize - nDataIdx + 1;
 
-        if (channel.nDataType == 0x20)
+        if ( m_RawFormat->IsHeader(channel.nDataType) )
         {
             channel.vecRaw.resize(nLen);
 
@@ -65,6 +64,33 @@ namespace HFST
 
     int RawCollector::ReadFrame( RAW::Frame<short>& frame )
     {
+        RAW::ChannelRaw<short> Raw;
+        while (1)
+        {
+            Raw.vecRaw.clear();
+            int ret = ReadChannelRaw(Raw);
+            if ( ret <= 0 ) {
+                return ret;
+            }
+
+            if (m_RawFormat->IsHeader(Raw.nDataType))
+                frame.vctHeader = Raw;
+            else if (m_RawFormat->IsMutual(Raw.nDataType))
+                frame.vctMutual.push_back(Raw);
+            else if (m_RawFormat->IsSelfX(Raw.nDataType))
+                frame.vctXSelf.push_back(Raw);
+            else if (m_RawFormat->IsSelfY(Raw.nDataType))
+                frame.vctYSelf.push_back(Raw);
+            else if (m_RawFormat->IsSelfXNs(Raw.nDataType))
+                frame.vctXSelfNs.push_back(Raw);
+            else if (m_RawFormat->IsSelfYNs(Raw.nDataType))
+                frame.vctYSelfNs.push_back(Raw);
+            else if (m_RawFormat->IsKey(Raw.nDataType))
+                frame.vctKey = Raw;
+            else if (m_RawFormat->IsKeyNs(Raw.nDataType))
+                frame.vctKeyNs = Raw;
+        }
+
         return 1;
     }
 

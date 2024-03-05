@@ -150,6 +150,15 @@ namespace HFST
                 , nChannelIdx(0)
                 , Type(TAG_TYPE::AG)
             {}
+
+            ChannelRaw& operator=(const ChannelRaw& rhs)
+            {
+                nDataType = rhs.nDataType;
+                nChannelIdx = rhs.nChannelIdx;
+                Type = rhs.Type;
+                std::copy(rhs.vecRaw.begin(), rhs.vecRaw.end(), std::back_inserter(vecRaw.begin()));
+                return *this;
+            }
             uchar       nDataType;        // Raw type
             uchar       nChannelIdx;      // which channel
             TAG_TYPE    Type;             // tell the tag info
