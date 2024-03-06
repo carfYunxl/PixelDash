@@ -87,7 +87,7 @@ namespace HFST
                     CommandIO cmd_io(m_IcInfo);
                     cmd_io.GetInfo();
                 }
-
+                break;
             }
         }
         

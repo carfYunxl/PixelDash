@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <iterator>
+#include <algorithm>
 #include "HFST_APICenter.hpp"
 
 namespace HFST
@@ -156,7 +158,7 @@ namespace HFST
                 nDataType = rhs.nDataType;
                 nChannelIdx = rhs.nChannelIdx;
                 Type = rhs.Type;
-                std::copy(rhs.vecRaw.begin(), rhs.vecRaw.end(), std::back_inserter(vecRaw.begin()));
+                std::copy(rhs.vecRaw.begin(), rhs.vecRaw.end(), std::back_inserter(vecRaw));
                 return *this;
             }
             uchar       nDataType;        // Raw type

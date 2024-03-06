@@ -13,7 +13,7 @@ namespace HFST
     class RawCollector
     {
     public:
-        RawCollector( const IC_Info& info);
+        explicit RawCollector( const IC_Info& info);
 
         int ReadChannelRaw( RAW::ChannelRaw<short>& channel );
         int ReadFrame(  RAW::Frame<short>& frame );

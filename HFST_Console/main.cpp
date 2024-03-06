@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
     if (!connector.Connect())
     {
         std::cout << "Connected Failed!\n";
+        return 0;
     }
 
     HFST::IC_Info info = connector.IC_GetInfo();
@@ -45,7 +46,7 @@ int main(int argc, char* argv[])
                 if (raw.nDataType == 0x20)
                     strText.append(std::format("{:02X} ", raw.vecRaw.at(i)));
                 else
-                    strText.append(std::format("{} ", raw.vecRaw.at(i)));
+                    strText.append(std::format("{:4d} ", raw.vecRaw.at(i)));
             }
 
             std::cout << strText << std::endl;

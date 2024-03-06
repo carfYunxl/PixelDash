@@ -19,8 +19,7 @@ namespace HFST
         std::unique_ptr<unsigned char[]> pBuffer = std::make_unique<unsigned char[]>(nBufferLen);
 
         int ret = pApi->TTK.ReadI2CReg( pBuffer.get(), ADDR_MAP::RAW, nBufferLen );
-        if (ret <= 0)
-        {
+        if (ret <= 0) {
             return ret;
         }
 
