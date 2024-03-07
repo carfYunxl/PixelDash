@@ -385,7 +385,7 @@ extern "C"
     int EXPORT_API WriteRegTL_Bulk(unsigned int Addr, unsigned int Data);
     int EXPORT_API ReadRegTL_Bulk(unsigned int Addr, unsigned int *Data);
     //int __fastcall ExWriteFlashHW(unsigned char *Data, unsigned int Addr ,unsigned int Len);
-
+//**************  HERE	//*************
     int EXPORT_API EraseFlashHW(unsigned int Addr, unsigned int Len);
     int EXPORT_API ST1802EraseFlashHW(unsigned int Addr , unsigned int Len);
     int EXPORT_API ReadFlashHW(unsigned char *Data, unsigned int Addr, unsigned int Len);

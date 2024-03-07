@@ -1242,3 +1242,1136 @@ bool TTK_Communication_API::ExReadFlashPage_Bulk_SPI_ST1802(int Addr, unsigned c
 	memcpy(Data, OutPutData, PageSize1K);
 	return true;
 }
+
+bool TTK_Communication_API::ExReadFlashPage_Bulk_SPI_ST1801(unsigned short Addr, unsigned char* Data)
+{
+	int ret = 0;
+	BYTE EBuffer[BulkLen] = { 0 }, RBuffer[BulkLen] = { 0 }, OutPutData[PageSize1K * 2] = { 0 };
+	//Read Flash Data
+	EBuffer[0] = Bridge_Read_SPI_AvdRead_Command_Packet;//Bridge_SPI_AvdRead_Command_Packet;	//SPI Read
+	EBuffer[1] = 12;	//Length L
+	EBuffer[2] = 0;		//Length H
+
+	EBuffer[3] = 0;		//Delay1
+	EBuffer[4] = 0;		//Delay2
+	EBuffer[5] = 0x80;	//Signature Number
+	EBuffer[6] = 0;		//Transfer Method
+	EBuffer[7] = 0;		//Read Length L
+	EBuffer[8] = 4;		//Read Length H
+	EBuffer[9] = 0;		//Reserved
+	EBuffer[10] = 0;	//Reserved
+
+	EBuffer[11] = 0x03;	//Read Data
+	EBuffer[12] = (unsigned char)(Addr >> 16);	//A23-A16
+	EBuffer[13] = (unsigned char)(Addr >> 8);	//A15-A8
+	EBuffer[14] = (unsigned char)(Addr);		//A7-A0
+
+	ret = USBComm_WriteToBulkEx(EBuffer, BulkLen);
+	if (ret < 0) {
+		return false;
+	}
+	int nIndex = 0;
+	for (int i = 0; i < 17; i++) {
+		ret = USBComm_ReadFromBulkEx(RBuffer, 64);
+		if (ret < 0) {
+			return false;
+		}
+		if (i == 0) {
+			for (int j = 8; j < 64; j++) {
+				OutPutData[nIndex++] = RBuffer[j];
+			}
+		}
+		else {
+			for (int j = 1; j < 64; j++) {
+				OutPutData[nIndex++] = RBuffer[j];
+			}
+		}
+	}
+	memcpy(Data, OutPutData, PageSize1K);
+	return true;
+}
+
+int TTK_Communication_API::EraseFlashHW_ST1801(unsigned int Addr)
+{
+	BYTE EBuffer[BulkLen] = { 0 };
+	int ret = 0;
+
+	ret = GetTouchLinkVersion(&g_TouchLinkVersion);
+	if (ret <= 0) return ret;
+
+	EBuffer[0] = 0x75;	//SPI Write
+	EBuffer[1] = 3;		//Length L
+	EBuffer[2] = 0;		//Length H
+
+	EBuffer[3] = 0;		//Delay1
+	EBuffer[4] = 0;		//Delay2
+
+	EBuffer[5] = 0x06;	//Write Enable
+
+	ret = USBComm_WriteToBulkEx(EBuffer, BulkLen);
+	if (ret < 0) {
+		return false;
+	}
+	//Erase Sector Command
+	EBuffer[0] = 0x75;	//SPI Write
+	EBuffer[1] = 6;		//Length L
+	EBuffer[2] = 0;		//Length H
+
+	EBuffer[3] = 0;		//Delay1
+	EBuffer[4] = 0;		//Delay2
+
+	EBuffer[5] = 0x20;	//Sector Erase
+	EBuffer[6] = (unsigned char)(Addr >> 16);	//A23-A16
+	EBuffer[7] = (unsigned char)(Addr >> 8);	//A15-A8
+	EBuffer[8] = (unsigned char)(Addr);		//A7-A0
+
+	ret = USBComm_WriteToBulkEx(EBuffer, BulkLen);
+	if (ret < 0) {
+		return false;
+	}
+	if (CheckST1801_SPI_FLASH_Busy() == false) {
+		return false;
+	}
+	return true;
+}
+
+//------------------------------------------------------------------
+//|0x10|0x04|0x00|0x00|AddressH|AddressL|16K|
+//------------------------------------------------------------------
+bool TTK_Communication_API::ExEraseFlashPage_Bulk(unsigned short Addr)
+{
+	if( m_Chipid == CHIP_ID::A2152 )
+		return EraseFlashHW_ST1801(Addr);
+
+	if (m_Chipid == CHIP_ID::A8010)
+	{
+		if (Addr >= 0xC000 && Addr < 0xFC00) {
+			return true;
+		}
+	}
+
+	int ret;
+	char StrShow[100];
+	unsigned char EBuffer[BulkLen] = { 0 };
+
+	if ((Addr & 0xFF) != 0) {
+		return false;
+	}
+
+	EBuffer[0] = Bridge_T_HWISP;
+	EBuffer[1] = 4; //Length L
+	EBuffer[2] = 0; //Length H
+	EBuffer[3] = HWISP_Erase;
+	EBuffer[4] = Addr >> 7;
+	EBuffer[5] = Addr & 0x7F;
+	if (m_Chipid == CHIP_ID::A8008)
+	{
+		if (Addr >= Flash16k) {
+			EBuffer[4] = (Addr - Flash16k) >> 7;
+			EBuffer[5] = (Addr - Flash16k) & 0x7F;
+			EBuffer[6] = 0x80;
+		}
+		else {
+			EBuffer[6] = 0x00;
+		}
+	}
+	else if (m_Chipid == CHIP_ID::A8015)
+	{
+		if (Addr >= Flash32k) {
+			EBuffer[4] = (Addr - Flash32k) >> 7;
+			EBuffer[5] = (Addr - Flash32k) & 0x7F;
+			EBuffer[6] = 0x80;
+		}
+		else {
+			EBuffer[6] = 0x00;
+		}
+	}
+	else if (m_Chipid == CHIP_ID::A8010)
+	{
+		EBuffer[4] = Addr >> 8;
+		EBuffer[5] = Addr & 0x8F;
+		if (Addr >= Flash63k) {
+			EBuffer[4] = Addr >> 8;
+			EBuffer[5] = Addr & 0xFF;
+			EBuffer[6] = 0x80; //因為超過16k, 要通知Touch-Link
+		}
+		else {
+			EBuffer[6] = 0;
+		}
+	}
+
+	ret = USBComm_WriteToBulkEx(EBuffer, BulkLen);
+	if (ret < 0) {
+		return false;
+	}
+	if (ret != BulkLen) {
+		return false;
+	}
+	return true;
+}
+
+//------------------------------------------------------------------
+//|0x10|0x04|0x00|0x03|
+//------------------------------------------------------------------
+bool TTK_Communication_API::MassEraseFlash_Bulk(void)
+{
+	int ret;
+	unsigned char EBuffer[BulkLen] = { 0 };
+
+	EBuffer[0] = Bridge_T_HWISP;
+	EBuffer[1] = 4; //Length L
+	EBuffer[2] = 0; //Length H
+	EBuffer[3] = HWISP_Mass_Erase;
+	EBuffer[6] = 0x00; //All erase
+	ret = USBComm_WriteToBulkEx(EBuffer, BulkLen);
+	if (ret < 0) {
+		return false;
+	}
+	SleepInProgram(40);
+	return true;
+}
+
+//------------------------------------------------------------------
+//ST1572: |0x88|0x00|0x00|0x00|0x00|0x00|0x00|0x00|
+//
+//|VerIntegral[3]|VerIntegral[2]|VerIntegral[1]|VerIntegral[0]|VerDecimal[3] |VerDecimal[2] |VerDecimal[1] |VerDecimal[0]|
+//------------------------------------------------------------------
+bool TTK_Communication_API::ReadFWVersion_SW(float* Ver)
+{
+	unsigned char VBuffer[BulkLen] = { 0 };
+	int ret;
+
+	VBuffer[0] = SWISP_Get_FWVer;
+	VBuffer[1] = 0;
+	VBuffer[2] = 0;
+	VBuffer[3] = 0;
+	VBuffer[4] = 0;
+	VBuffer[5] = 0;
+	VBuffer[6] = 0;
+	VBuffer[7] = 0;
+
+	ret = WriteCmd(VBuffer, SWISPLength);
+	if (ret < 0) {
+		return false;
+	}
+	ret = ReadCmd(VBuffer, SWISPLength);
+	if (ret < 0) {
+		return false;
+	}
+	*Ver = (float)VBuffer[7] * 1000.0 + (float)VBuffer[6] * 100.0 + (float)VBuffer[5] * 10.0 + (float)VBuffer[4] * 1.0 + \
+		(float)VBuffer[3] * 0.1 + (float)VBuffer[2] * 0.01 + (float)VBuffer[1] * 0.001 + (float)VBuffer[0] * 0.0001;
+	return true;
+}
+
+//------------------------------------------------------------------
+//ST1572: |0x8B|0x00|0x00|0x00|0x00|0x00|0x00|0x00|
+//
+//|ChecksumL|ChecksumH|0x00|0x00|0x00|0x00|0x00|0x00|
+//------------------------------------------------------------------
+bool TTK_Communication_API::ReadChecksum_SW(unsigned int Length, unsigned int* Checksum)
+{
+	unsigned char CBuffer[BulkLen] = { 0 };
+	int ret;
+
+	CBuffer[0] = SWISP_Read_Checksum;
+	CBuffer[1] = Length & 0xFF;
+	CBuffer[2] = (Length >> 8) & 0xFF;
+	CBuffer[3] = (Length >> 16) & 0xFF;
+	CBuffer[4] = (Length >> 24) & 0xFF;
+	CBuffer[5] = 0;
+	CBuffer[6] = 0;
+	CBuffer[7] = 0;
+
+	ret = WriteCmd(CBuffer, SWISPLength);
+	if (ret < 0) {
+		return false;
+	}
+
+	ret = ReadCmd(CBuffer, SWISPLength);
+	if (ret < 0) {
+		return false;
+	}
+	*Checksum = CBuffer[0] + (CBuffer[1] << 8);
+	return true;
+}
+
+//----------------------------------------------------------
+bool TTK_Communication_API::Jump_SWISP(void)
+{
+	int ret, i = 0, Repeat = 2;
+	unsigned char state[9];
+	ret = ReadI2CReg(state, 0x01, 0x08);
+	if (ret < 0)
+	{
+		return false;
+	}
+
+	if (state[0] == 0x06)
+	{
+		return true;
+	}
+
+	unsigned char pattern[9] = { "STX_FWUP" };
+
+	//====check status====end*/
+	Repeat = 2;
+	while (Repeat--)
+	{
+		for (i = 0; i < 8; i++)
+		{
+			//ret = WriteI2CReg_Bulk(0x00,JumpSWISPString[i]);
+			ret = WriteI2CReg(&pattern[i], 0x00, 1);
+			if (ret == false)
+			{
+				return false;
+			}
+		}
+
+		SleepInProgram(300);
+		//====check status====
+		ret = ReadI2CReg(state, 0x01, 0x08);
+		if (ret < 0)
+		{
+			return false;
+		}
+		if (state[0] == 0x06)
+		{
+			return true;
+		}
+		//====check status====end
+		SleepInProgram(nSleepTime);
+		//====check status====
+		ret = ReadI2CReg(state, 0x01, 0x08);
+		if (ret < 0)
+		{
+			return false;
+		}
+		if (state[0] == 0x06)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//------------------------------------------------------------------
+//ST1572: |0x89|0x00|0x00|0x00|0x00|0x00|0x00|0x00|
+//------------------------------------------------------------------
+bool TTK_Communication_API::JumpBack_SW(void)
+{
+	unsigned char JBuffer[BulkLen] = { 0 };
+	int ret;
+
+	JBuffer[0] = SWISP_Run_APROM;
+	JBuffer[1] = 0;
+	JBuffer[2] = 0;
+	JBuffer[3] = 0;
+	JBuffer[4] = 0;
+	JBuffer[5] = 0;
+	JBuffer[6] = 0;
+	JBuffer[7] = 0;
+
+	ret = WriteCmd(JBuffer, SWISPLength);
+	if (ret < 0) {
+		return false;
+	}
+	return true;
+}
+
+//------------------------------------------------------------------
+bool TTK_Communication_API::GetResponse_SW(unsigned short* Checksum)
+{
+	int ret;
+	char StrShow[100];
+	unsigned char GBuffer[BulkLen] = { 0 };
+
+	ret = ReadCmd(GBuffer, SWISPLength);
+	if (ret < 0)
+	{
+		return false;
+	}
+	if (GBuffer[0] != 0x8F)
+	{
+		return false;
+	}
+	else {
+		if (GBuffer[2] & 0x10)
+		{
+			return false;
+		}
+		else {
+			if (GBuffer[2] & 0x02)
+			{
+				return false;
+			}
+			else {
+				if (GBuffer[2] & 0x01)
+				{
+					//MsgAdd("Flash Error");
+					return false;
+				}
+				else
+				{
+					//MsgAdd("Flash Correct");
+				}
+			}
+		}
+	}
+	*Checksum = GBuffer[4] + (GBuffer[5] << 8);
+	return true;
+}
+
+//------------------------------------------------------------------
+//ST1572: |0x8D|0x00|BlockNum|0x00|0x00|0x00|0x00|0x00|
+//
+//|Data0 |Data1 |Data2 |Data3 |Data4 |Data5 |Data6 |Data7 |
+//|Data8 |Data9 |Data10|Data11|Data12|Data13|Data14|Data15|
+//...
+//|Data504|Data505|Data506|Data507|Data508|Data509|Data510|Data511|
+//------------------------------------------------------------------
+bool TTK_Communication_API::ReadDataFlashBlock_SW(unsigned int Addr, unsigned char* Data)
+{
+	unsigned char RBuffer[BulkLen] = { 0 };
+	int i, ret, iData = 0;
+
+	RBuffer[0] = SWISP_Read_DataFlash;
+	RBuffer[1] = 0;
+	RBuffer[2] = (Addr >> 9) & 0xFF;
+	RBuffer[3] = 0;
+	RBuffer[4] = 0;
+	RBuffer[5] = 0;
+	RBuffer[6] = 0;
+	RBuffer[7] = 0;
+
+	ret = WriteCmd(RBuffer, SWISPLength);
+	if (ret < 0) {
+		return false;
+	}
+	while (iData < BlockSize)
+	{
+		ret = ReadCmd(RBuffer, SWISPLength);
+		if (ret < 0) {
+			return false;
+		}
+
+		for (i = 0; (i < SWISPLength) && (iData < BlockSize); i++, iData++) {
+			Data[iData] = RBuffer[i];
+		}
+	}
+	return true;
+}
+
+//-----------------------------------------------------------------
+bool TTK_Communication_API::ResetBridgeStatus_Bulk(void)
+{
+	int ret;
+	unsigned char WBuffer[BulkLen] = { 0 };
+	WBuffer[0] = Bridge_T_ResetBridge;
+	WBuffer[1] = 0; //Length L
+	WBuffer[2] = 0; //Length H
+
+	ret = USBComm_WriteToBulkEx(WBuffer, BulkLen);
+	if (ret < 0)
+	{
+		////ShowMessage("USB_Write_Fail");
+		return false;
+	}
+	if (ret != BulkLen)
+	{
+		////ShowMessage("Non-complete");
+		return false;
+	}
+	return true;
+}
+
+//----------------------------------------------------------------
+int TTK_Communication_API::Read_Packet_Bulk(unsigned char* RBuffer, unsigned short RLength)
+{
+	unsigned char RData[UsbMaxReadLen] = { 0 };
+	int ReadL = 0, ret, timeout = ReadTimeout, i = 0;
+	int done = false;
+	int countFO = 0;
+	int usbReadNum;
+	DWORD dwStartTick = GetTickCount();
+	do
+	{
+		usbReadNum = UsbMaxReadLen;
+		timeout = ReadTimeout;
+		done = false;
+		int numReadUsbReadBytes = 0;
+		int numReadUsbUsedBytes = 0;
+		int numReadTime = 0;
+		if (ReadL == 0) { // first one
+			for (int k = 0; k < UsbMaxReadLen / 60; k++) {
+				numReadUsbReadBytes += 64;
+				numReadTime++;
+				if (k == 0) {
+					numReadUsbUsedBytes += 60;
+				}
+				else {
+					numReadUsbUsedBytes += 63;
+				}
+				if (numReadUsbReadBytes >= UsbMaxReadLen) {
+					break;
+				}
+				if (numReadUsbUsedBytes >= (RLength - ReadL)) {
+					break;
+				}
+			}
+		}
+		else {
+			for (int k = 0; k < 100000; k++) {
+				numReadUsbReadBytes += 64;
+				numReadTime++;
+				numReadUsbUsedBytes += 63;
+				if (numReadUsbReadBytes >= UsbMaxReadLen) {
+					break;
+				}
+				if (numReadUsbUsedBytes >= (RLength - ReadL)) {
+					break;
+				}
+			}
+		}
+		usbReadNum = numReadUsbReadBytes;
+		ret = USBComm_ReadFromBulkEx(RData, usbReadNum);
+		if (ret < 0)
+		{
+			return ERRORMSG_BRIDGE_STATUS_TIMEOUT; ;
+		}
+
+		int bankNum = ((ret - 1) / 64) + 1;
+		int bankCnt = 0;
+		if (fSPIMode) {
+			//  if(RData[0]==Bridge_R_SPI_Data_Packet && RData[4]==0x87 && RData[5]==0x00){
+			if ((RData[0] == Bridge_R_SPI_Data_Packet || RData[0] == Bridge_R_HWISP_Data) || (RData[0] == 0xff)) {
+
+			}
+			else {
+				return ERRORMSG_READ_PACKET_ERROR;
+			}
+		}
+#if( (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802))
+		if (RData[0] != 0x82) {
+			//return ERRORMSG_READ_PACKET_ERROR;
+		}
+#endif
+		while ((bankCnt < bankNum) && (ReadL < RLength)) {
+			int nErrorTimeOut = 1000;
+			do
+			{
+				switch (RData[0 + bankCnt * 64])
+				{
+				case Bridge_R_SPI_Data_Packet:
+				case Bridge_R_Data:
+				case Bridge_R_I2C_Data:
+				case Bridge_R_HWISP_Data:
+					if (fSPIMode && RData[0] == Bridge_R_SPI_Data_Packet) {
+						for (i = 7; (i < 64) && (ReadL < RLength); i++, ReadL++)
+						{
+							RBuffer[ReadL] = RData[i + (bankCnt * 64)];
+						}
+					}
+					else {
+						for (i = 4; (i < 64) && (ReadL < RLength); i++, ReadL++)
+						{
+							RBuffer[ReadL] = RData[i + (bankCnt * 64)];
+						}
+					}
+					done = true;
+					bankCnt++;
+					break;
+				case Bridge_R_Continuous:
+					for (i = 1; (i < 64) && (ReadL < RLength); i++, ReadL++)
+					{
+						RBuffer[ReadL] = RData[i + (bankCnt * 64)];
+
+					}
+					done = true;
+					bankCnt++;
+					break;
+				case Bridge_R_Status:
+					countFO++;
+					memcpy(&RBuffer[0], &RData[0], RLength);
+					switch (RData[4])
+					{
+					case BridgeStatus_TouchPanel_Detect_Mode:
+						return ERRORMSG_BRIDGE_STATUS_SCANNING;
+						break;
+					case Bridge_Status_Running:
+						break;
+					case Bridge_Status_Initialization:
+						break;
+					case Bridge_Status_Ready:
+						switch (RData[5])
+						{
+						case I2C_Status_ACK:
+							done = true;
+							return ERRORMSG_TIMEOUT;
+							break;
+						case I2C_Status_Initialization:
+							done = true;
+							return ERRORMSG_TIMEOUT;
+							break;
+						case I2C_Status_NAK:
+							return ERRORMSG_BRIDGE_STATUS_NAK;
+						case I2C_Status_Timeout:
+							return ERRORMSG_BRIDGE_STATUS_TIMEOUT;
+						case I2C_Status_Arbitration_Loss:
+							return ERRORMSG_BRIDGE_STATUS_ARB_Loss;
+						case I2C_Status_Bus_Fault:
+							return ERRORMSG_BRIDGE_STATUS_BUS_FAULT;
+						default:
+							return ERRORMSG_BRIDGE_STATUS_ERROR;
+							break;
+						}
+
+						break;
+					case Bridge_Status_Error:
+						switch (RData[8])
+						{
+						case Error_Bulk_Length:
+							break;
+						case Error_First_Packet:
+							break;
+						case Error_Continuous_Packet:
+							break;
+						case Error_Unexpected:
+							break;
+						case Error_UnknownCmd:
+							break;
+						case Error_ReadTimeout:
+							break;
+						case Error_VddGndShort:
+							return ERRORMSG_BRIDGE_STATUS_ERROR_VDDGND_Short;
+							break;
+						}
+						ResetBridgeStatus_Bulk();
+						return ERRORMSG_BRIDGE_STATUS_ERROR;
+					default:
+						break;
+					}
+					break;
+				default:
+					return ERRORMSG_READ_PACKET_ERROR;
+				}
+			} while (!done);
+		}
+		if (timeout <= 0)
+		{
+			return ERRORMSG_TIMEOUT;
+		}
+	} while ((ReadL < RLength) && (timeout--) && ((GetTickCount() - dwStartTick) < 3000));
+
+	return 1;
+}
+
+//----------------------------------------------------------------
+int TTK_Communication_API::Read_Packet_INT_Bulk(unsigned char* RBuffer, unsigned short RLength)
+{
+	unsigned char RData[BulkLen] = { 0 };
+	char StrShow[100];
+	int ReadL = 0, ret, i = 0;
+
+	ret = USBComm_ReadFromBulkEx(RData, BulkLen);
+
+	if (ret < 0) {
+		return ERRORMSG_READ_BLUK_FAIL;
+	}
+	if (ret != BulkLen) {
+		return ERRORMSG_NON_COMPLETE_TRANSFER;
+	}
+
+	memset(RBuffer, 0, sizeof(RBuffer));
+	switch (RData[0]) {
+	case Bridge_R_INT_Detect_Data_Packet_Mode2:
+		for (i = 0; (i < 64) && (ReadL < RLength); i++, ReadL++)
+		{
+			RBuffer[ReadL] = RData[i];
+		}
+		return ret;
+		break;
+	case Bridge_R_INT_Detect_Data_Packet:
+		for (i = 4; (i < 64) && (ReadL < RLength); i++, ReadL++)
+		{
+			RBuffer[ReadL] = RData[i];
+		}
+		return 1;
+		break;
+	case Bridge_R_Data:
+	case Bridge_R_I2C_Data:
+	case Bridge_R_HWISP_Data:
+		for (i = 4; (i < 64) && (ReadL < RLength); i++, ReadL++)
+		{
+			RBuffer[ReadL] = RData[i];
+		}
+		break;
+	case Bridge_R_Continuous:
+	case Bridge_R_Status:
+
+		switch (RData[4])
+		{
+		case BridgeStatus_TouchPanel_Detect_Mode:
+		{
+
+		}
+		break;
+		case Bridge_Status_Running:
+			break;
+		case Bridge_Status_Initialization:
+			break;
+		case Bridge_Status_Ready:
+			switch (RData[5])
+			{
+			case I2C_Status_ACK:
+				break;
+			case I2C_Status_Initialization:
+				break;
+			case I2C_Status_NAK:
+				return ERRORMSG_BRIDGE_STATUS_NAK;
+			case I2C_Status_Timeout:
+				return ERRORMSG_BRIDGE_STATUS_TIMEOUT;
+			case I2C_Status_Arbitration_Loss:
+				return ERRORMSG_BRIDGE_STATUS_ARB_Loss;
+			case I2C_Status_Bus_Fault:
+				return ERRORMSG_BRIDGE_STATUS_BUS_FAULT;
+			default:
+				break;
+			}
+
+			break;
+		case Bridge_Status_Error:
+			switch (RData[8])
+			{
+			case Error_Bulk_Length:
+				break;
+			case Error_First_Packet:
+				break;
+			case Error_Continuous_Packet:
+				break;
+			case Error_Unexpected:
+				break;
+			case Error_UnknownCmd:
+				break;
+			case Error_ReadTimeout:
+				break;
+			}
+			ResetBridgeStatus_Bulk();
+			return ERRORMSG_BRIDGE_STATUS_ERROR;
+		default:
+			break;
+		}
+		return -1;  //No Data
+	default:
+		return ERRORMSG_READ_PACKET_ERROR;
+	}
+	return 1;
+}
+
+int TTK_Communication_API::Read_TouchPanelDetectStatus()
+{
+	unsigned char RData[BulkLen] = { 0 };
+	char StrShow[100];
+	int ReadL = 0, ret = 0, i = 0;
+
+	ret = USBComm_ReadFromBulkEx(RData, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_READ_BLUK_FAIL;
+	}
+	if (ret != BulkLen)
+	{
+		return ERRORMSG_NON_COMPLETE_TRANSFER;
+	}
+
+	if (RData[0] == Bridge_R_INT_Detect_Data_Packet_Mode2) {
+		if (RData[0x03] == BridgeStatus_TouchPanel_Detect_Mode) {//0x06 = 
+			if (RData[0x04] == 0x01) {
+				ret = (RData[5] << 8) + (RData[6] << 4) + RData[7];
+			}
+			else {
+				ret = ERRORMSG_TP_Not_Connect;
+			}
+		}
+	}
+	else {
+		ret = ERRORMSG_Not_Touch_Panel_Detect_Mode_Status;
+	}
+	return ret;
+}
+
+//-----------------------------------------------------------------
+//mode 0: Jump Bulk
+//mode 1: Jump HID
+//-----------------------------------------------------------------
+int TTK_Communication_API::SwitchBridge(unsigned char mode)
+{
+	int ret;
+	unsigned char WBuffer[BulkLen] = { 0 };
+	WBuffer[0] = Bridge_T_System_OP;
+	WBuffer[1] = 2; //Length L
+	WBuffer[2] = 0; //Length H
+	WBuffer[3] = 0x0F;  //Bridge Switch
+	WBuffer[4] = mode;
+	ret = USBComm_WriteToBulkEx(WBuffer, BulkLen);
+	if (ret < 0)
+	{
+		////ShowMessage("USB_Write_Fail");
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+	if (ret != BulkLen)
+	{
+		////ShowMessage("Non-complete");
+		return ERRORMSG_NON_COMPLETE_TRANSFER;
+	}
+	return true;
+}
+
+//------------------------------------------------------------------
+//T:|0x6F|0x03|0x00|0x03|LED R/W|LED ON/OFF|
+//------------------------------------------------------------------
+int TTK_Communication_API::SetLED_Bulk(unsigned char LEDSetting, BOOL fFlashMode, BYTE pPeriod)
+{
+	unsigned char TBuffer[BulkLen] = { 0 };
+	int ret;
+	TBuffer[0] = Bridge_T_System_OP;
+	if (fFlashMode == false) {
+		TBuffer[1] = 0x03;
+		TBuffer[2] = 0x00;
+		TBuffer[3] = 0x03; //LED Status Control   
+		TBuffer[4] = 0x00; //write   Data Buffer[1]
+		TBuffer[5] = LEDSetting;  //Data Buffer[2]
+		TBuffer[6] = pPeriod;  //Data Buffer[3]
+	}
+	else {
+		if (pPeriod == 0) {
+			TBuffer[1] = 0x02;
+			TBuffer[2] = 0x00;
+			TBuffer[3] = 0x06; //LED Status Control   
+			TBuffer[4] = 0x00; //NormalMode   Data Buffer[1]
+		}
+		else {
+			TBuffer[1] = 0x04;
+			TBuffer[2] = 0x00;
+			TBuffer[3] = 0x06; //LED Status Control   
+			TBuffer[4] = 0x01; //FlashMode   Data Buffer[1]
+			TBuffer[5] = LEDSetting;  //Data Buffer[2]
+			TBuffer[6] = pPeriod;  //Data Buffer[3]
+		}
+	}
+	ret = USBComm_WriteToBulkEx(TBuffer, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------
+//T:|0x6F|0x02|0x00|0x03|LED R/W|
+//R:|0x8F|0x01|0x00|0x03|LED ON/OFF|
+//------------------------------------------------------------------
+int TTK_Communication_API::GetLED_Bulk(unsigned char* LEDSetting)
+{
+	unsigned char TBuffer[BulkLen] = { 0 };
+	unsigned char RBuffer[BulkLen] = { 0 };
+	int ret, timeout = 100;
+
+	TBuffer[0] = Bridge_T_System_OP;
+	TBuffer[1] = 0x02;
+	TBuffer[2] = 0x00;
+	TBuffer[3] = 0x03; //LED Status Control
+	TBuffer[4] = 0x80; //read
+
+	ret = USBComm_WriteToBulkEx(TBuffer, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+
+	SleepInProgram(5);
+
+	while (timeout--)
+	{
+		ret = USBComm_ReadFromBulkEx(RBuffer, BulkLen);
+		if (ret > 0)
+		{
+			if (RBuffer[0x00] == 0x8F && RBuffer[0x03] == 0x03)
+			{
+				*LEDSetting = RBuffer[0x04];
+				break;
+			}
+		}
+	}
+
+	if (timeout == 0)
+		return ERRORMSG_TIMEOUT;
+
+	return 1;
+}
+
+//------------------------------------------------------------------
+//T:|0x6F|0x03|0x00|0x04|Button W|Button ON/OFF|
+//------------------------------------------------------------------
+int TTK_Communication_API::SetButton_Bulk(unsigned char ButtonSetting)
+{
+	unsigned char TBuffer[BulkLen] = { 0 };
+	int ret;
+
+	TBuffer[0] = Bridge_T_System_OP;
+	TBuffer[1] = 0x03;
+	TBuffer[2] = 0x00;
+	TBuffer[3] = 0x04; //Button Status Control
+	TBuffer[4] = 0x00; //write
+	TBuffer[5] = ButtonSetting;
+
+	ret = USBComm_WriteToBulkEx(TBuffer, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+	return 1;
+}
+
+//------------------------------------------------------------------
+//T:|0x6F|0x02|0x00|0x04|Button R|
+//R:|0x8F|0x01|0x00|0x04|Button Flag|Button78 value|
+//------------------------------------------------------------------
+int TTK_Communication_API::GetButton_Bulk(unsigned char* ButtonSetting)
+{
+	unsigned char TBuffer[BulkLen] = { 0 };
+	unsigned char RBuffer[BulkLen] = { 0 };
+	int ret, timeout = 100;
+
+	TBuffer[0] = Bridge_T_System_OP;
+	TBuffer[1] = 0x02;
+	TBuffer[2] = 0x00;
+	TBuffer[3] = 0x04; //Button Status Control
+	TBuffer[4] = 0x80; //read
+
+	ret = USBComm_WriteToBulkEx(TBuffer, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+	while (timeout--)
+	{
+		ret = USBComm_ReadFromBulkEx(RBuffer, BulkLen);
+		if (ret > 0)
+		{
+			if (RBuffer[0x00] == 0x8F && RBuffer[0x03] == 0x04)
+			{
+				*ButtonSetting = RBuffer[0x04];        //Button Flag
+				*ButtonSetting += (RBuffer[0x05] << 4);  //Button78 value
+				break;
+			}
+		}
+	}
+	if (timeout == 0)
+		return ERRORMSG_TIMEOUT;
+
+	return 1;
+}
+
+//----------------------------------------------------------------------------------
+//T:|0x6F|0x0A|0x00|0x02|RegWrite|ADDR0|ADDR1|ADDR2|ADDR3|Data0|Data1|Data2|Data3|
+//----------------------------------------------------------------------------------
+int  TTK_Communication_API::WriteRegTL_Bulk(unsigned int Addr, unsigned int Data)
+{
+	unsigned char TBuffer[BulkLen] = { 0 };
+	int ret;
+
+	TBuffer[0] = Bridge_T_System_OP;
+	TBuffer[1] = 0x0A;
+	TBuffer[2] = 0x00;
+	TBuffer[3] = 0x02; //Register Control
+	TBuffer[4] = 0x00; //write
+	TBuffer[5] = Addr & 0xFF;
+	TBuffer[6] = (Addr >> 8) & 0xFF;
+	TBuffer[7] = (Addr >> 16) & 0xFF;
+	TBuffer[8] = (Addr >> 24) & 0xFF;
+	TBuffer[9] = Data & 0xFF;
+	TBuffer[10] = (Data >> 8) & 0xFF;
+	TBuffer[11] = (Data >> 16) & 0xFF;
+	TBuffer[12] = (Data >> 24) & 0xFF;
+
+	ret = USBComm_WriteToBulkEx(TBuffer, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+	return 1;
+}
+
+//----------------------------------------------------------------------------------
+//T:|0x6F|0x06|0x00|0x02|RegWrite|ADDR0|ADDR1|ADDR2|ADDR3|
+//R:|0x8F|0x04|0x00|0x02|Data0|Data1|Data2|Data3|
+//----------------------------------------------------------------------------------
+int  TTK_Communication_API::ReadRegTL_Bulk(unsigned int Addr, unsigned int* Data)
+{
+	unsigned char TBuffer[BulkLen] = { 0 };
+	unsigned char RBuffer[BulkLen] = { 0 };
+	int ret, timeout = 10;
+
+	TBuffer[0] = Bridge_T_System_OP;
+	TBuffer[1] = 0x06;
+	TBuffer[2] = 0x00;
+	TBuffer[3] = 0x02; //Register Control
+	TBuffer[4] = 0x80; //Read
+	TBuffer[5] = Addr & 0xFF;
+	TBuffer[6] = (Addr >> 8) & 0xFF;
+	TBuffer[7] = (Addr >> 16) & 0xFF;
+	TBuffer[8] = (Addr >> 24) & 0xFF;
+
+	ret = USBComm_WriteToBulkEx(TBuffer, BulkLen);
+	if (ret < 0)
+	{
+		return ERRORMSG_WRITE_BLUK_FAIL;
+	}
+	SleepInProgram(10);
+	while (timeout--)
+	{
+		ret = USBComm_ReadFromBulkEx(RBuffer, BulkLen);
+		if (ret > 0)
+		{
+			if (RBuffer[0x00] == 0x8F && RBuffer[0x03] == 0x02)
+			{
+				*Data = RBuffer[0x04];
+				*Data += RBuffer[0x05] * 0x100;
+				*Data += RBuffer[0x06] * 0x10000;
+				*Data += RBuffer[0x07] * 0x1000000;
+				break;
+			}
+		}
+	}
+	if (timeout == 0)
+		return ERRORMSG_TIMEOUT;
+
+	return 1;
+}
+
+int TTK_Communication_API::EraseFlashHW(unsigned int Addr, unsigned int Len)
+{
+	if(m_Chipid == CHIP_ID::A2152)
+		return  ST1802EraseFlashHW(Addr, Len);
+
+	if (m_Chipid == CHIP_ID::A8018)
+		return EraseFlashHW_A8018(Addr, Len, true);
+
+	int ret, i = 0;
+	unsigned int Eindex = 0, curPos, rtLen;
+#if IC_Module==IC_Module_A8008 
+	unsigned char PBuffer[PageSize512]; // 1024 bytes
+#elif  IC_Module==IC_Module_A8010
+	unsigned char PBuffer[PageSize1K]; // 1024 bytes
+#elif IC_Module == IC_Module_A8015
+	unsigned char PBuffer[PageSize512];
+#elif (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802)
+	unsigned char PBuffer[PageSize1K * 4]; // 1024 bytes
+#elif (IC_Module==IC_Module_A8018)
+	unsigned char PBuffer[PageSize1K];
+#endif
+	unsigned short PAddr = (unsigned short)Addr;
+	unsigned char ReadFlag = false;
+	unsigned short curPageSize = 0;
+	unsigned short validMask = 0;
+
+#if  IC_Module==IC_Module_A8008
+	curPageSize = 512;
+	validMask = 0x1FF;
+#elif  IC_Module==IC_Module_A8010
+	curPageSize = 1024;
+	validMask = 0x1FF;
+#elif IC_Module == IC_Module_A8015
+	curPageSize = 512;
+	validMask = 0x1FF;
+#elif  (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802)
+	curPageSize = 4096;
+	validMask = 0x1FF;
+	if (ST1801FlashWakeUp() == false) {
+		if (ST1801ResetTouchLinkPullHight() == false) {
+			return false;
+		}
+		return false;
+	}
+	if (ST1801_SPI_FLASH_LOCK(FALSE) == false) {
+		if (ST1801ResetTouchLinkPullHight() == false) {
+			return false;
+		}
+		return false;
+	}
+#endif  
+	while (Eindex < Len)
+	{
+		ReadFlag = false;
+		if (Eindex == 0)
+		{
+			//===============read back===========
+			if ((PAddr & validMask) || (((Addr + Len) - PAddr) < curPageSize && (Addr + Len) & validMask))
+			{
+				ret = ExReadFlashPage_Bulk(PAddr & 0xFF00, PBuffer);
+				if (ret == false)
+				{
+					//ShowMessage("EraseFlashHW:ReadFlashPage_Bulk");
+#if  (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802)
+					if (ST1801ResetTouchLinkPullHight() == false) {
+						return false;
+					}
+					if (ST1801_SPI_FLASH_LOCK(TRUE) == false)   return false;
+#endif
+					return ERRORMSG_ATOM_READ_FLASH_FAIL;
+				}
+				ReadFlag = true;
+			}
+
+			for (i = PAddr & validMask; (i < curPageSize) && (Eindex < Len); i++, Eindex++)
+			{
+				PBuffer[i] = 0xFF;
+			}
+		}
+		else {
+			//===============read back===========
+			if (((Addr + Len) - (PAddr & 0xFF00)) < PageSize && ((Addr + Len) & 0xFF)) {
+				ret = ExReadFlashPage_Bulk(PAddr & 0xFF00, PBuffer);
+				if (ret == false) {
+#if  (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802)
+					if (ST1801ResetTouchLinkPullHight() == false) {
+						return false;
+					}
+					if (ST1801_SPI_FLASH_LOCK(TRUE) == false)   return false;
+#endif
+					return ERRORMSG_ATOM_READ_FLASH_FAIL;
+				}
+				ReadFlag = true;
+			}
+			for (i = 0; (i < curPageSize) && (Eindex < Len); i++, Eindex++)
+			{
+				PBuffer[i] = 0xFF;
+			}
+		}
+		ret = ExEraseFlashPage_Bulk(PAddr & 0xFF00);
+		if (ret == false)
+		{
+			//ShowMessage("EraseFlashHW:EraseFlashPage_Bulk");
+#if  (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802)
+			if (ST1801_SPI_FLASH_LOCK(TRUE) == false)   return false;
+#endif
+			return ERRORMSG_ATOM_ERASE_FLASH_FAIL;
+		}
+		if (ReadFlag == true)
+		{
+			if (ret == false)
+			{
+				//ShowMessage("EraseFlashHW:WriteFlashPage_Bulk");
+				return ERRORMSG_ATOM_WRITE_FLASH_FAIL;
+			}
+		}
+		PAddr += curPageSize;
+	}
+#if  (IC_Module==IC_Module_ST1801) || (IC_Module==IC_Module_ST1802)
+	if (ST1801_SPI_FLASH_LOCK(TRUE) == false)   return false;
+	if (ST1801ResetTouchLinkPullHight() == false) {
+		return false;
+	}
+#endif
+	return true;
+}

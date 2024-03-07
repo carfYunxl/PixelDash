@@ -220,6 +220,8 @@ private:
 	bool ExWriteFlashPage_Bulk_A8010(unsigned short Addr, unsigned char* Data);
 	bool ExWriteFlashPage_Bulk_ST1801(unsigned short Addr, unsigned char* Data);
 	bool CheckST1801_SPI_FLASH_Busy();
+	int  EraseFlashHW_ST1801(unsigned int Addr);
+	bool ResetBridgeStatus_Bulk(void);
 private:
 	CHIP_ID		m_Chipid;
 

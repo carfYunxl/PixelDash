@@ -275,4 +275,37 @@ typedef unsigned long u32;
 typedef unsigned short u16;
 typedef unsigned char u8;
 
+enum //SWISP
+{
+	SWISP_Flash_Advance = 0x12, // Advance for A8002
+
+	SWISP_Response = 0x31,
+	SWISP_Erase = 0x80,
+	SWISP_Write_Data = 0x81,
+	SWISP_Write_Flash = 0x82,
+	SWISP_Read_Flash = 0x83,
+	SWISP_Reset = 0x84,
+	SWISP_Get_FWVer = 0x88, //for ST1572
+	SWISP_Run_APROM = 0x89, //for ST1572
+	SWISP_Get_Flash_Mode = 0x89, //for ST1572
+	SWISP_Read_Checksum = 0x8B, //for ST1572
+	SWISP_Boot_Sel = 0x8C, //for ST1572
+	SWISP_Read_DataFlash = 0x8D, //for ST1572
+	SWISP_UNLOCK = 0x87, //for ST1572
+	SWISP_ReadSFR = 0x88,
+	SWISP_Ready = 0x8F,
+};
+
+enum { //ST1801
+	ST1801_SWISP_Unlock_Flash = 0x10,
+	ST1801_SWISP_lock_Flash = 0x11,
+	ST1801_SWISP_Chip_Erase = 0x12,
+	ST1801_SWISP_Sector_Erase = 0x13,
+	ST1801_SWISP_Page_Program = 0x14,
+	ST1801_SWISP_Read_Flash = 0x15,
+	ST1801_SWISP_32K_Erase = 0x16,
+	ST1801_SWISP_Unlock_Flash_ISP = 0x90,
+	ST1801_SWISP_Unlock_Boot_Loader = 0x1F,
+};
+
 #endif //__TTK_COMMUNICATION_CORE_HPP__

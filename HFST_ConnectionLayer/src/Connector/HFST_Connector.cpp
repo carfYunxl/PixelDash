@@ -5,6 +5,7 @@
 #include "HFST_DeviceManager.hpp"
 #include "HFST_TouchDevice.hpp"
 #include "HFST_CommandIO.hpp"
+#include "HFST_Bridge.hpp"
 
 namespace HFST
 {
@@ -24,6 +25,9 @@ namespace HFST
 
     bool Connector::Connect()
     {
+        Bridge* pBri = new Bridge(CommunicationMode::BULK);
+        pBri->Attach();
+
         if ( m_UsbManager->DetectUSBConnectCount() <= 0 ) {
             m_HidManager->SwicthToBULK();
             int nRetry = 10;
