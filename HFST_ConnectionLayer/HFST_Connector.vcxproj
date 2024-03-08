@@ -182,6 +182,7 @@
     <ClInclude Include="src\Core\HFST_CommonHeader.hpp" />
     <ClInclude Include="src\Connector\Bridge\HFST_DeviceManager.hpp" />
     <ClInclude Include="src\DLL\HFST_DllLoader.hpp" />
+    <ClInclude Include="src\RawData\HFST_RawFormatA2152.hpp" />
     <ClInclude Include="src\UI\HFST_DummyWindow.hpp" />
     <ClInclude Include="src\Core\HFST_Exception.hpp" />
     <ClInclude Include="src\DLL\HFST_FunctionExport.hpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="src\Connector\IC\HFST_CFG.cpp" />
     <ClCompile Include="src\Connector\IC\HFST_Flash.cpp" />
     <ClCompile Include="src\DLL\HFST_APICenter.cpp" />
+    <ClCompile Include="src\RawData\HFST_RawFormatA2152.cpp" />
     <ClCompile Include="src\UI\HFST_DummyWindow.cpp" />
     <ClCompile Include="src\Core\HFST_Exception.cpp" />
     <ClCompile Include="src\DLL\HFST_FuncLoader.cpp" />

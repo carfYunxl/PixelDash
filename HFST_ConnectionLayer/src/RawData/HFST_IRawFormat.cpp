@@ -3,6 +3,7 @@
 #include "HFST_CommonHeader.hpp"
 #include "HFST_RawFormatA8018_Self.hpp"
 #include "HFST_RawFormatA8018_Mutual.hpp"
+#include "HFST_RawFormatA2152.hpp"
 namespace HFST
 {
     IRawFormat::IRawFormat( const IC_Info& info )
