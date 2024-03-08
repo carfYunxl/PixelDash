@@ -48,7 +48,10 @@ namespace HFST
     {
     public:
         explicit Bridge(CommunicationMode mode);
-        virtual ~Bridge() {}
+        virtual ~Bridge() {
+            if (pImpl)
+                delete pImpl;
+        }
 
         void Attach();
         void Detach();
