@@ -58,33 +58,6 @@ namespace HFST
 		return deviceIndex;
 	}
 
-	bool USB_Manager::Check_USB_BULK_Status(int device_index) const
-	{
-		auto pApi = HFST_API::GetAPI();
-		if (!pApi)
-			return false;
-
-		int retNum = pApi->BULK.USBComm_InitEx(1500, device_index);
-		if (retNum < 0) {
-			pApi->BULK.USBComm_FinishEx();
-			return false;
-		}
-
-		retNum = pApi->BULK.USBComm_CheckBulkInEx();
-		if (retNum == 0) {
-			pApi->BULK.USBComm_FinishEx();
-			return false;
-		}
-
-		retNum = pApi->BULK.USBComm_CheckBulkOutEx();
-		if (retNum == 0)
-		{
-			pApi->BULK.USBComm_FinishEx();
-			return false;
-		}
-		return true;
-	}
-
 	HID_Manager::HID_Manager()
 		: m_hHIDDevNotify{NULL}
 	{

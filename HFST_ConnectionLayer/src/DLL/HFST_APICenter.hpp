@@ -29,12 +29,13 @@ namespace HFST
         }
 
         static bool m_bInit;
+
+        HFST_API(const HFST_API& rhs) = delete;
+        HFST_API& operator=(const HFST_API& rhs) = delete;
     private:
         bool Init();
-    private:
+
         HFST_API() = default;
-        HFST_API(const HFST_API& rhs) = default;
-        HFST_API& operator=(const HFST_API& rhs) = default;
     };
 }
 

@@ -10,7 +10,6 @@ namespace HFST
         bool Register(HWND hWnd);
 
         int  DetectUSBConnectCount() const;
-        bool Check_USB_BULK_Status( int device_index ) const;
 
         const GUID GetGUID() const {
             return m_Guid;

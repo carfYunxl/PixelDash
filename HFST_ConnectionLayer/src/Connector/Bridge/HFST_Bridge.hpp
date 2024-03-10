@@ -27,8 +27,8 @@ namespace HFST
 
     struct Impl
     {
-        bool init() {}
-        bool UnInit() {}
+        bool init() { return true; }
+        bool UnInit() { return true; }
         void DoSomething() {};
     };
 

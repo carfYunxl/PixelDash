@@ -10,6 +10,11 @@
 #include "HFST_DummyWindow.hpp"
 #include <format>
 
+constexpr int GenIC(int id)
+{
+    return id;
+}
+
 int main(int argc, char* argv[])
 {
     HFST::Connector connector;
@@ -52,6 +57,7 @@ int main(int argc, char* argv[])
             std::cout << strText << std::endl;
         }
     }
+    
     return 0;
 }
 
