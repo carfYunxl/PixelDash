@@ -6,6 +6,7 @@
 #include "HFST_TouchDevice.hpp"
 #include "HFST_CommandIO.hpp"
 #include "HFST_Bridge.hpp"
+#include "HFST_BulkController.hpp"
 
 namespace HFST
 {
@@ -28,12 +29,12 @@ namespace HFST
         Bridge* pBri = new Bridge(CommunicationMode::BULK);
         pBri->Attach();
 
-        if ( m_UsbManager->DetectUSBConnectCount() <= 0 ) {
+        if ( m_TouchLink->GetBulk().DetectUSBConnectCount( USB_Manager::GetGUID() ) <= 0 ) {
             m_HidManager->SwicthToBULK();
             int nRetry = 10;
             while ( nRetry > 0 )
             {
-                if ( m_UsbManager->DetectUSBConnectCount() > 0 )
+                if ( m_TouchLink->GetBulk().DetectUSBConnectCount(USB_Manager::GetGUID()) > 0  )
                     break;
 
                 m_HidManager->SwicthToBULK();

@@ -19,7 +19,8 @@ namespace HFST
 {
     enum class CommunicationMode
     {
-        BULK = 0,
+        TOUCH_LINK = 0,
+        TOUCH_PAD,
         HID,
         WIFI,
         ADB

@@ -5,6 +5,15 @@
 
 namespace HFST
 {
+	//! ********************* Implementation of USB_Manager *********************!//
+	//! 
+	const GUID USB_Manager::m_Guid = 
+							{ 
+								0x8D98FC49,
+								0x7A37,
+								0x4B2D,
+								{0xA1, 0xA3, 0x55, 0xEA, 0x7B, 0xB2, 0xAE, 0x60} 
+							};
 	USB_Manager::USB_Manager()
 		: m_hUSBDevNotify(NULL)
 	{
@@ -26,38 +35,15 @@ namespace HFST
 		return (m_hUSBDevNotify != NULL);
     }
 
-	int USB_Manager::DetectUSBConnectCount() const
-	{
-		HDEVINFO hardwareDeviceInfoSet;
-		SP_DEVICE_INTERFACE_DATA deviceInterfaceData;
-		GUID myGUID = m_Guid;//GUID_DEVINTERFACE_ATL;
-		HANDLE deviceHandle = INVALID_HANDLE_VALUE;
-		DWORD result;
-		UCHAR deviceIndex = 0;
-		hardwareDeviceInfoSet = SetupDiGetClassDevs(&myGUID,
-			NULL,
-			NULL,
-			(DIGCF_PRESENT |
-				DIGCF_DEVICEINTERFACE));
-		do {
-			deviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
-			result = SetupDiEnumDeviceInterfaces(hardwareDeviceInfoSet,
-				NULL,
-				&myGUID,
-				deviceIndex,
-				&deviceInterfaceData);
-			if (result == FALSE) {
-				//TRACE("NOT a target USB\n");
-			}
-			else {
-				//TRACE("FOUND a target USB\n");
-				deviceIndex++;
-			}
-			SetupDiDestroyDeviceInfoList(hardwareDeviceInfoSet);
-		} while (result == TRUE);
-		return deviceIndex;
-	}
-
+	//! ********************* Implementation of HID_Manager *********************!//
+	//! 
+	const GUID HID_Manager::m_Guid = 
+							{
+								0x4d1e55b2,
+								0xf16f,
+								0x11cf,
+								{ 0x88, 0xcb, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30}
+							};
 	HID_Manager::HID_Manager()
 		: m_hHIDDevNotify{NULL}
 	{
@@ -106,6 +92,15 @@ namespace HFST
 		return (m_hHIDDevNotify != NULL);
 	}
 
+	//! ********************* Implementation of ABT_Manager *********************!//
+	//! 
+	const GUID HID_Manager::m_Guid =
+	{
+		0xf7fea3af,
+		0x6d81,
+		0x4cbf,
+		{0xa5, 0xc1, 0x3b, 0x78, 0xd5, 0xa6, 0x99, 0xbb}
+	};
 	ABT_Manager::ABT_Manager()
 		: m_hABTDevNotify{ NULL }
 	{

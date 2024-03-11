@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "HFST_TouchLink.hpp"
+#include "HFST_DeviceManager.hpp"
 
 namespace HFST
 {
-    TouchLink::TouchLink(const USB_Manager& manager)
-        : m_UsbManager(manager){
+    TouchLink::TouchLink(){
     }
 
     bool TouchLink::GetInfomation()
@@ -23,6 +23,7 @@ namespace HFST
         m_TLInfo.nFwVerL = buffer[3];
         return true;
     }
+
     bool TouchLink::SetVoltage(double vdd, double iovdd)
     {
         HFST_API* pApi = HFST_API::GetAPI();
@@ -47,7 +48,7 @@ namespace HFST
         return true;
     }
 
-    bool TouchLink::CheckInstallDriver()
+    bool TouchLink::Init()
     {
         HFST_API* pApi = HFST_API::GetAPI();
         if (!pApi)
@@ -57,8 +58,12 @@ namespace HFST
         {
             if (pApi->USB_Driver.WinUSB_Driver_CheckIsConnected(i) == 0)
             {
+                m_BulkController.ChangeDeviceIndex(i);
+                m_BulkController.Initialize();
+                bool state = m_BulkController.CheckState();
+                int cnt = m_BulkController.DetectUSBConnectCount( USB_Manager::GetGUID() );
                 // check usb status
-                if ((!m_UsbManager.Check_USB_BULK_Status(i)) && (m_UsbManager.DetectUSBConnectCount() <= 0))
+                if ( !state && cnt <= 0 )
                 {
                     std::thread thread_install_TL_Driver([&]() -> bool {
 
