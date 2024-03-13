@@ -36,6 +36,16 @@ namespace HFST
         pfn_SetTouchLink3_Voltage       SetTouchLink3_Voltage;
         pfn_HFST_CheckIsA8018ICPI2CAddr CheckIsA8018ICPI2CAddr;
         pfn_CommunicationModeSelect     CommunicationModeSelect;
+
+        pfn_HID_Init                    HID_Init;
+        pfn_HID_UnInit                  HID_UnInit;
+        pfn_HID_GetLastErrorCode        HID_GetLastErrorCode;
+        pfn_HID_ReadRawdata             HID_ReadRawdata;
+        pfn_HID_GetLastErrorMessage     HID_GetLastErrorMessage;
+        pfn_ADB_Init                    ADB_Init;
+        pfn_ADB_UnInit                  ADB_UnInit;
+        pfn_ADB_StartRecordRawData      ADB_StartRecordRawData;
+        pfn_ADB_StopRecordRawData       ADB_StopRecordRawData;
     };
 
     //! load Bulk API functions

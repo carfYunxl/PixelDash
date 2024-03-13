@@ -7,6 +7,7 @@
 #include "HFST_CommandIO.hpp"
 #include "HFST_Bridge.hpp"
 #include "HFST_BulkController.hpp"
+#include "HFST_Bridge.hpp"
 
 namespace HFST
 {
@@ -18,7 +19,6 @@ namespace HFST
         , m_UsbManager(std::make_unique<USB_Manager>())
         , m_HidManager(std::make_unique<HID_Manager>())
         , m_AbtManager(std::make_unique<ABT_Manager>())
-        , m_TouchLink(std::make_unique<TouchLink>(*m_UsbManager))
         , m_Guid{m_UsbManager->GetGUID()} {
     }
 
@@ -26,31 +26,50 @@ namespace HFST
 
     bool Connector::Connect()
     {
-        Bridge* pBri = new Bridge(CommunicationMode::BULK);
-        pBri->Attach();
-
-        if ( m_TouchLink->GetBulk().DetectUSBConnectCount( USB_Manager::GetGUID() ) <= 0 ) {
-            m_HidManager->SwicthToBULK();
-            int nRetry = 10;
-            while ( nRetry > 0 )
+        Bridge* pBridge = nullptr;
+        switch (m_CommunicationMode)
+        {
+            case CommunicationMode::TOUCH_LINK:
             {
-                if ( m_TouchLink->GetBulk().DetectUSBConnectCount(USB_Manager::GetGUID()) > 0  )
-                    break;
-
-                m_HidManager->SwicthToBULK();
-                nRetry--;
+                pBridge = new TouchLink();
+                break;
             }
-            return false;
+            case CommunicationMode::TOUCH_PAD:
+            {
+                pBridge = new TouchPad();
+                break;
+            }
+            case CommunicationMode::HID:
+            {
+                pBridge = new TL_HID();
+                break;
+            }
+            case CommunicationMode::WIFI:
+            {
+                pBridge = new WIFI();
+                break;
+            }
+            case CommunicationMode::ADB:
+            {
+                pBridge = new ADB();
+                break;
+            }
         }
+        pBridge->Attach();
 
-        if ( !m_TouchLink->CheckInstallDriver() )
-            return false;
+        //if ( m_TouchLink->GetBulk().DetectUSBConnectCount( USB_Manager::GetGUID() ) <= 0 ) {
+        //    m_HidManager->SwicthToBULK();
+        //    int nRetry = 10;
+        //    while ( nRetry > 0 )
+        //    {
+        //        if ( m_TouchLink->GetBulk().DetectUSBConnectCount(USB_Manager::GetGUID()) > 0  )
+        //            break;
 
-        if ( !m_TouchLink->GetInfomation() )
-            return false;
-
-        if ( !m_TouchLink->SetVoltage(2.8, 1.8) )
-            return false;
+        //        m_HidManager->SwicthToBULK();
+        //        nRetry--;
+        //    }
+        //    return false;
+        //}
 
         if ( !I2C_ScanAddr() )
             return false;

@@ -37,47 +37,47 @@ namespace HFST
     //! GetI2CStatus_Bulk
     using pfn_GetI2CStatus_Bulk = int (*)(unsigned char* SBuff);
 
-    //£¡ SetTouchLinkVoltage
+    //£¡SetTouchLinkVoltage
     using pfn_SetTouchLinkVoltage = int (*)(unsigned short nVDD1, unsigned short nVDD2);
 
-    //£¡ for control touch-link 3 voltage
+    //£¡for control touch-link 3 voltage
     using pfn_SetTouchLink3_Voltage = int (*)(double dVDD1, double dVDD2);
 
     //! CheckIsA8018ICPI2CAddr
     using pfn_HFST_CheckIsA8018ICPI2CAddr = bool (*)(unsigned char);
 
-    //£¡ CommunicationModeSelect
+    //£¡CommunicationModeSelect
     using pfn_CommunicationModeSelect = bool (*)(int cm);
 
-    //typedef bool (*pfnHID_Init)(int nProductId, int nVenorId, int nReportId, int nUsagePage);
-    //extern pfnHID_Init  HID_Init;
+    //! HID_Init
+    using pfn_HID_Init = bool (*)(int nProductId, int nVenorId, int nReportId, int nUsagePage);
 
-    //typedef void (*pfnHID_UnInit)();
-    //extern pfnHID_UnInit    HID_UnInit;
+    //! HID_UnInit
+    using pfn_HID_UnInit = void (*)();
 
-    //typedef int  (*pfnHID_GetLastErrorCode)();
-    //extern pfnHID_GetLastErrorCode  HID_GetLastErrorCode;
+    //! HID_GetLastErrorCode
+    using pfn_HID_GetLastErrorCode = int (*)();
 
-    //typedef int  (*pfnHID_ReadRawdata)(unsigned char* rawdata, int nReadSize);
-    //extern pfnHID_ReadRawdata  HID_ReadRawdata;
+    //! HID_ReadRawdata
+    using pfn_HID_ReadRawdata = int (*)(unsigned char* rawdata, int nReadSize);
 
-    //typedef char* (pfnHID_GetLastErrorMessage)();
-    //extern pfnHID_GetLastErrorMessage  HID_GetLastErrorMessage;
+    //! HID_GetLastErrorMessage
+    using pfn_HID_GetLastErrorMessage = char* (*)();
 
-    //typedef bool (*HFST_CheckIsA8018ICPI2CAddr)(unsigned char);
-    //extern HFST_CheckIsA8018ICPI2CAddr  CheckIsA8018ICPI2CAddr;
+    //! CheckIsA8018ICPI2CAddr
+    using pfn_CheckIsA8018ICPI2CAddr = bool (*)(unsigned char);
 
-    //// ADB
-    //typedef int (*pfnADB_Init)(bool bAdbRunAsRoot, const char* pAdbFilePath, const char* pExtraService);
-    //extern pfnADB_Init ADB_Init;
+    //! ADB_Init
+    using pfn_ADB_Init = int (*)(bool bAdbRunAsRoot, const char* pAdbFilePath, const char* pExtraService);
 
-    //typedef int (*pfnADB_UnInit)();
-    //extern pfnADB_UnInit ADB_UnInit;
+    //! ADB_UnInit
+    using pfn_ADB_UnInit = int (*)();
 
-    //typedef int (*pfnADB_StartRecordRawData)(FM_ReadRawdata* ctx);
-    //extern pfnADB_StartRecordRawData ADB_StartRecordRawData;
+    //! ADB_StartRecordRawData
+    using pfn_ADB_StartRecordRawData = int (*)(FM_ReadRawdata* ctx);
 
-    //typedef int (*pfnADB_StopRecordRawData)(const char* pAdbFilePath, const char* pSavePath);
+    //!ADB_StopRecordRawData
+    using pfn_ADB_StopRecordRawData = int (*)(const char* pAdbFilePath, const char* pSavePath);
 
     ///////////////////////////////////////////////////////////////////////////
     // For Bulk_API ///////////////////////////////////////////////////////////

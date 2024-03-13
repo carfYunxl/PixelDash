@@ -6,6 +6,47 @@
 namespace HFST
 {
     struct IC_Info;
+    class RawFormat
+    {
+    public:
+
+
+        virtual int  GetReadLength() = 0;
+        virtual int  IndexOfDatatype() { return 0; }
+        virtual int  IndexOfValidDataSize() { return 1; }
+        virtual int  IndexOfTag() = 0;
+        virtual int  IndexOfChannel() = 0;
+        virtual int  IndexOfData() = 0;
+        virtual bool IsHeader(unsigned char dataType) = 0;
+        virtual bool IsMutual(unsigned char dataType) = 0;
+        virtual bool IsSelfX(unsigned char dataType) = 0;
+        virtual bool IsSelfXNs(unsigned char dataType) = 0;
+        virtual bool IsSelfY(unsigned char dataType) = 0;
+        virtual bool IsSelfYNs(unsigned char dataType) = 0;
+        virtual bool IsKey(unsigned char dataType) = 0;
+        virtual bool IsKeyNs(unsigned char dataType) = 0;
+    };
+
+    template<typename Derived>
+    class RawFormatBase : public RawFormat
+    {
+    public:
+        virtual int  GetReadLength() = 0;
+        virtual int  IndexOfDatatype() { return 0; }
+        virtual int  IndexOfValidDataSize() { return 1; }
+        virtual int  IndexOfTag() = 0;
+        virtual int  IndexOfChannel() = 0;
+        virtual int  IndexOfData() = 0;
+        virtual bool IsHeader(unsigned char dataType) = 0;
+        virtual bool IsMutual(unsigned char dataType) = 0;
+        virtual bool IsSelfX(unsigned char dataType) = 0;
+        virtual bool IsSelfXNs(unsigned char dataType) = 0;
+        virtual bool IsSelfY(unsigned char dataType) = 0;
+        virtual bool IsSelfYNs(unsigned char dataType) = 0;
+        virtual bool IsKey(unsigned char dataType) = 0;
+        virtual bool IsKeyNs(unsigned char dataType) = 0;
+    };
+
     class IRawFormat
     {
     public:
@@ -35,7 +76,6 @@ namespace HFST
         const       IC_Info& m_Info;
         bool        m_bHasTag{ false };
     };
-
 
     class A8008_RawFormat : public IRawFormat
     {

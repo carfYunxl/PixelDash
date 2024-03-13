@@ -94,7 +94,7 @@ namespace HFST
 
 	//! ********************* Implementation of ABT_Manager *********************!//
 	//! 
-	const GUID HID_Manager::m_Guid =
+	const GUID ABT_Manager::m_Guid =
 	{
 		0xf7fea3af,
 		0x6d81,

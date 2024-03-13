@@ -174,9 +174,7 @@
   <ItemGroup>
     <ClInclude Include="src\CommandIO\HFST_CommandIO.hpp" />
     <ClInclude Include="src\Connector\Bridge\HFST_Bridge.hpp" />
-    <ClInclude Include="src\Connector\Bridge\HFST_BridgeImpl.hpp" />
     <ClInclude Include="src\Connector\Bridge\HFST_BulkController.hpp" />
-    <ClInclude Include="src\Connector\Bridge\HFST_TouchLink.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_FW.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_CFG.hpp" />
     <ClInclude Include="src\Connector\IC\HFST_Flash.hpp" />
@@ -184,6 +182,7 @@
     <ClInclude Include="src\Core\HFST_CommonHeader.hpp" />
     <ClInclude Include="src\Connector\Bridge\HFST_DeviceManager.hpp" />
     <ClInclude Include="src\DLL\HFST_DllLoader.hpp" />
+    <ClInclude Include="src\RawData\HFST_RawReader.hpp" />
     <ClInclude Include="src\RawData\HFST_RawFormatA2152.hpp" />
     <ClInclude Include="src\UI\HFST_DummyWindow.hpp" />
     <ClInclude Include="src\Core\HFST_Exception.hpp" />
@@ -207,10 +206,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommandIO\HFST_CommandIO.cpp" />
-    <ClCompile Include="src\Connector\Bridge\HFST_Bridge.cpp" />
     <ClCompile Include="src\Connector\Bridge\HFST_BulkController.cpp" />
     <ClCompile Include="src\Connector\Bridge\HFST_DeviceManager.cpp" />
-    <ClCompile Include="src\Connector\Bridge\HFST_TouchLink.cpp" />
     <ClCompile Include="src\Connector\IC\HFST_FW.cpp" />
     <ClCompile Include="src\Connector\IC\HFST_CFG.cpp" />
     <ClCompile Include="src\Connector\IC\HFST_Flash.cpp" />

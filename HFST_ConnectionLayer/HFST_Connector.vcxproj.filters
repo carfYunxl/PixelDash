@@ -84,12 +84,6 @@
     <ClInclude Include="src\RawData\HFST_RawFormatA8018_Self.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Connector\Bridge\HFST_TouchLink.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Connector\Bridge\HFST_Bridge.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\Connector\IC\HFST_CFG.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -108,7 +102,10 @@
     <ClInclude Include="src\Connector\Bridge\HFST_BulkController.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Connector\Bridge\HFST_BridgeImpl.hpp">
+    <ClInclude Include="src\Connector\Bridge\HFST_Bridge.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RawData\HFST_RawReader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,13 +146,7 @@
     <ClCompile Include="src\RawData\HFST_RawFormatA8018_Self.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Connector\Bridge\HFST_TouchLink.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\DLL\HFST_APICenter.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Connector\Bridge\HFST_Bridge.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Connector\IC\HFST_CFG.cpp">

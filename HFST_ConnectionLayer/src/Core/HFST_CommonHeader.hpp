@@ -256,6 +256,41 @@ namespace HFST
         A2152 = 0x0C,
         A8018 = 0x10
     };
+
+    enum class CommunicationMode
+    {
+        TOUCH_LINK = 0,
+        TOUCH_PAD,
+        HID,
+        WIFI,
+        ADB
+    };
+
+    struct FM_RawdataType {
+        unsigned char dataType;		///< what kind of raw data type that want TouchLink return
+        unsigned char dataLength;	///< TouchLink read the data length of dataType 
+        unsigned char dataNum;		///< TouchLink read 'dataNum' times of dataType
+    };
+
+    struct FM_ReadRawdata {
+        unsigned char type;			///< bit0 ~ bit3: 0: I2C			1: SPI
+                                    ///< bit4 ~ bit7: 0: Check Mode		1: Repeat Mode
+        unsigned char addr;			///< Raw data address, typical 0x40
+
+        /**
+         * To specify what kind of raw data want to read
+         * if you want read mutual, then you should set the type to mutual
+         * and specify the data length and times
+         */
+        std::vector< FM_RawdataType >	readRawdataType;
+
+        /**
+         * undefine raw data type default read length. if you only want mutual,
+         * then TouchLink will read other data(header, self, noise) use defaultReadLength
+         * to read data
+         */
+        unsigned char defaultReadLength;
+    };
 }
 
 

@@ -18,6 +18,15 @@ namespace HFST
         , SetTouchLink3_Voltage{ nullptr }
         , CheckIsA8018ICPI2CAddr{ nullptr }
         , CommunicationModeSelect{ nullptr }
+        , HID_Init{ nullptr }
+        , HID_UnInit{ nullptr }
+        , HID_GetLastErrorCode{ nullptr }
+        , HID_ReadRawdata{ nullptr }
+        , HID_GetLastErrorMessage{ nullptr }
+        , ADB_Init{ nullptr }
+        , ADB_UnInit{ nullptr }
+        , ADB_StartRecordRawData{ nullptr }
+        , ADB_StopRecordRawData{ nullptr }
     {
     }
 
@@ -90,6 +99,51 @@ namespace HFST
 
         (FARPROC&)CommunicationModeSelect = GetProcAddress(m_hInstance, "CommunicationModeSelect");
         if (!CommunicationModeSelect) {
+            return false;
+        }
+
+        (FARPROC&)HID_Init = GetProcAddress(m_hInstance, "HID_Init");
+        if (!HID_Init) {
+            return false;
+        }
+
+        (FARPROC&)HID_UnInit = GetProcAddress(m_hInstance, "HID_UnInit");
+        if (!HID_UnInit) {
+            return false;
+        }
+
+        (FARPROC&)HID_GetLastErrorCode = GetProcAddress(m_hInstance, "HID_GetLastErrorCode");
+        if (!HID_GetLastErrorCode) {
+            return false;
+        }
+
+        (FARPROC&)HID_ReadRawdata = GetProcAddress(m_hInstance, "HID_ReadRawdata");
+        if (!HID_ReadRawdata) {
+            return false;
+        }
+
+        (FARPROC&)HID_GetLastErrorMessage = GetProcAddress(m_hInstance, "HID_GetLastErrorMessage");
+        if (!HID_GetLastErrorMessage) {
+            return false;
+        }
+
+        (FARPROC&)ADB_Init = GetProcAddress(m_hInstance, "ADB_Init");
+        if (!ADB_Init) {
+            return false;
+        }
+
+        (FARPROC&)ADB_UnInit = GetProcAddress(m_hInstance, "ADB_UnInit");
+        if (!ADB_UnInit) {
+            return false;
+        }
+
+        (FARPROC&)ADB_StartRecordRawData = GetProcAddress(m_hInstance, "ADB_StartRecordRawData");
+        if (!ADB_StartRecordRawData) {
+            return false;
+        }
+
+        (FARPROC&)ADB_StopRecordRawData = GetProcAddress(m_hInstance, "ADB_StopRecordRawData");
+        if (!ADB_StopRecordRawData) {
             return false;
         }
 

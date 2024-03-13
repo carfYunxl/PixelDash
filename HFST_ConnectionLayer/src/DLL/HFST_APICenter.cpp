@@ -7,8 +7,6 @@
 
 namespace HFST
 {
-    bool HFST_API::m_bInit = false;
-
     bool HFST_API::Init()
     {
         auto dll_path = std::filesystem::current_path() / "dll";

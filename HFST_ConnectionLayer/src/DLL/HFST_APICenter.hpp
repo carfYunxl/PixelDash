@@ -28,7 +28,7 @@ namespace HFST
             return &m_API;
         }
 
-        static bool m_bInit;
+        inline static bool m_bInit = false;
 
         HFST_API(const HFST_API& rhs) = delete;
         HFST_API& operator=(const HFST_API& rhs) = delete;

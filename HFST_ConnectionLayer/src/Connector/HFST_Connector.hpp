@@ -5,7 +5,6 @@
 #include "HFST_APICenter.hpp"
 #include "HFST_CommonHeader.hpp"
 #include "HFST_RawCollector.hpp"
-#include "HFST_TouchLink.hpp"
 #include "HFST_DeviceManager.hpp"
 
 namespace HFST
@@ -49,7 +48,6 @@ namespace HFST
         std::vector<I2CAddr>    m_vI2CAddr;
 
     private:
-        std::unique_ptr<TouchLink>  m_TouchLink;
 
         int        m_nCurrentI2CAddr;
         double     m_dCurrentVDD;
@@ -63,6 +61,7 @@ namespace HFST
         std::unique_ptr<HID_Manager>    m_HidManager;
         std::unique_ptr<ABT_Manager>    m_AbtManager;
         GUID       m_Guid;
+        CommunicationMode m_CommunicationMode{ CommunicationMode::TOUCH_LINK };
     };
 }
 

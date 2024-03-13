@@ -26,7 +26,7 @@ namespace HFST
     public:
         BulkController() = default;
         BulkController(uint32_t device_index);
-        ~BulkController() = default;
+        ~BulkController();
 
         //! Initialize the BULK
         bool Initialize();
