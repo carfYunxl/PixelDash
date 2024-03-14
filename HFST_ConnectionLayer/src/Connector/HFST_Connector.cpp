@@ -8,6 +8,7 @@
 #include "HFST_Bridge.hpp"
 #include "HFST_BulkController.hpp"
 #include "HFST_Bridge.hpp"
+#include <conio.h>
 
 namespace HFST
 {
@@ -31,31 +32,35 @@ namespace HFST
         {
             case CommunicationMode::TOUCH_LINK:
             {
-                pBridge = new TouchLink();
+                pBridge = new TouchLink(m_CommunicationMode);
                 break;
             }
             case CommunicationMode::TOUCH_PAD:
             {
-                pBridge = new TouchPad();
+                pBridge = new TouchPad(m_CommunicationMode);
                 break;
             }
             case CommunicationMode::HID:
             {
-                pBridge = new TL_HID();
+                pBridge = new TL_HID(m_CommunicationMode);
                 break;
             }
             case CommunicationMode::WIFI:
             {
-                pBridge = new WIFI();
+                pBridge = new WIFI(m_CommunicationMode);
                 break;
             }
             case CommunicationMode::ADB:
             {
-                pBridge = new ADB();
+                pBridge = new ADB(m_CommunicationMode);
                 break;
             }
         }
-        pBridge->Attach();
+        if (!pBridge->Attach())
+        {
+            _cprintf("connect failed!\n");
+            return false;
+        }
 
         //if ( m_TouchLink->GetBulk().DetectUSBConnectCount( USB_Manager::GetGUID() ) <= 0 ) {
         //    m_HidManager->SwicthToBULK();

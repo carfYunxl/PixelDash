@@ -123,7 +123,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

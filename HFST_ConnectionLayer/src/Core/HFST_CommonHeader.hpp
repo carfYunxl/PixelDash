@@ -260,10 +260,10 @@ namespace HFST
     enum class CommunicationMode
     {
         TOUCH_LINK = 0,
+        ADB,
         TOUCH_PAD,
         HID,
         WIFI,
-        ADB
     };
 
     struct FM_RawdataType {

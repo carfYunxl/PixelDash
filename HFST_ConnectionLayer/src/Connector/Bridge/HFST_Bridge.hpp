@@ -11,6 +11,8 @@
 
 #include "HFST_CommonHeader.hpp"
 #include "HFST_BulkController.hpp"
+#include <thread>
+#include "HFST_DeviceManager.hpp"
 
 namespace HFST
 {
@@ -27,8 +29,16 @@ namespace HFST
     class BridgeBase : public Bridge
     {
     public:
+        explicit BridgeBase(CommunicationMode mode) : m_CMode(mode) {}
+        ~BridgeBase() {}
         virtual bool Attach() override
         {
+            HFST_API* pApi = HFST_API::GetAPI();
+            if (!pApi)
+                return false;
+
+            pApi->TTK.CommunicationModeSelect(static_cast<int>(m_CMode));
+
             Derived* pDerived = static_cast<Derived*>(this);
             bool success = pDerived->Init();
             success &= pDerived->GetInfo();
@@ -41,12 +51,16 @@ namespace HFST
         {
             return static_cast<Derived*>(this)->UnInit();
         }
+    protected:
+        CommunicationMode m_CMode;
     };
 
     //****** TouchLink Implementation ******//
-    class TouchLink : public BridgeBase<TouchLink>
+    class TouchLink final: public BridgeBase<TouchLink>
     {
     public:
+        explicit TouchLink(CommunicationMode mode) : BridgeBase<TouchLink>(mode) {}
+
         bool    Init() {
             HFST_API* pApi = HFST_API::GetAPI();
             if (!pApi)
@@ -131,20 +145,46 @@ namespace HFST
     };
 
     //****** TouchPad Implementation ******//
-    class TouchPad : public BridgeBase<TouchPad>
+    class TouchPad final : public BridgeBase<TouchPad>
     {
+        inline static int USER_PAGE = 0xFF55;
     public:
-        bool Init() {
+        explicit TouchPad(CommunicationMode mode) : BridgeBase<TouchPad>(mode) {}
 
+        bool Init() {
+            auto api = HFST_API::GetAPI();
+            if (!api)
+                return false;
+
+            if ( !api->TTK.HID_Init(m_nPid, m_nVid, m_nReportid, USER_PAGE) )
+            {
+                return false;
+            }
+
+            return true;
         }
-        bool UnInit() { return true; }
+        bool UnInit() {
+            auto api = HFST_API::GetAPI();
+            if (!api)
+                return false;
+
+            api->TTK.HID_UnInit();
+            return true;
+        }
         bool GetInfo() { return true; }
         bool SetVoltage() { return true; }
+
+    private:
+        int m_nPid{0x8148};
+        int m_nVid{0x1200};
+        int m_nReportid{0x09};
     };
 
     class TL_HID : public BridgeBase<TL_HID>
     {
     public:
+        explicit TL_HID(CommunicationMode mode) : BridgeBase<TL_HID>(mode) {}
+
         bool Init() { return true; }
         bool UnInit() { return true; }
         bool GetInfo() { return true; }
@@ -154,6 +194,8 @@ namespace HFST
     class WIFI : public BridgeBase<WIFI>
     {
     public:
+        explicit WIFI(CommunicationMode mode) : BridgeBase<WIFI>(mode) {}
+
         bool Init() { return true; }
         bool UnInit() { return true; }
         bool GetInfo() { return true; }
@@ -163,6 +205,8 @@ namespace HFST
     class ADB : public BridgeBase<ADB>
     {
     public:
+        explicit ADB(CommunicationMode mode) : BridgeBase<ADB>(mode) {}
+
         bool Init() { return true; }
         bool UnInit() { return true; }
         bool GetInfo() { return true; }
