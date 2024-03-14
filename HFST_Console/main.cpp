@@ -18,24 +18,32 @@ int main(int argc, char* argv[])
 
     HFST::IC_Info info = connector.IC_GetInfo();
     HFST::RAW::ChannelRaw<short> raw;
+    HFST::RAW::Frame<short> frame;
 
-    HFST::RawReader* pRawReader = new HFST::RawReader_A8018_Mutual(info);
+    std::unique_ptr<HFST::RawReader> pRawReader = HFST::CreateRawReader(info);
 
-    std::string str;
     while (1)
     {
         pRawReader->ReadChannelRaw(raw);
+        pRawReader->PrintChannel(std::cout, raw);
 
-        for (const auto& data : raw.vecRaw)
-        {
-            str += std::format("{:02d}  ", data);
-        }
+        pRawReader->ReadFrame(frame);
+        pRawReader->PrintFrame(frame);
 
-        std::cout << str << std::endl;
-        str.clear();
     }
 
-    delete pRawReader;
+    CONSOLE_SCREEN_BUFFER_INFO sInfo;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &sInfo);
+
+    int x = 0;
+    while (1)
+    {
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), sInfo.dwCursorPosition);
+        
+        std::cout << "\n\tNow x = " << x;
+        x++;
+        Sleep(300);
+    }
     
     return 0;
 }

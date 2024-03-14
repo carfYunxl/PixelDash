@@ -9,10 +9,10 @@ namespace HFST
     {
         enum class DataType
         {
-            HEADER = 0x09,
-            MUTUAL = 0x06,
-            SELF = 0x04,
-            NOISE = 0x08
+            HEADER  = 0x09,
+            MUTUAL  = 0x06,
+            SELF    = 0x04,
+            NOISE   = 0x08
         };
     public:
         A2152_RawFormat(const IC_Info& info)

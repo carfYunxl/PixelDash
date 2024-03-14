@@ -2,6 +2,7 @@
 #define __HFST_RAWDATA_READER_HPP__
 
 #include "HFST_CommonHeader.hpp"
+#include <memory>
 
 namespace HFST
 {
@@ -13,6 +14,24 @@ namespace HFST
         ~RawReader() {}
 
         virtual int ReadChannelRaw(RAW::ChannelRaw<short>& channel) = 0;
+        virtual int ReadFrame(RAW::Frame<short>& frame) = 0;
+
+        template<typename Stream>
+        void PrintChannel( Stream& stream, RAW::ChannelRaw<short>& channel )
+        {
+            std::string str;
+            for (const auto& data : raw.vecRaw)
+            {
+                str += std::format("{:02d}  ", data);
+            }
+            stream << str << "\n";
+        }
+
+        template<typename Stream>
+        void PrintFrame( Stream& stream, RAW::Frame<short>& frame )
+        {
+            
+        }
     protected:
         const IC_Info& m_Info;
     };
@@ -31,9 +50,9 @@ namespace HFST
             if (!pApi)
                 return -1;
 
-            Derived* m_RawFormat = static_cast<Derived*>(this);
+            Derived* RawFormat = static_cast<Derived*>(this);
 
-            int nBufferLen = m_RawFormat->GetReadLength();
+            int nBufferLen = RawFormat->GetReadLength();
             std::unique_ptr<unsigned char[]> pBuffer = std::make_unique<unsigned char[]>(nBufferLen);
 
             int ret = pApi->TTK.ReadI2CReg(pBuffer.get(), ADDR_MAP::RAW, nBufferLen);
@@ -41,23 +60,23 @@ namespace HFST
                 return ret;
             }
 
-            if (pBuffer[m_RawFormat->IndexOfDatatype()] == 0)
+            if (pBuffer[RawFormat->IndexOfDatatype()] == 0)
                 return -1;
 
-            channel.nDataType = pBuffer[m_RawFormat->IndexOfDatatype()];
+            channel.nDataType = pBuffer[RawFormat->IndexOfDatatype()];
 
             if ( m_Info.TagTypeSel == 1 )
             {
-                channel.Type = ConvertToTagType(pBuffer[m_RawFormat->IndexOfTag()]);
+                channel.Type = ConvertToTagType(pBuffer[RawFormat->IndexOfTag()]);
             }
             // 20 0E 01 00 01 11 22 33 44 55 66 77 88 99 aa xx
-            int nDataSize = pBuffer[m_RawFormat->IndexOfValidDataSize()];     // 0x0E : 14
-            channel.nChannelIdx = pBuffer[m_RawFormat->IndexOfChannel()];     // 01
-            int nDataIdx = m_RawFormat->IndexOfData();                        // 5
+            int nDataSize = pBuffer[RawFormat->IndexOfValidDataSize()];     // 0x0E : 14
+            channel.nChannelIdx = pBuffer[RawFormat->IndexOfChannel()];     // 01
+            int nDataIdx = RawFormat->IndexOfData();                        // 5
 
             int nLen = nDataSize - nDataIdx + 1;
 
-            if (m_RawFormat->IsHeader(channel.nDataType))
+            if (RawFormat->IsHeader(channel.nDataType))
             {
                 channel.vecRaw.resize(nLen);
 
@@ -94,6 +113,75 @@ namespace HFST
                 return RAW::TAG_TYPE::AG;
             else
                 return RAW::TAG_TYPE::GND_FLUSH;
+        }
+
+        virtual int ReadFrame(RAW::Frame<short>& frame) override
+        {
+            Derived* RawFormat = static_cast<Derived*>(this);
+            RAW::ChannelRaw<short> Raw;
+            while (1)
+            {
+                Raw.vecRaw.clear();
+                int ret = ReadChannelRaw(Raw);
+                if (ret <= 0) {
+                    return ret;
+                }
+
+                if (RawFormat->IsHeader(Raw.nDataType))
+                {
+                    if ( !frame.vctHeader.vecRaw.empty() )
+                        break;
+
+                    frame.vctHeader = Raw;
+                }
+                else if (RawFormat->IsMutual(Raw.nDataType))
+                {
+                    if ( !frame.vctMutual.empty() )
+                        break;
+
+                    frame.vctMutual.push_back(Raw);
+                }
+                else if (RawFormat->IsSelfX(Raw.nDataType))
+                {
+                    if ( !frame.vctXSelf.empty() )
+                        break;
+                    frame.vctXSelf.push_back(Raw);
+                }
+                else if (RawFormat->IsSelfY(Raw.nDataType))
+                {
+                    if (!frame.vctYSelf.empty())
+                        break;
+                    frame.vctYSelf.push_back(Raw);
+                }
+                else if (RawFormat->IsSelfXNs(Raw.nDataType))
+                {
+                    if (!frame.vctXSelfNs.empty())
+                        break;
+                    frame.vctXSelfNs.push_back(Raw);
+                }
+                else if (RawFormat->IsSelfYNs(Raw.nDataType))
+                {
+                    if (!frame.vctYSelfNs.empty())
+                        break;
+                    frame.vctYSelfNs.push_back(Raw);
+                }
+                else if (RawFormat->IsKey(Raw.nDataType))
+                {
+                    if (!frame.vctKey.vecRaw.empty())
+                        break;
+                    frame.vctKey = Raw;
+                }
+                else if (RawFormat->IsKeyNs(Raw.nDataType))
+                {
+                    if (!frame.vctKeyNs.vecRaw.empty())
+                        break;
+                    frame.vctKeyNs = Raw;
+                }
+                else
+                    continue;
+            }
+
+            return 1;
         }
     };
 
@@ -212,6 +300,61 @@ namespace HFST
         bool IsKey(unsigned char dataType)     { return dataType == static_cast<unsigned char>(DataType::KEY) || dataType == static_cast<unsigned char>(DataType::ALG_KEY); }
         bool IsKeyNs(unsigned char dataType)   { return dataType == static_cast<unsigned char>(DataType::KEY_NS) || dataType == static_cast<unsigned char>(DataType::ALG_KEY_NS); }
     };
+
+    class RawReader_A2152 final : public RawReaderBase<RawReader_A2152>
+    {
+        enum class DataType
+        {
+            HEADER = 0x09,
+            MUTUAL = 0x06,
+            SELF = 0x04,
+            NOISE = 0x08
+        };
+    public:
+        RawReader_A2152(const IC_Info& info)
+            : RawReaderBase<RawReader_A2152>(info)
+        {}
+        ~RawReader_A2152() {}
+
+        int  GetReadLength() {
+            return max(m_Info.nNumX, m_Info.nNumY) * 2 + 5;
+        }
+        int  IndexOfTag() { return 0; }
+        int  IndexOfChannel() { return 2; }
+        int  IndexOfData() { return 4; }
+
+        int  IndexOfDatatype() { return 0; }
+        int  IndexOfValidDataSize() { return 1; }
+
+        bool IsHeader(unsigned char dataType)   { return dataType == static_cast<unsigned char>(DataType::HEADER); }
+        bool IsMutual(unsigned char dataType)   { return dataType == static_cast<unsigned char>(DataType::MUTUAL); }
+        bool IsSelfX(unsigned char dataType)    { return dataType == static_cast<unsigned char>(DataType::SELF); }
+        bool IsSelfXNs(unsigned char dataType)  { return false; }
+        bool IsSelfY(unsigned char dataType)    { return false; }
+        bool IsSelfYNs(unsigned char dataType)  { return false; }
+        bool IsKey(unsigned char dataType)      { return false; }
+        bool IsKeyNs(unsigned char dataType)    { return false; }
+    };
+
+    static std::unique_ptr<RawReader> CreateRawReader(const IC_Info& info)
+    {
+        switch ( static_cast<ChipID>(info.nChipID) )
+        {
+            case ChipID::A8018:
+            {
+                if (info.bSlfTP)
+                    return std::make_unique<RawReader_A8018_Self>(info);
+
+                return std::make_unique<RawReader_A8018_Mutual>(info);
+            }
+            case ChipID::A2152:
+            {
+                return std::make_unique<RawReader_A2152>(info);
+            }
+        }
+
+        return nullptr;
+    }
 }
 
 #endif //__HFST_RAWDATA_READER_HPP__

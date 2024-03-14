@@ -15,5 +15,5 @@
 #include <SetupAPI.h>
 #include <memory>
 #include <format>
-
+#include <conio.h>
 #endif //PCH_H

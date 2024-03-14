@@ -13,6 +13,7 @@
 #include "HFST_BulkController.hpp"
 #include <thread>
 #include "HFST_DeviceManager.hpp"
+#include <memory>
 
 namespace HFST
 {
@@ -212,6 +213,35 @@ namespace HFST
         bool GetInfo() { return true; }
         bool SetVoltage() { return true; }
     };
+
+    static std::unique_ptr<Bridge> CreateBridge(CommunicationMode mode)
+    {
+        switch (mode)
+        {
+            case CommunicationMode::TOUCH_LINK:
+            {
+                return std::make_unique<TouchLink>(mode);
+            }
+            case CommunicationMode::TOUCH_PAD:
+            {
+                return std::make_unique<TouchPad>(mode);
+            }
+            case CommunicationMode::HID:
+            {
+                return std::make_unique<TL_HID>(mode);
+            }
+            case CommunicationMode::WIFI:
+            {
+                return std::make_unique<WIFI>(mode);
+            }
+            case CommunicationMode::ADB:
+            {
+                return std::make_unique<ADB>(mode);
+            }
+        }
+
+        return nullptr;
+    }
 }
 
 #endif //__HFST_BRIDGE_IMPL_HPP__

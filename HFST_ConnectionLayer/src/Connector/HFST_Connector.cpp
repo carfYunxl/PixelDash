@@ -7,9 +7,6 @@
 #include "HFST_CommandIO.hpp"
 #include "HFST_Bridge.hpp"
 #include "HFST_BulkController.hpp"
-#include "HFST_Bridge.hpp"
-#include <conio.h>
-
 namespace HFST
 {
     Connector::Connector()
@@ -27,36 +24,8 @@ namespace HFST
 
     bool Connector::Connect()
     {
-        Bridge* pBridge = nullptr;
-        switch (m_CommunicationMode)
-        {
-            case CommunicationMode::TOUCH_LINK:
-            {
-                pBridge = new TouchLink(m_CommunicationMode);
-                break;
-            }
-            case CommunicationMode::TOUCH_PAD:
-            {
-                pBridge = new TouchPad(m_CommunicationMode);
-                break;
-            }
-            case CommunicationMode::HID:
-            {
-                pBridge = new TL_HID(m_CommunicationMode);
-                break;
-            }
-            case CommunicationMode::WIFI:
-            {
-                pBridge = new WIFI(m_CommunicationMode);
-                break;
-            }
-            case CommunicationMode::ADB:
-            {
-                pBridge = new ADB(m_CommunicationMode);
-                break;
-            }
-        }
-        if (!pBridge->Attach())
+        std::unique_ptr<Bridge> pBridge = CreateBridge(m_CommunicationMode);
+        if ( !pBridge || !pBridge->Attach() )
         {
             _cprintf("connect failed!\n");
             return false;
