@@ -61,7 +61,7 @@ namespace HFST
         std::unique_ptr<HID_Manager>    m_HidManager;
         std::unique_ptr<ABT_Manager>    m_AbtManager;
         GUID       m_Guid;
-        CommunicationMode m_CommunicationMode{ CommunicationMode::TOUCH_PAD };
+        CommunicationMode m_CommunicationMode{ CommunicationMode::TOUCH_LINK };
     };
 }
 

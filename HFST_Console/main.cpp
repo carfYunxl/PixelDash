@@ -5,7 +5,6 @@
 #include "HFST_RawReader.hpp"
 #include "HFST_CommonHeader.hpp"
 #include "HFST_Bridge.hpp"
-
 int main(int argc, char* argv[])
 {
     HFST::Connector connector;
@@ -22,29 +21,20 @@ int main(int argc, char* argv[])
 
     std::unique_ptr<HFST::RawReader> pRawReader = HFST::CreateRawReader(info);
 
+    //CONSOLE_SCREEN_BUFFER_INFO sInfo;
+    //GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &sInfo);
     while (1)
     {
+        //SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), sInfo.dwCursorPosition);
         pRawReader->ReadChannelRaw(raw);
         pRawReader->PrintChannel(std::cout, raw);
 
-        pRawReader->ReadFrame(frame);
-        pRawReader->PrintFrame(frame);
+        /*pRawReader->ReadFrame(frame);
+        pRawReader->PrintFrame(std::cout, frame);*/
+
+        Sleep(100);
 
     }
-
-    CONSOLE_SCREEN_BUFFER_INFO sInfo;
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &sInfo);
-
-    int x = 0;
-    while (1)
-    {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), sInfo.dwCursorPosition);
-        
-        std::cout << "\n\tNow x = " << x;
-        x++;
-        Sleep(300);
-    }
-    
     return 0;
 }
 

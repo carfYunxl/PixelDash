@@ -19,10 +19,10 @@ namespace HFST
         template<typename Stream>
         void PrintChannel( Stream& stream, RAW::ChannelRaw<short>& channel )
         {
-            std::string str;
-            for (const auto& data : raw.vecRaw)
+            std::string str = std::format("{: <4X}  {: >4d}  {: >4d}  ", channel.nDataType, channel.nChannelIdx, static_cast<int>(channel.Type));
+            for (const auto& data : channel.vecRaw)
             {
-                str += std::format("{:02d}  ", data);
+                str += std::format("{: >4d}  ", data);
             }
             stream << str << "\n";
         }
