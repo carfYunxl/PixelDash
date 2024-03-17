@@ -1,31 +1,7 @@
 ﻿#pragma once
-
+#include "HFST_LogBox.hpp"
+#include "afxdialogex.h"
 #include <memory>
-
-namespace ADV_RECORD
-{
-	constexpr int ID_CLOSE = 0x400;
-	constexpr int ID_MAX = 0x401;
-	constexpr int ID_NORMAL = 0x402;
-	constexpr int ID_WIN_TITLE = 0x403;
-
-	const COLORREF GRAY = RGB(0x3E, 0x3E, 0x3E);
-	const COLORREF WHITE = RGB(0xFF, 0xFF, 0xFF);
-	const COLORREF RED = RGB(0xFF, 0x00, 0x00);
-
-	constexpr int ICON_SIZE = 40;
-	constexpr int GAP = 5;
-	constexpr int HEIGHT = ICON_SIZE + GAP * 2;
-
-	constexpr int PEN_SIZE = 5;
-	constexpr int LEVEL1_OFFSETX = 60;
-	constexpr int LEVEL2_OFFSETX = 200;
-
-	constexpr int OFFSETY = 30;
-
-	constexpr int MCU_ROM = 0x02;
-	constexpr int OFTV_AutoTrim_Offset = 0xBCA1;
-}
 
 class CHFSTWidgetsMFCDlg : public CDialogEx
 {
@@ -47,12 +23,21 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg LRESULT OnNcHitTest(CPoint point);
+	afx_msg void OnBtnClose();
+	afx_msg void OnBtnShowMax();
+	afx_msg void OnBtnShowNormal();
+	afx_msg void OnBtnWinTitle();
+	afx_msg void OnNMCustomdrawListDrawerContent(NMHDR* pNMHDR, LRESULT* pResult);
 	DECLARE_MESSAGE_MAP()
 
 private:
 	void CreateUIControls();
 	void CreateGdiObjects();
 	void ResizeUI(int cx, int cy);
+	void InitToolBar();
 private:
 	// Controls
 	std::unique_ptr<CMFCButton> m_pBtnClose;		// 关闭按钮
@@ -69,7 +54,8 @@ private:
 	CPen			m_Pen;
 
 	BOOL			m_bCreateCtrls{ FALSE };
-public:
-	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
+	HFST::LogBox	m_LogBox;
+	CListCtrl		m_ListDrawerContent;
+	CImageList		m_DrawerImglist;
+	CToolBar		m_ToolBar;
 };

@@ -1,13 +1,15 @@
 #ifndef __CCTRL_LAYOUT_HPP__
 #define __CCTRL_LAYOUT_HPP__
 
+#include <afxwin.h>
+
 namespace HFST
 {
-    class CCtrlLayout
+    class CtrlLayout
     {
     public:
-        CCtrlLayout();
-        CCtrlLayout(const CPoint& start, int CtrlHeight, int Gap);
+        CtrlLayout();
+        CtrlLayout(const CPoint& start, int CtrlHeight, int Gap);
 
         void Add(CWnd& wnd, int CtrlWidth, int nShow);
         void NextLine() {
