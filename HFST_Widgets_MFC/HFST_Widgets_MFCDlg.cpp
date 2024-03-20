@@ -118,7 +118,21 @@ BOOL CHFSTWidgetsMFCDlg::OnInitDialog()
 	title.Append(ver);
 	m_pBtnWindowTitle->SetWindowTextW(title);
 
-	m_LogBox.AppendString(_T("Hello"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello撒大大S大"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello大1"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello2"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hell打算的 大萨达撒多 萨达阿达o3"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello4"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello5"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello6 但是阿达阿达啊啊 "), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello7"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello8"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello  大大 阿达按时但是9"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello0"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello1"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello 的sad撒多啊啊2"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello的 大大3"), RGB(255,0,0), RGB(255,255,255));
+	m_LogBox.AppendString(_T("Hello4 的萨达的是"), RGB(255,0,0), RGB(255,255,255));
 
 	InitToolBar();
 
