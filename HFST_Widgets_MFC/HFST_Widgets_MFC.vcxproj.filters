@@ -33,7 +33,13 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="UI\CCtrlLayout.h">
+    <ClInclude Include="Core\HFST_Core.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\HFST_LogBox.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\HFST_CtrlLayout.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,7 +53,10 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="UI\CCtrlLayout.cpp">
+    <ClCompile Include="UI\HFST_CtrlLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\HFST_LogBox.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,6 +84,33 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\Record.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\boy.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\cute.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\girl.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\Mom.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\cartman.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\kenny.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\kyle.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\stan.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\toolbar1.bmp">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
