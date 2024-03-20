@@ -109,7 +109,7 @@ BOOL CHFSTWidgetsMFCDlg::OnInitDialog()
 	CreateGdiObjects();
 	CreateUIControls();
 
-	CString title;
+CString title;
 	CString ver;
 	ver = HFST::GetFileVersion();
 	ver.Replace(_T(", "), _T("."));
@@ -175,8 +175,7 @@ BOOL CHFSTWidgetsMFCDlg::OnInitDialog()
 
 	m_ListDrawerContent.SetColumnWidth(0, LVSCW_AUTOSIZE);
 
-	m_ListDrawerContent.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP);
-	return TRUE;
+	m_ListDrawerContent.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP);	return TRUE;
 }
 
 void CHFSTWidgetsMFCDlg::OnSysCommand(UINT nID, LPARAM lParam)
