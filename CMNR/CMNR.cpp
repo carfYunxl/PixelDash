@@ -80,8 +80,7 @@ BOOL CCMNRApp::InitInstance()
 	// 更改用于存储设置的注册表项
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
-	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
-
+	SetRegistryKey(_T("HFST-CMNR"));
 
 	InitContextMenuManager();
 
@@ -103,10 +102,6 @@ BOOL CCMNRApp::InitInstance()
 	pFrame->LoadFrame(IDR_MAINFRAME,
 		WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, nullptr,
 		nullptr);
-
-
-
-
 
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	pFrame->ShowWindow(SW_SHOW);

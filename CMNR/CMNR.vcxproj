@@ -102,6 +102,7 @@
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -125,6 +126,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,6 +152,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -177,6 +180,7 @@
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,8 +199,17 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ChildView.h" />
+    <ClInclude Include="Dockable\CLinearCtlDlg.h" />
     <ClInclude Include="CMNR.h" />
+    <ClInclude Include="Dockable\CTestDialog.h" />
+    <ClInclude Include="Dockable\ChildView.h" />
+    <ClInclude Include="Dockable\CLinearCtlPanel.h" />
+    <ClInclude Include="Dockable\FileView.h" />
+    <ClInclude Include="Dockable\GraphicsView.h" />
+    <ClInclude Include="Dockable\OutputWnd.h" />
+    <ClInclude Include="Dockable\PropertiesWnd.h" />
+    <ClInclude Include="Dockable\TestPanel.h" />
+    <ClInclude Include="Dockable\ViewTree.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -204,8 +217,17 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChildView.cpp" />
+    <ClCompile Include="Dockable\CLinearCtlDlg.cpp" />
     <ClCompile Include="CMNR.cpp" />
+    <ClCompile Include="Dockable\CLinearCtlPanel.cpp" />
+    <ClCompile Include="Dockable\CTestDialog.cpp" />
+    <ClCompile Include="Dockable\ChildView.cpp" />
+    <ClCompile Include="Dockable\FileView.cpp" />
+    <ClCompile Include="Dockable\GraphicsView.cpp" />
+    <ClCompile Include="Dockable\OutputWnd.cpp" />
+    <ClCompile Include="Dockable\PropertiesWnd.cpp" />
+    <ClCompile Include="Dockable\TestPanel.cpp" />
+    <ClCompile Include="Dockable\ViewTree.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -218,8 +240,10 @@
     <ResourceCompile Include="CMNR.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bmp00001.bmp" />
     <Image Include="res\CMNR.ico" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\toolbar1.bmp" />
     <Image Include="res\Toolbar256.bmp" />
     <Image Include="res\userimages.bmp" />
   </ItemGroup>

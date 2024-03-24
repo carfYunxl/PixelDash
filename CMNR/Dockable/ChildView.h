@@ -1,12 +1,4 @@
-﻿
-// ChildView.h: CChildView 类的接口
-//
-
-
-#pragma once
-
-
-// CChildView 窗口
+﻿#pragma once
 
 class CChildView : public CWnd
 {
@@ -32,5 +24,9 @@ public:
 protected:
 	afx_msg void OnPaint();
 	DECLARE_MESSAGE_MAP()
+
+public:
+	CButton m_Btn;
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };
 

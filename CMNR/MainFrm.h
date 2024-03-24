@@ -1,9 +1,11 @@
-﻿
-// MainFrm.h: CMainFrame 类的接口
-//
-
-#pragma once
+﻿#pragma once
 #include "ChildView.h"
+#include "FileView.h"
+#include "GraphicsView.h"
+#include "OutputWnd.h"
+#include "PropertiesWnd.h"
+#include "TestPanel.h"
+#include "CLinearCtlPanel.h"
 
 class CMainFrame : public CFrameWndEx
 {
@@ -41,7 +43,15 @@ protected:  // 控件条嵌入成员
 	CMFCToolBar       m_wndToolBar;
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
-	CChildView    m_wndView;
+	CChildView		  m_wndView;
+	CFileView		  m_wndFileView;
+	CGraphicsView	  m_wndGraphicsView;
+	COutputWnd        m_wndOutput;
+
+	CMFCToolBar       m_NewToolBar;
+	CPropertiesWnd	  m_wndProperty;
+	TestPanel		  m_wndTest;
+	LinearCtlPane	  m_wndLinearCtl;
 
 // 生成的消息映射函数
 protected:
@@ -50,7 +60,13 @@ protected:
 	afx_msg void OnViewCustomize();
 	afx_msg LRESULT OnToolbarCreateNew(WPARAM wp, LPARAM lp);
 	DECLARE_MESSAGE_MAP()
-
+public:
+	afx_msg void OnButtonIc();
+	afx_msg void OnButtonCon();
+	afx_msg void OnButtonDiscon();
+	afx_msg void OnButtonTest1();
+	afx_msg void OnButtonTest2();
+	afx_msg void OnButtonTest3();
 };
 
 

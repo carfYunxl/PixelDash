@@ -1,8 +1,4 @@
-﻿
-// MainFrm.cpp: CMainFrame 类的实现
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "CMNR.h"
 
@@ -11,8 +7,6 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-// CMainFrame
 
 IMPLEMENT_DYNAMIC(CMainFrame, CFrameWndEx)
 
@@ -25,6 +19,12 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_SETFOCUS()
 	ON_COMMAND(ID_VIEW_CUSTOMIZE, &CMainFrame::OnViewCustomize)
 	ON_REGISTERED_MESSAGE(AFX_WM_CREATETOOLBAR, &CMainFrame::OnToolbarCreateNew)
+	ON_COMMAND(ID_BUTTON_IC, &CMainFrame::OnButtonIc)
+	ON_COMMAND(ID_BUTTON_CON, &CMainFrame::OnButtonCon)
+	ON_COMMAND(ID_BUTTON_DISCON, &CMainFrame::OnButtonDiscon)
+	ON_COMMAND(ID_BUTTON_TEST1, &CMainFrame::OnButtonTest1)
+	ON_COMMAND(ID_BUTTON_TEST2, &CMainFrame::OnButtonTest2)
+	ON_COMMAND(ID_BUTTON_TEST3, &CMainFrame::OnButtonTest3)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -46,6 +46,8 @@ CMainFrame::~CMainFrame()
 {
 }
 
+extern CCMNRApp theApp;
+#define ID_VIEW_PROPERTIESWND 1126
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CFrameWndEx::OnCreate(lpCreateStruct) == -1)
@@ -72,11 +74,19 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) ||
-		!m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
+		//!m_wndToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_MAINFRAME_256 : IDR_MAINFRAME))
+		!m_wndToolBar.LoadToolBar(IDR_TOOLBAR_IC, 0, 0, TRUE))
 	{
 		TRACE0("未能创建工具栏\n");
 		return -1;      // 未能创建
 	}
+	m_wndToolBar.SetWindowTextW(_T("图形"));
+	m_wndToolBar.SetPermament(TRUE);
+
+	m_NewToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_TOOLBAR_TEST);
+	m_NewToolBar.LoadToolBar(IDR_TOOLBAR_TEST, 0, 0, TRUE /* 已锁定*/);
+	m_NewToolBar.SetPermament(TRUE);
+	m_NewToolBar.SetShowTooltips(TRUE);
 
 	CString strToolBarName;
 	bNameValid = strToolBarName.LoadString(IDS_TOOLBAR_STANDARD);
@@ -101,10 +111,63 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO: 如果您不希望工具栏和菜单栏可停靠，请删除这五行
 	m_wndMenuBar.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	m_NewToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
+	DockPane(&m_NewToolBar);
 
+	// 创建属性窗口
+	if (!m_wndProperty.Create(_T("属性窗口"), this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_PROPERTIESWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建“属性”窗口\n");
+		return FALSE; // 未能创建
+	}
+
+	// 创建文件视图
+	if (!m_wndFileView.Create(_T("文件视图"), this, CRect(0, 0, 200, 200), TRUE, 133, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建“文件视图”窗口\n");
+		return FALSE; // 未能创建
+	}
+
+	// 创建文件视图
+	if (!m_wndGraphicsView.Create(_T("图形视图"), this, CRect(0, 0, 200, 200), TRUE, 1340, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建“图形视图”窗口\n");
+		return FALSE; // 未能创建
+	}
+
+	if (!m_wndOutput.Create(_T("输出窗口"), this, CRect(0, 0, 100, 100), TRUE, 1350, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建输出窗口\n");
+		return FALSE; // 未能创建
+	}
+
+	if (!m_wndTest.Create(_T("IC连接"), this, CRect(0, 0, 100, 100), TRUE, 1351, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建IC连接\n");
+		return FALSE; // 未能创建
+	}
+
+	if (!m_wndLinearCtl.Create(_T("线性机台控制"), this, CRect(0, 0, 100, 100), TRUE, 1355, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建线性机台控制\n");
+		return FALSE; // 未能创建
+	}
+
+	m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndGraphicsView.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndProperty.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndTest.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndLinearCtl.EnableDocking(CBRS_ALIGN_ANY);
+	DockPane(&m_wndLinearCtl);
+	DockPane(&m_wndProperty);
+	DockPane(&m_wndTest);
+	DockPane(&m_wndOutput);
+	DockPane(&m_wndFileView);
+	DockPane(&m_wndGraphicsView);
 
 	// 启用 Visual Studio 2005 样式停靠窗口行为
 	CDockingManager::SetDockingMode(DT_SMART);
@@ -161,9 +224,9 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
 	cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
-	//cs.lpszClass = AfxRegisterWndClass(0);
+	cs.lpszClass = AfxRegisterWndClass(0);
 	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
-		::LoadCursor(nullptr, IDC_ARROW), (HBRUSH)GetStockObject(BLACK_BRUSH), LoadIcon(NULL, IDI_ERROR));
+		::LoadCursor(nullptr, IDC_ARROW), nullptr, LoadIcon(NULL, IDI_ERROR));
 	return TRUE;
 }
 
@@ -256,3 +319,35 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	return TRUE;
 }
 
+
+void CMainFrame::OnButtonIc()
+{
+	MessageBox(_T("Show IC Info"));
+}
+
+void CMainFrame::OnButtonCon()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CMainFrame::OnButtonDiscon()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+void CMainFrame::OnButtonTest1()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CMainFrame::OnButtonTest2()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+void CMainFrame::OnButtonTest3()
+{
+	// TODO: 在此添加命令处理程序代码
+}
