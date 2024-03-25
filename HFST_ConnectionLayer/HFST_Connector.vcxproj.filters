@@ -108,6 +108,9 @@
     <ClInclude Include="src\RawData\HFST_RawReader.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\HFST_Error.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -165,6 +168,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Connector\Bridge\HFST_BulkController.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\HFST_Error.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
