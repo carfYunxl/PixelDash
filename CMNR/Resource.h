@@ -23,6 +23,8 @@
 #define IDR_TOOLBAR_TEST                312
 #define IDD_DIALOG_TEST_PAN             314
 #define IDD_DIALOG_LINEAR_CONTROL       316
+#define IDR_MENU1                       318
+#define IDR_XLISTBOX                    318
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON2                     1001
 #define IDC_BUTTON3                     1002
@@ -36,13 +38,17 @@
 #define ID_BUTTON_TEST3                 32782
 #define ID_BUTTON_TEST2                 32783
 #define ID_BUTTON_TEST1                 32784
+#define ID_SELECTALL_CLEAR              32785
+#define ID_XLISTBOX_SELECTALL           32786
+#define ID_XLISTBOX_COPY                32787
+#define ID_XLISTBOX_CLEAR               32788
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32785
+#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_COMMAND_VALUE         32789
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

@@ -5,6 +5,7 @@
 #include "OutputWnd.h"
 #include "Resource.h"
 #include "MainFrm.h"
+#include "Clipboard.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -44,7 +45,11 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// 创建输出窗格: 
-	const DWORD dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
+	//const DWORD dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
+	const DWORD dwStyle = LBS_NOTIFY | LBS_MULTIPLESEL |
+		LBS_OWNERDRAWFIXED | LBS_HASSTRINGS |
+		LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL |
+		WS_TABSTOP;
 
 	if (!m_wndOutputBuild.Create(dwStyle, rectDummy, &m_wndTabs, 2) ||
 		!m_wndOutputDebug.Create(dwStyle, rectDummy, &m_wndTabs, 3) ||
@@ -71,6 +76,14 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndTabs.AddTab(&m_wndOutputFind, strTabName, (UINT)2);
 
 	// 使用一些虚拟文本填写输出选项卡(无需复杂数据)
+	m_wndOutputBuild.EnableColor(TRUE);
+	m_wndOutputDebug.EnableColor(TRUE);
+	m_wndOutputFind.EnableColor(TRUE);
+
+	m_wndOutputBuild.SetContextMenuId(IDR_XLISTBOX);
+	m_wndOutputDebug.SetContextMenuId(IDR_XLISTBOX);
+	m_wndOutputFind.SetContextMenuId(IDR_XLISTBOX);
+
 	FillBuildWindow();
 	FillDebugWindow();
 	FillFindWindow();
@@ -110,6 +123,10 @@ void COutputWnd::FillBuildWindow()
 	m_wndOutputBuild.AddString(_T("生成输出正显示在此处。"));
 	m_wndOutputBuild.AddString(_T("输出正显示在列表视图的行中"));
 	m_wndOutputBuild.AddString(_T("但您可以根据需要更改其显示方式..."));
+
+	m_wndOutputBuild.AddLine(CXListBox::Red, CXListBox::Color::White, _T("这是一段测试文字，检查颜色是否能正确设置"));
+
+	m_wndOutputBuild.Printf(CXListBox::Blue, CXListBox::White, 0, _T("XHtmlTreeTest v1.6"));
 }
 
 void COutputWnd::FillDebugWindow()
@@ -117,6 +134,10 @@ void COutputWnd::FillDebugWindow()
 	m_wndOutputDebug.AddString(_T("调试输出正显示在此处。"));
 	m_wndOutputDebug.AddString(_T("输出正显示在列表视图的行中"));
 	m_wndOutputDebug.AddString(_T("但您可以根据需要更改其显示方式..."));
+
+	m_wndOutputDebug.AddLine(CXListBox::Red, CXListBox::Color::White, _T("这是一段测试文字，检查颜色是否能正确设置"));
+
+	m_wndOutputDebug.Printf(CXListBox::Blue, CXListBox::White, 0, _T("XHtmlTreeTest v1.6"));
 }
 
 void COutputWnd::FillFindWindow()
@@ -124,6 +145,10 @@ void COutputWnd::FillFindWindow()
 	m_wndOutputFind.AddString(_T("查找输出正显示在此处。"));
 	m_wndOutputFind.AddString(_T("输出正显示在列表视图的行中"));
 	m_wndOutputFind.AddString(_T("但您可以根据需要更改其显示方式..."));
+
+	m_wndOutputFind.AddLine(CXListBox::Red, CXListBox::Color::White, _T("这是一段测试文字，检查颜色是否能正确设置"));
+
+	m_wndOutputFind.Printf(CXListBox::Blue, CXListBox::White, 0, _T("XHtmlTreeTest v1.6"));
 }
 
 void COutputWnd::UpdateFonts()
@@ -133,71 +158,6 @@ void COutputWnd::UpdateFonts()
 	m_wndOutputFind.SetFont(&afxGlobalData.fontRegular);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COutputList1
-
-COutputList::COutputList() noexcept
-{
-}
-
-COutputList::~COutputList()
-{
-}
-
 #define ID_VIEW_OUTPUTWND 149
 #define IDR_OUTPUT_POPUP			182
 
-BEGIN_MESSAGE_MAP(COutputList, CListBox)
-	ON_WM_CONTEXTMENU()
-	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
-	ON_COMMAND(ID_EDIT_CLEAR, OnEditClear)
-	ON_COMMAND(ID_VIEW_OUTPUTWND, OnViewOutput)
-	ON_WM_WINDOWPOSCHANGING()
-END_MESSAGE_MAP()
-/////////////////////////////////////////////////////////////////////////////
-// COutputList 消息处理程序
-
-void COutputList::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
-{
-	CMenu menu;
-	menu.LoadMenu(IDR_OUTPUT_POPUP);
-
-	CMenu* pSumMenu = menu.GetSubMenu(0);
-
-	if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CMDIFrameWndEx)))
-	{
-		CMFCPopupMenu* pPopupMenu = new CMFCPopupMenu;
-
-		if (!pPopupMenu->Create(this, point.x, point.y, (HMENU)pSumMenu->m_hMenu, FALSE, TRUE))
-			return;
-
-		((CMDIFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
-		UpdateDialogControls(this, FALSE);
-	}
-
-	SetFocus();
-}
-
-void COutputList::OnEditCopy()
-{
-	MessageBox(_T("复制输出"));
-}
-
-void COutputList::OnEditClear()
-{
-	MessageBox(_T("清除输出"));
-}
-
-void COutputList::OnViewOutput()
-{
-	CDockablePane* pParentBar = DYNAMIC_DOWNCAST(CDockablePane, GetOwner());
-	CMDIFrameWndEx* pMainFrame = DYNAMIC_DOWNCAST(CMDIFrameWndEx, GetTopLevelFrame());
-
-	if (pMainFrame != nullptr && pParentBar != nullptr)
-	{
-		pMainFrame->SetFocus();
-		pMainFrame->ShowPane(pParentBar, FALSE, FALSE, FALSE);
-		pMainFrame->RecalcLayout();
-
-	}
-}

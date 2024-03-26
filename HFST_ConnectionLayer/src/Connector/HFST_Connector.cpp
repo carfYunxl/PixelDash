@@ -7,6 +7,7 @@
 #include "HFST_CommandIO.hpp"
 #include "HFST_Bridge.hpp"
 #include "HFST_BulkController.hpp"
+#include "HFST_Error.hpp"
 namespace HFST
 {
     Connector::Connector()
@@ -22,13 +23,12 @@ namespace HFST
 
     Connector::~Connector() { }
 
-    bool Connector::Connect()
+    std::error_code Connector::Connect()
     {
         std::unique_ptr<Bridge> pBridge = CreateBridge(m_CommunicationMode);
         if ( !pBridge || !pBridge->Attach() )
         {
-            _cprintf("connect failed!\n");
-            return false;
+            return make_error_code(-7);
         }
 
         //if ( m_TouchLink->GetBulk().DetectUSBConnectCount( USB_Manager::GetGUID() ) <= 0 ) {
@@ -46,26 +46,26 @@ namespace HFST
         //}
 
         if ( !I2C_ScanAddr() )
-            return false;
+            return make_error_code(-8);
 
         if ( !IC_SetI2CAddr(m_nCurrentI2CAddr) )
-            return false;
+            return make_error_code(-9);
 
         if ( !IC_GetChipID() )
-            return false;
+            return make_error_code(-10);
 
         if ( !IC_GetProtocol() )
-            return false;
+            return make_error_code(-11);
 
         if ( m_IcInfo.nProtocol == PROROCOL::PROTOCOL_STNA || m_IcInfo.nProtocol == PROROCOL::PROTOCOL_STND ) {
             m_I2cFlag = true;
 
             if (!IC_SetI2CAddr(m_nCurrentI2CAddr))
-                return false;
+                return make_error_code(-9);
         }
 
         if ( !IC_GetStatus() )
-            return false;
+            return make_error_code(-12);
 
         switch (m_IcStatus)
         {
@@ -78,18 +78,19 @@ namespace HFST
             case IC_Status::CONNECT:
             {
                 if ( !IC_GetInformation() )
-                    return false;
+                    return make_error_code(-13);
 
                 if ( m_IcInfo.nChipID == static_cast<int>(ChipID::A8018) )
                 {
                     CommandIO cmd_io(m_IcInfo);
-                    cmd_io.GetInfo();
+                    if (!cmd_io.GetInfo())
+                        return make_error_code(-14);
                 }
                 break;
             }
         }
         
-        return true;
+        return make_error_code(0);
     }
 
     void Connector::DisConnect()
@@ -97,11 +98,11 @@ namespace HFST
         std::cout << "DisConnect Success!" << std::endl;
     }
 
-    bool Connector::I2C_ScanAddr()
+    std::error_code Connector::I2C_ScanAddr()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);;
 
         if ( !m_vI2CAddr.empty() )
             m_vI2CAddr.clear();
@@ -135,38 +136,38 @@ namespace HFST
             }
         }
 
-        return true;
+        return make_error_code(0);;
     }
 
-    bool Connector::SW_Reset()
+    std::error_code Connector::SW_Reset()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);;
 
         unsigned char buffer = 0x01;
         int ret = pApi->TTK.WriteI2CReg( &buffer, 0x02, 1 );
         if (ret <= 0)
-            return false;
+            return make_error_code(-5);;
 
-        return true;
+        return make_error_code(0);;
     }
 
-    bool Connector::IC_GetStatus()
+    std::error_code Connector::IC_GetStatus()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);;
 
         if ( !SW_Reset() )
-            return false;
+            return make_error_code(-15);;
 
         unsigned char buffer{0};
         int ret = pApi->TTK.ReadI2CReg( &buffer, 0x01, 1 );
         if (ret <= 0)
         {
             m_IcStatus = IC_Status::NOT_CONNECT;
-            return false;
+            return make_error_code(-5);;
         }
 
         int nStatus = (buffer & 0x0F );
@@ -186,24 +187,24 @@ namespace HFST
             }
         }
 
-        return true;
+        return make_error_code(0);;
     }
 
-    bool Connector::IC_GetInformation()
+    std::error_code Connector::IC_GetInformation()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);;
 
         if (!SW_Reset())
-            return false;
+            return make_error_code(-15);
 
         constexpr size_t READ_LEN = 256;
         unsigned char buffer[READ_LEN]{ 0 };
 
         int ret = pApi->TTK.ReadI2CReg( buffer, 0x00, READ_LEN );
         if ( ret <= 0 )
-            return false;
+            return make_error_code(-5);
 
         m_IcInfo.nResX = (buffer[ADDR_MAP::RES_X_H] << 8) | buffer[ADDR_MAP::RES_X_L];
         m_IcInfo.nResY = (buffer[ADDR_MAP::RES_Y_H] << 8) | buffer[ADDR_MAP::RES_Y_L];
@@ -223,21 +224,21 @@ namespace HFST
         m_IcInfo.nChipID = buffer[ADDR_MAP::CHIPID];
         m_IcInfo.nFwVersion = buffer[ADDR_MAP::FW_VERSION];
 
-        return true;
+        return make_error_code(0);
     }
 
-    bool Connector::IC_GetProtocol()
+    std::error_code Connector::IC_GetProtocol()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);
 
         constexpr size_t READ_LEN = 8;
         unsigned char buffer[READ_LEN]{ 0 };
 
         int ret = pApi->TTK.ReadI2CReg( buffer, ADDR_MAP::PAGE, READ_LEN );
         if ( ret <= 0 )
-            return false;
+            return make_error_code(-5);
 
         std::string strProtocol( (const char* const)&buffer[1], 4 );
 
@@ -250,26 +251,26 @@ namespace HFST
         else
             m_IcInfo.nProtocol = (*iterator).first;
 
-        return true;
+        return make_error_code(0);
     }
 
-    bool Connector::IC_GetChipID()
+    std::error_code Connector::IC_GetChipID()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);
 
         constexpr size_t READ_LEN = 1;
         unsigned char buffer[READ_LEN]{ 0 };
 
         int ret = pApi->TTK.ReadI2CReg( buffer, ADDR_MAP::CHIPID, READ_LEN );
         if (ret <= 0)
-            return false;
+            return make_error_code(-5);
 
         int nChipID = buffer[0];
 
         m_IcInfo.nChipID = buffer[0];
-        return true;
+        return make_error_code(0);
     }
 
     std::string Connector::Protocol()
@@ -309,20 +310,20 @@ namespace HFST
         return "UnKnown";
     }
 
-    bool Connector::IC_SetI2CAddr(int nAddr)
+    std::error_code Connector::IC_SetI2CAddr(int nAddr)
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return false;
+            return make_error_code(-1);
 
         int ret = pApi->TTK.SetI2CAddr( m_nCurrentI2CAddr, 2, m_I2cFlag );
         if (ret < 0)
-            return false;
+            return make_error_code(-9);
 
-        return true;
+        return make_error_code(0);
     }
 
-    bool Connector::IC_SwitchPage( RAW::PageType type )
+    std::error_code Connector::IC_SwitchPage( RAW::PageType type )
     {
         switch ( type )
         {
@@ -332,7 +333,7 @@ namespace HFST
             break;
         }
 
-        return true;
+        return make_error_code(0);
     }
 
     bool Connector::RegisterDevice(HWND hWnd)

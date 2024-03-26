@@ -201,6 +201,7 @@
   <ItemGroup>
     <ClInclude Include="Dockable\CLinearCtlDlg.h" />
     <ClInclude Include="CMNR.h" />
+    <ClInclude Include="Dockable\Clipboard.h" />
     <ClInclude Include="Dockable\CTestDialog.h" />
     <ClInclude Include="Dockable\ChildView.h" />
     <ClInclude Include="Dockable\CLinearCtlPanel.h" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Dockable\PropertiesWnd.h" />
     <ClInclude Include="Dockable\TestPanel.h" />
     <ClInclude Include="Dockable\ViewTree.h" />
+    <ClInclude Include="Dockable\XListBox.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -220,6 +222,7 @@
     <ClCompile Include="Dockable\CLinearCtlDlg.cpp" />
     <ClCompile Include="CMNR.cpp" />
     <ClCompile Include="Dockable\CLinearCtlPanel.cpp" />
+    <ClCompile Include="Dockable\Clipboard.cpp" />
     <ClCompile Include="Dockable\CTestDialog.cpp" />
     <ClCompile Include="Dockable\ChildView.cpp" />
     <ClCompile Include="Dockable\FileView.cpp" />
@@ -228,6 +231,7 @@
     <ClCompile Include="Dockable\PropertiesWnd.cpp" />
     <ClCompile Include="Dockable\TestPanel.cpp" />
     <ClCompile Include="Dockable\ViewTree.cpp" />
+    <ClCompile Include="Dockable\XListBox.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -249,6 +253,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\CMNR.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HFST_ConnectionLayer\HFST_Connector.vcxproj">
+      <Project>{a9261353-9ac9-46df-825d-bbf7c9fabc30}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

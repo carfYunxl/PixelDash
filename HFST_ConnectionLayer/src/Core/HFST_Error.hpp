@@ -6,8 +6,6 @@ namespace HFST
     class std::error_category;
     class HFST_ERROR;
 
-    extern HFST_ERROR g_sError;
-
     enum class ErrorCode
     {
         OK              = 0,
@@ -15,7 +13,17 @@ namespace HFST
         BULK_INIT       = -2,
         BULK_IN         = -3,
         BULK_OUT        = -4,
-        I2C_READ_ERROR  = -5
+        I2C_RW_ERROR    = -5,
+        HID_INIT        = -6,
+        BRIDGE_CREATE   = -7,
+        SACN_I2C_ADDR   = -8,
+        SET_I2C_ADDR    = -9,
+        GET_CHIP_ID     = -10,
+        GET_PROTOCOL    = -11,
+        GET_STATUS      = -12,
+        GET_IC_INFO     = -13,
+        GET_RAW_INFO    = -14,
+        SW_RESET        = -15
         // ...etc
     };
 
@@ -27,9 +35,15 @@ namespace HFST
         std::string message(int ev) const override;
     };
 
-    std::error_code make_error_code(int e);
+    static HFST_ERROR& GetError()
+    {
+        static HFST_ERROR hError;
+        return hError;
+    }
 
-    std::error_code TryError();
+    std::error_code make_error_code(int e) {
+        return { e, GetError() };
+    }
 }
 
 #endif //__HFST_ERROR_HPP__

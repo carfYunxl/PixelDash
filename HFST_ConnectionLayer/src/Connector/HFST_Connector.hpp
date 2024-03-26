@@ -15,23 +15,21 @@ namespace HFST
         Connector();
         ~Connector();
 
-        bool Connect();
+        std::error_code Connect();
         void DisConnect();
 
-        const GUID GetGUID() const { return m_Guid; }
-
-        bool I2C_ScanAddr();
-
-        bool IC_GetStatus();
-        bool IC_GetInformation();
-        bool IC_GetProtocol();
-        bool IC_GetChipID();
-        bool IC_SetI2CAddr( int nAddr );
+        std::error_code I2C_ScanAddr();
+        std::error_code IC_GetStatus();
+        std::error_code IC_GetInformation();
+        std::error_code IC_GetProtocol();
+        std::error_code IC_GetChipID();
+        std::error_code IC_SetI2CAddr( int nAddr );
+        std::error_code SW_Reset();
+        bool RegisterDevice(HWND hWnd);
 
         std::string Protocol();
+        const GUID GetGUID() const { return m_Guid; }
 
-        bool SW_Reset();
-        bool RegisterDevice(HWND hWnd);
     public: // Get infomation
         int                  GetChipID()        const { return m_IcInfo.nChipID;                  }
         std::pair<int, int>  GetRxTxCnt()       const { return { m_IcInfo.nNumX,m_IcInfo.nNumY };   }
@@ -43,7 +41,7 @@ namespace HFST
         int                  GetFwVersion()     const { return m_IcInfo.nFwVersion; }
         int                  GetNumKey()        const { return m_IcInfo.nNumKey; }
     public: // Set method
-        bool                 IC_SwitchPage( RAW::PageType type );
+        std::error_code      IC_SwitchPage( RAW::PageType type );
     private:
         std::vector<I2CAddr>    m_vI2CAddr;
 
