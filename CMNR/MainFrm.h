@@ -7,6 +7,8 @@
 #include "TestPanel.h"
 #include "CLinearCtlPanel.h"
 
+#define UM_PROGRESS WM_USER+1
+
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -53,20 +55,25 @@ protected:  // 控件条嵌入成员
 	TestPanel		  m_wndTest;
 	LinearCtlPane	  m_wndLinearCtl;
 
+	CFont			  m_Font;
+
 // 生成的消息映射函数
 protected:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSetFocus(CWnd *pOldWnd);
-	afx_msg void OnViewCustomize();
+	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void	OnSetFocus(CWnd *pOldWnd);
+	afx_msg void	OnViewCustomize();
 	afx_msg LRESULT OnToolbarCreateNew(WPARAM wp, LPARAM lp);
+	afx_msg void	OnButtonIc();
+	afx_msg void	OnButtonCon();
+	afx_msg void	OnButtonDiscon();
+	afx_msg void	OnButtonTest1();
+	afx_msg void	OnButtonTest2();
+	afx_msg void	OnButtonTest3();
+
+	afx_msg LRESULT	OnProgress(WPARAM wp, LPARAM lp);
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnButtonIc();
-	afx_msg void OnButtonCon();
-	afx_msg void OnButtonDiscon();
-	afx_msg void OnButtonTest1();
-	afx_msg void OnButtonTest2();
-	afx_msg void OnButtonTest3();
+	afx_msg void OnPaint();
 };
 
 

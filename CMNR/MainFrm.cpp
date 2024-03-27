@@ -25,15 +25,24 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_BUTTON_TEST1, &CMainFrame::OnButtonTest1)
 	ON_COMMAND(ID_BUTTON_TEST2, &CMainFrame::OnButtonTest2)
 	ON_COMMAND(ID_BUTTON_TEST3, &CMainFrame::OnButtonTest3)
+	ON_MESSAGE(UM_PROGRESS, &CMainFrame::OnProgress)
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
 	ID_SEPARATOR,           // 状态行指示器
+	IDS_PROGRESS,
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
 };
+
+LRESULT CMainFrame::OnProgress(WPARAM wp, LPARAM lp)
+{
+
+	return 0;
+}
 
 // CMainFrame 构造/析构
 
@@ -203,6 +212,17 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
+	//PostMessage(UM_PROGRESS);
+	m_wndStatusBar.SetPaneInfo(1, IDS_PROGRESS, SBPS_NORMAL, 400);
+	m_wndStatusBar.EnablePaneProgressBar(1, 100, TRUE);
+	m_wndStatusBar.SetPaneProgress(1, 50); 
+	m_wndStatusBar.SetPaneBackgroundColor(0, RGB(192,192,192));
+
+	m_Font.CreatePointFont(130, _T("微软雅黑"));
+	LOGFONT font;
+	memset(&font,0,sizeof(LOGFONT));
+	m_Font.GetLogFont(&font);
+	m_wndMenuBar.SetMenuFont(&font);
 	return 0;
 }
 
@@ -350,4 +370,10 @@ void CMainFrame::OnButtonTest2()
 void CMainFrame::OnButtonTest3()
 {
 	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CMainFrame::OnPaint()
+{
+	CPaintDC dc(this);
 }

@@ -7,6 +7,8 @@
 #define IDS_BUILD_TAB                   101
 #define IDS_FIND_TAB                    102
 #define IDS_DEBUG_TAB                   103
+#define IDS_PROGRESS                    104
+#define IDS_PROGRESS_LABEL              105
 #define IDR_POPUP_EDIT                  119
 #define ID_STATUSBAR_PANE1              120
 #define ID_STATUSBAR_PANE2              121
@@ -23,7 +25,6 @@
 #define IDR_TOOLBAR_TEST                312
 #define IDD_DIALOG_TEST_PAN             314
 #define IDD_DIALOG_LINEAR_CONTROL       316
-#define IDR_MENU1                       318
 #define IDR_XLISTBOX                    318
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON2                     1001

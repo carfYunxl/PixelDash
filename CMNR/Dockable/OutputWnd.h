@@ -38,6 +38,8 @@ protected:
 	CXListBox m_wndOutputDebug;
 	CXListBox m_wndOutputFind;
 
+	CFont	  m_Font;
+
 protected:
 	void FillBuildWindow();
 	void FillDebugWindow();
