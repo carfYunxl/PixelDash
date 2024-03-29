@@ -49,4 +49,8 @@ namespace HFST
 
         return "Î´ÖªÏµÍ³´íÎó";
     }
+
+    std::error_code make_error_code(int e) {
+        return { e, GetError() };
+    }
 }

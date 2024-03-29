@@ -45,26 +45,26 @@ namespace HFST
         //    return false;
         //}
 
-        if ( !I2C_ScanAddr() )
+        if ( I2C_ScanAddr().value() != 0 )
             return make_error_code(-8);
 
-        if ( !IC_SetI2CAddr(m_nCurrentI2CAddr) )
+        if ( IC_SetI2CAddr(m_nCurrentI2CAddr).value() != 0 )
             return make_error_code(-9);
 
-        if ( !IC_GetChipID() )
+        if ( IC_GetChipID().value() != 0 )
             return make_error_code(-10);
 
-        if ( !IC_GetProtocol() )
+        if ( IC_GetProtocol().value() != 0 )
             return make_error_code(-11);
 
         if ( m_IcInfo.nProtocol == PROROCOL::PROTOCOL_STNA || m_IcInfo.nProtocol == PROROCOL::PROTOCOL_STND ) {
             m_I2cFlag = true;
 
-            if (!IC_SetI2CAddr(m_nCurrentI2CAddr))
+            if ( IC_SetI2CAddr(m_nCurrentI2CAddr).value() != 0 )
                 return make_error_code(-9);
         }
 
-        if ( !IC_GetStatus() )
+        if ( IC_GetStatus().value() != 0 )
             return make_error_code(-12);
 
         switch (m_IcStatus)
@@ -77,13 +77,13 @@ namespace HFST
                 break;
             case IC_Status::CONNECT:
             {
-                if ( !IC_GetInformation() )
+                if ( IC_GetInformation().value() != 0 )
                     return make_error_code(-13);
 
                 if ( m_IcInfo.nChipID == static_cast<int>(ChipID::A8018) )
                 {
                     CommandIO cmd_io(m_IcInfo);
-                    if (!cmd_io.GetInfo())
+                    if ( !cmd_io.GetInfo() )
                         return make_error_code(-14);
                 }
                 break;
@@ -102,7 +102,7 @@ namespace HFST
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return make_error_code(-1);;
+            return make_error_code(-1);
 
         if ( !m_vI2CAddr.empty() )
             m_vI2CAddr.clear();
@@ -136,38 +136,38 @@ namespace HFST
             }
         }
 
-        return make_error_code(0);;
+        return make_error_code(0);
     }
 
     std::error_code Connector::SW_Reset()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return make_error_code(-1);;
+            return make_error_code(-1);
 
         unsigned char buffer = 0x01;
         int ret = pApi->TTK.WriteI2CReg( &buffer, 0x02, 1 );
         if (ret <= 0)
-            return make_error_code(-5);;
+            return make_error_code(-5);
 
-        return make_error_code(0);;
+        return make_error_code(0);
     }
 
     std::error_code Connector::IC_GetStatus()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return make_error_code(-1);;
+            return make_error_code(-1);
 
-        if ( !SW_Reset() )
-            return make_error_code(-15);;
+        if ( SW_Reset().value() != 0 )
+            return make_error_code(-15);
 
         unsigned char buffer{0};
         int ret = pApi->TTK.ReadI2CReg( &buffer, 0x01, 1 );
         if (ret <= 0)
         {
             m_IcStatus = IC_Status::NOT_CONNECT;
-            return make_error_code(-5);;
+            return make_error_code(-5);
         }
 
         int nStatus = (buffer & 0x0F );
@@ -187,14 +187,14 @@ namespace HFST
             }
         }
 
-        return make_error_code(0);;
+        return make_error_code(0);
     }
 
     std::error_code Connector::IC_GetInformation()
     {
         auto* pApi = HFST_API::GetAPI();
         if (!pApi)
-            return make_error_code(-1);;
+            return make_error_code(-1);
 
         if (!SW_Reset())
             return make_error_code(-15);

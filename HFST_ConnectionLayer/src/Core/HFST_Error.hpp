@@ -41,9 +41,7 @@ namespace HFST
         return hError;
     }
 
-    std::error_code make_error_code(int e) {
-        return { e, GetError() };
-    }
+    std::error_code make_error_code(int e);
 }
 
 #endif //__HFST_ERROR_HPP__
