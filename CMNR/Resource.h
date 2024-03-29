@@ -26,9 +26,23 @@
 #define IDD_DIALOG_TEST_PAN             314
 #define IDD_DIALOG_LINEAR_CONTROL       316
 #define IDR_XLISTBOX                    318
+#define IDB_PNG_BACK                    320
+#define IDB_PNG_DOWN                    321
+#define IDB_PNG_FRONT                   322
+#define IDB_PNG_LEFT                    323
+#define IDB_PNG_RIGHT                   324
+#define IDB_PNG_UP                      325
+#define IDB_PNG1                        326
+#define IDB_PNG_CENTER                  326
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON2                     1001
 #define IDC_BUTTON3                     1002
+#define IDC_BUTTON_VIEW_LEFT            1003
+#define IDC_BUTTON_VIEW_RIGHT           1004
+#define IDC_BUTTON_VIEW_FRONT           1005
+#define IDC_BUTTON_VIEW_BACK            1006
+#define IDC_BUTTON_VIEW_UP              1007
+#define IDC_BUTTON_VIEW_DOWN            1008
 #define ID_Menu                         32776
 #define ID_BUTTON_CON                   32777
 #define ID_BUTTON_DISCON                32778
@@ -48,7 +62,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_RESOURCE_VALUE        327
 #define _APS_NEXT_COMMAND_VALUE         32789
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310

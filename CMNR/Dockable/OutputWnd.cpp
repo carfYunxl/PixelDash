@@ -88,7 +88,7 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	FillDebugWindow();
 	FillFindWindow();
 
-	m_Font.CreatePointFont(130, _T("微软雅黑"));
+	m_Font.CreatePointFont(120, _T("微软雅黑"));
 	m_wndOutputBuild.SetFont(&m_Font);
 	m_wndOutputDebug.SetFont(&m_Font);
 	m_wndOutputFind.SetFont(&m_Font);

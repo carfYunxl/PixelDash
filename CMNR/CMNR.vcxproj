@@ -245,7 +245,14 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\Center.png" />
     <Image Include="res\CMNR.ico" />
+    <Image Include="res\MoveBack.png" />
+    <Image Include="res\MoveDown.png" />
+    <Image Include="res\MoveFront.png" />
+    <Image Include="res\MoveLeft.png" />
+    <Image Include="res\MoveRight.png" />
+    <Image Include="res\MoveUp.png" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\toolbar1.bmp" />
     <Image Include="res\Toolbar256.bmp" />

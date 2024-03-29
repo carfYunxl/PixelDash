@@ -218,7 +218,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndStatusBar.SetPaneProgress(1, 50); 
 	m_wndStatusBar.SetPaneBackgroundColor(0, RGB(192,192,192));
 
-	m_Font.CreatePointFont(130, _T("微软雅黑"));
+	m_Font.CreatePointFont(120, _T("微软雅黑"));
 	LOGFONT font;
 	memset(&font,0,sizeof(LOGFONT));
 	m_Font.GetLogFont(&font);
