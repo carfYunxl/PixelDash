@@ -23,13 +23,17 @@ namespace HFST
 
     Connector::~Connector() { }
 
-    std::error_code Connector::Connect()
+    std::error_code Connector::Connect(double vdd, double iovdd)
     {
         std::unique_ptr<Bridge> pBridge = CreateBridge(m_CommunicationMode);
         if ( !pBridge || !pBridge->Attach() )
         {
             return make_error_code(-7);
         }
+
+        GetTLInfo();
+
+        SetVoltage(vdd, iovdd);
 
         //if ( m_TouchLink->GetBulk().DetectUSBConnectCount( USB_Manager::GetGUID() ) <= 0 ) {
         //    m_HidManager->SwicthToBULK();
@@ -77,8 +81,8 @@ namespace HFST
                 break;
             case IC_Status::CONNECT:
             {
-                if ( IC_GetInformation().value() != 0 )
-                    return make_error_code(-13);
+                if (std::error_code code = IC_GetInformation(); code.value() != 0 )
+                    return code;
 
                 if ( m_IcInfo.nChipID == static_cast<int>(ChipID::A8018) )
                 {
@@ -150,6 +154,8 @@ namespace HFST
         if (ret <= 0)
             return make_error_code(-5);
 
+        Sleep(100);
+
         return make_error_code(0);
     }
 
@@ -196,10 +202,10 @@ namespace HFST
         if (!pApi)
             return make_error_code(-1);
 
-        if (!SW_Reset())
+        if ( SW_Reset().value() != 0 )
             return make_error_code(-15);
 
-        constexpr size_t READ_LEN = 256;
+        constexpr size_t READ_LEN = 255;
         unsigned char buffer[READ_LEN]{ 0 };
 
         int ret = pApi->TTK.ReadI2CReg( buffer, 0x00, READ_LEN );
@@ -343,5 +349,41 @@ namespace HFST
         success &= m_AbtManager->Register(hWnd);
 
         return success;
+    }
+
+    bool    Connector::GetTLInfo() {
+        HFST_API* pApi = HFST_API::GetAPI();
+        if (!pApi)
+            return false;
+
+        unsigned char buffer[64]{ 0 };
+        int ret = pApi->TTK.GetI2CStatus_Bulk(buffer);
+        if (ret <= 0)
+            return false;
+
+        m_TLInfo.nHwVer = (buffer[2] >> 5);
+        m_TLInfo.nFwVerH = (buffer[2] & 0x1F);
+        m_TLInfo.nFwVerL = buffer[3];
+        return true;
+    }
+
+    bool Connector::SetVoltage(double vdd, double iovdd) {
+        HFST_API* pApi = HFST_API::GetAPI();
+        if (!pApi)
+            return false;
+
+        int ret{ -1 };
+        if (m_TLInfo.nHwVer > 5)
+        {
+            ret = pApi->TTK.SetTouchLinkVoltage((unsigned short)(vdd * 1000), (unsigned short)(iovdd * 1000));
+        }
+        else
+            ret = pApi->TTK.SetTouchLink3_Voltage(vdd, iovdd);
+
+        if (ret <= 0)
+        {
+            return false;
+        }
+        return true;
     }
 }

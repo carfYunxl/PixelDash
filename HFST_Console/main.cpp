@@ -7,9 +7,16 @@
 int main(int argc, char* argv[])
 {
     HFST::Connector connector;
-    std::error_code error = connector.Connect();
+    connector.SetCommunicationMode(HFST::CommunicationMode::TOUCH_LINK);
+
+    std::error_code error = connector.Connect(3.3,3.3);
 
     std::cout << "\n" << error.message() << std::endl;
+
+    std::cout << connector.GetChipID() << std::endl;
+    std::cout << connector.GetRxTxCnt().first << " | " << connector.GetRxTxCnt().second << std::endl;
+
+    HFST::IC_Info info = connector.IC_GetInfo();
     system("pause");
     return 0;
 }

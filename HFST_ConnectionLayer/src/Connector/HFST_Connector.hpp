@@ -15,7 +15,7 @@ namespace HFST
         Connector();
         ~Connector();
 
-        std::error_code Connect();
+        std::error_code Connect(double vdd, double iovdd);
         void DisConnect();
 
         std::error_code I2C_ScanAddr();
@@ -42,6 +42,10 @@ namespace HFST
         int                  GetNumKey()        const { return m_IcInfo.nNumKey; }
     public: // Set method
         std::error_code      IC_SwitchPage( RAW::PageType type );
+
+        void                 SetCommunicationMode(CommunicationMode mode) { m_CommunicationMode = mode; }
+        bool                 SetVoltage(double vdd, double iovdd);
+        bool                 GetTLInfo();
     private:
         std::vector<I2CAddr>    m_vI2CAddr;
 
