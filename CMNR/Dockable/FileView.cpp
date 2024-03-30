@@ -89,46 +89,52 @@ void CFileView::OnSize(UINT nType, int cx, int cy)
 
 void CFileView::FillFileView()
 {
-	HTREEITEM hRoot = m_wndFileView.InsertItem(_T("线性机台相关侧项"), 0, 0);
+	HTREEITEM hRoot = m_wndFileView.InsertItem(_T("测试选项"), 0, 0);
 	m_wndFileView.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
 
 	HTREEITEM hSrc = m_wndFileView.InsertItem(_T("灵敏度"), 0, 0, hRoot);
 
-	m_wndFileView.InsertItem(_T("FakeApp.cpp"), 1, 1, hSrc);
-	m_wndFileView.InsertItem(_T("FakeApp.rc"), 1, 1, hSrc);
-	m_wndFileView.InsertItem(_T("FakeAppDoc.cpp"), 1, 1, hSrc);
-	m_wndFileView.InsertItem(_T("FakeAppView.cpp"), 1, 1, hSrc);
-	m_wndFileView.InsertItem(_T("MainFrm.cpp"), 1, 1, hSrc);
-	m_wndFileView.InsertItem(_T("pch.cpp"), 1, 1, hSrc);
+	m_wndFileView.InsertItem(_T("直线"), 1, 1, hSrc);
+	m_wndFileView.InsertItem(_T("米字型"), 1, 1, hSrc);
+	m_wndFileView.InsertItem(_T("圆形"), 1, 1, hSrc);
+	m_wndFileView.InsertItem(_T("口字形"), 1, 1, hSrc);
+	m_wndFileView.InsertItem(_T("回字形"), 1, 1, hSrc);
+	m_wndFileView.InsertItem(_T("螺旋"), 1, 1, hSrc);
 
 	HTREEITEM hInc = m_wndFileView.InsertItem(_T("精准度"), 0, 0, hRoot);
 
-	m_wndFileView.InsertItem(_T("FakeApp.h"), 2, 2, hInc);
-	m_wndFileView.InsertItem(_T("FakeAppDoc.h"), 2, 2, hInc);
-	m_wndFileView.InsertItem(_T("FakeAppView.h"), 2, 2, hInc);
-	m_wndFileView.InsertItem(_T("Resource.h"), 2, 2, hInc);
-	m_wndFileView.InsertItem(_T("MainFrm.h"), 2, 2, hInc);
-	m_wndFileView.InsertItem(_T("pch.h"), 2, 2, hInc);
+	m_wndFileView.InsertItem(_T("直线"), 2, 2, hInc);
+	m_wndFileView.InsertItem(_T("米字型"), 2, 2, hInc);
+	m_wndFileView.InsertItem(_T("圆形"), 2, 2, hInc);
+	m_wndFileView.InsertItem(_T("口字形"), 2, 2, hInc);
+	m_wndFileView.InsertItem(_T("回字形"), 2, 2, hInc);
+	m_wndFileView.InsertItem(_T("螺旋"), 2, 2, hInc);
 
 	HTREEITEM hRes = m_wndFileView.InsertItem(_T("直线度"), 0, 0, hRoot);
 
-	m_wndFileView.InsertItem(_T("FakeApp.ico"), 2, 2, hRes);
-	m_wndFileView.InsertItem(_T("FakeApp.rc2"), 2, 2, hRes);
-	m_wndFileView.InsertItem(_T("FakeAppDoc.ico"), 2, 2, hRes);
-	m_wndFileView.InsertItem(_T("FakeToolbar.bmp"), 2, 2, hRes);
+	m_wndFileView.InsertItem(_T("直线"), 2, 2, hRes);
+	m_wndFileView.InsertItem(_T("米字型"), 2, 2, hRes);
+	m_wndFileView.InsertItem(_T("圆形"), 2, 2, hRes);
+	m_wndFileView.InsertItem(_T("口字形"), 2, 2, hRes);
+	m_wndFileView.InsertItem(_T("回字形"), 2, 2, hRes);
+	m_wndFileView.InsertItem(_T("螺旋"), 2, 2, hRes);
 
 	HTREEITEM hRes1 = m_wndFileView.InsertItem(_T("光滑度"), 0, 0, hRoot);
 
-	m_wndFileView.InsertItem(_T("FakeApp.ico"), 2, 2, hRes1);
-	m_wndFileView.InsertItem(_T("FakeApp.rc2"), 2, 2, hRes1);
-	m_wndFileView.InsertItem(_T("FakeAppDoc.ico"), 2, 2, hRes1);
-	m_wndFileView.InsertItem(_T("FakeToolbar.bmp"), 2, 2, hRes1);
+	m_wndFileView.InsertItem(_T("直线"), 2, 2, hRes1);
+	m_wndFileView.InsertItem(_T("米字型"), 2, 2, hRes1);
+	m_wndFileView.InsertItem(_T("圆形"), 2, 2, hRes1);
+	m_wndFileView.InsertItem(_T("口字形"), 2, 2, hRes1);
+	m_wndFileView.InsertItem(_T("回字形"), 2, 2, hRes1);
+	m_wndFileView.InsertItem(_T("螺旋"), 2, 2, hRes1);
 
 	m_wndFileView.Expand(hRoot, TVE_EXPAND);
 	m_wndFileView.Expand(hSrc, TVE_EXPAND);
 	m_wndFileView.Expand(hInc, TVE_EXPAND);
 	m_wndFileView.Expand(hRes, TVE_EXPAND);
 	m_wndFileView.Expand(hRes1, TVE_EXPAND);
+
+	GetStockObject(NULL_BRUSH);
 }
 
 void CFileView::OnContextMenu(CWnd* pWnd, CPoint point)

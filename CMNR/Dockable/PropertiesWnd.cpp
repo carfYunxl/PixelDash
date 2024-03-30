@@ -155,7 +155,7 @@ void CPropertiesWnd::InitPropList()
 	SetPropListFont();
 
 	m_wndPropList.EnableHeaderCtrl(FALSE);
-	m_wndPropList.EnableDescriptionArea();
+	//m_wndPropList.EnableDescriptionArea();
 	m_wndPropList.SetVSDotNetLook();
 	m_wndPropList.MarkModifiedProperties();
 
@@ -174,6 +174,7 @@ void CPropertiesWnd::InitPropList()
 	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("标题"), (_variant_t) _T("关于"), _T("指定窗口标题栏中显示的文本")));
 
 	m_wndPropList.AddProperty(pGroup1);
+
 
 	CMFCPropertyGridProperty* pSize = new CMFCPropertyGridProperty(_T("窗口大小"), 0, TRUE);
 

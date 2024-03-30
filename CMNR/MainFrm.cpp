@@ -130,7 +130,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (!m_wndProperty.Create(_T("属性窗口"), this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_PROPERTIESWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
 	{
 		TRACE0("未能创建“属性”窗口\n");
-		return FALSE; // 未能创建
+		return FALSE;
 	}
 
 	// 创建文件视图
@@ -140,12 +140,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return FALSE; // 未能创建
 	}
 
-	// 创建文件视图
-	if (!m_wndGraphicsView.Create(_T("图形视图"), this, CRect(0, 0, 200, 200), TRUE, 1340, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
-	{
-		TRACE0("未能创建“图形视图”窗口\n");
-		return FALSE; // 未能创建
-	}
+	//// 创建文件视图
+	//if (!m_wndGraphicsView.Create(_T("图形视图"), this, CRect(0, 0, 200, 200), TRUE, 1340, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	//{
+	//	TRACE0("未能创建“图形视图”窗口\n");
+	//	return FALSE; // 未能创建
+	//}
 
 	if (!m_wndOutput.Create(_T("输出窗口"), this, CRect(0, 0, 100, 100), TRUE, 1350, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
 	{
@@ -165,8 +165,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return FALSE; // 未能创建
 	}
 
-	m_wndFileView.EnableDocking(CBRS_ALIGN_ANY);
-	m_wndGraphicsView.EnableDocking(CBRS_ALIGN_ANY);
+	m_wndFileView.EnableDocking(CBRS_ALIGN_LEFT);
+	//m_wndGraphicsView.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndProperty.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndTest.EnableDocking(CBRS_ALIGN_ANY);
@@ -176,7 +176,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndTest);
 	DockPane(&m_wndOutput);
 	DockPane(&m_wndFileView);
-	DockPane(&m_wndGraphicsView);
+	//DockPane(&m_wndGraphicsView);
 
 	// 启用 Visual Studio 2005 样式停靠窗口行为
 	CDockingManager::SetDockingMode(DT_SMART);
