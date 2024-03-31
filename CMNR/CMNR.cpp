@@ -1,33 +1,19 @@
-﻿
-// CMNR.cpp: 定义应用程序的类行为。
-//
-
-#include "pch.h"
-#include "framework.h"
+﻿#include "pch.h"
 #include "afxwinappex.h"
-#include "afxdialogex.h"
 #include "CMNR.h"
-#include "MainFrm.h"
-
+#include "HF_MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-
-// CCMNRApp
-
 BEGIN_MESSAGE_MAP(CCMNRApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &CCMNRApp::OnAppAbout)
 END_MESSAGE_MAP()
 
-
-// CCMNRApp 构造
-
 CCMNRApp::CCMNRApp() noexcept
 {
 	m_bHiColorIcons = TRUE;
-
 
 	// TODO: 将以下应用程序 ID 字符串替换为唯一的 ID 字符串；建议的字符串格式
 	//为 CompanyName.ProductName.SubProduct.VersionInformation
@@ -37,12 +23,7 @@ CCMNRApp::CCMNRApp() noexcept
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
-// 唯一的 CCMNRApp 对象
-
 CCMNRApp theApp;
-
-
-// CCMNRApp 初始化
 
 BOOL CCMNRApp::InitInstance()
 {
@@ -94,7 +75,7 @@ BOOL CCMNRApp::InitInstance()
 
 	// 若要创建主窗口，此代码将创建新的框架窗口
 	// 对象，然后将其设置为应用程序的主窗口对象
-	CFrameWnd* pFrame = new CMainFrame;
+	CFrameWnd* pFrame = new HF::HF_MainFrame;
 	if (!pFrame)
 		return FALSE;
 	m_pMainWnd = pFrame;

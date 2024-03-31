@@ -1,23 +1,5 @@
-// CClipboard Class
-// ----------------
-// Written by David Terracino <davet@lycosemail.com>
-//
-// http://www.codeguru.com/clipboard/simple_clipboard.shtml
-//
-// This code is released into the public domain, because
-// it's silly easy. If you want to use and expand it, go
-// ahead; fine by me. If you do expand this class's
-// functionality, please consider sending it back up to
-// the MFC Programmer's Sourcebook at www.codeguru.com.
-//
-// And as always, please give credit where credit is
-// due. Don't remove my name from the source.
-///////////////////////////////////////////////////////////////////////////////
-// Modified by Hans Dietrich  hdietrich@gmail.com
-///////////////////////////////////////////////////////////////////////////////
-
 #include "pch.h"
-#include "Clipboard.h"
+#include "HF_Clipboard.h"
 
 #pragma warning(disable : 4996)	// disable bogus deprecation warning
 
@@ -32,7 +14,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-CString CClipboard::GetText()
+CString HF_Clipboard::GetText()
 {
 	CString str;
 	str = _T("");
@@ -84,7 +66,7 @@ CString CClipboard::GetText()
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-BOOL CClipboard::GetText(LPSTR lpszBuffer, int nBufSize)
+BOOL HF_Clipboard::GetText(LPSTR lpszBuffer, int nBufSize)
 {
 	ASSERT(lpszBuffer);
 	if (lpszBuffer == NULL)
@@ -159,7 +141,7 @@ BOOL CClipboard::GetText(LPSTR lpszBuffer, int nBufSize)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-int CClipboard::GetTextLength()
+int HF_Clipboard::GetTextLength()
 {
 #if _MFC_VER < 0x700
 	DWORD nSize = 0;		// Size of clipboard data
@@ -214,7 +196,7 @@ int CClipboard::GetTextLength()
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-BOOL CClipboard::SetText(LPCTSTR lpszBuffer)
+BOOL HF_Clipboard::SetText(LPCTSTR lpszBuffer)
 {
 	BOOL bSuccess = FALSE;
 

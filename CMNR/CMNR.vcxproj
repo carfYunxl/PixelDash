@@ -102,7 +102,7 @@
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -152,7 +152,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -180,7 +180,7 @@
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -199,40 +199,39 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Dockable\CLinearCtlDlg.h" />
+    <ClInclude Include="Core\HF_Header.h" />
+    <ClInclude Include="Dockable\HF_MachineDlg.h" />
     <ClInclude Include="CMNR.h" />
-    <ClInclude Include="Dockable\Clipboard.h" />
-    <ClInclude Include="Dockable\CTestDialog.h" />
-    <ClInclude Include="Dockable\ChildView.h" />
-    <ClInclude Include="Dockable\CLinearCtlPanel.h" />
-    <ClInclude Include="Dockable\FileView.h" />
-    <ClInclude Include="Dockable\GraphicsView.h" />
-    <ClInclude Include="Dockable\OutputWnd.h" />
-    <ClInclude Include="Dockable\PropertiesWnd.h" />
-    <ClInclude Include="Dockable\TestPanel.h" />
-    <ClInclude Include="Dockable\ViewTree.h" />
-    <ClInclude Include="Dockable\XListBox.h" />
+    <ClInclude Include="Dockable\HF_Clipboard.h" />
+    <ClInclude Include="Dockable\HF_IcInfoDlg.h" />
+    <ClInclude Include="Dockable\HF_ChildView.h" />
+    <ClInclude Include="Dockable\HF_MachineView.h" />
+    <ClInclude Include="Dockable\HF_FileView.h" />
+    <ClInclude Include="Dockable\HF_OutputWnd.h" />
+    <ClInclude Include="Dockable\HF_PropertiesWnd.h" />
+    <ClInclude Include="Dockable\HF_IcInfoView.h" />
+    <ClInclude Include="Dockable\HF_ViewTree.h" />
+    <ClInclude Include="Dockable\HF_ListBox.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="HF_MainFrm.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Dockable\CLinearCtlDlg.cpp" />
+    <ClCompile Include="Dockable\HF_MachineDlg.cpp" />
     <ClCompile Include="CMNR.cpp" />
-    <ClCompile Include="Dockable\CLinearCtlPanel.cpp" />
-    <ClCompile Include="Dockable\Clipboard.cpp" />
-    <ClCompile Include="Dockable\CTestDialog.cpp" />
-    <ClCompile Include="Dockable\ChildView.cpp" />
-    <ClCompile Include="Dockable\FileView.cpp" />
-    <ClCompile Include="Dockable\GraphicsView.cpp" />
-    <ClCompile Include="Dockable\OutputWnd.cpp" />
-    <ClCompile Include="Dockable\PropertiesWnd.cpp" />
-    <ClCompile Include="Dockable\TestPanel.cpp" />
-    <ClCompile Include="Dockable\ViewTree.cpp" />
-    <ClCompile Include="Dockable\XListBox.cpp" />
-    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Dockable\HF_MachineView.cpp" />
+    <ClCompile Include="Dockable\HF_Clipboard.cpp" />
+    <ClCompile Include="Dockable\HF_IcInfoDlg.cpp" />
+    <ClCompile Include="Dockable\HF_ChildView.cpp" />
+    <ClCompile Include="Dockable\HF_FileView.cpp" />
+    <ClCompile Include="Dockable\HF_OutputWnd.cpp" />
+    <ClCompile Include="Dockable\HF_PropertiesWnd.cpp" />
+    <ClCompile Include="Dockable\HF_IcInfoView.cpp" />
+    <ClCompile Include="Dockable\HF_ViewTree.cpp" />
+    <ClCompile Include="Dockable\HF_ListBox.cpp" />
+    <ClCompile Include="HF_MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -244,6 +243,7 @@
     <ResourceCompile Include="CMNR.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\bmp00001.bmp" />
     <Image Include="res\Center.png" />
     <Image Include="res\CMNR.ico" />

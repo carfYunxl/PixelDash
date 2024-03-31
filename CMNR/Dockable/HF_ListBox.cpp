@@ -1,40 +1,15 @@
-// XListBox.cpp
-//
-// Author:  Hans Dietrich
-//          hdietrich@gmail.com
-//
-// This software is released into the public domain.
-// You are free to use it in any way you like.
-//
-// This software is provided "as is" with no expressed
-// or implied warranty.  I accept no liability for any
-// damage or loss of business that this software may cause.
-//
-// Notes on use:  To use in an MFC project, first create
-//                a listbox using the standard dialog editor.
-//                Be sure to mark the listbox as OWNERDRAW
-//                FIXED, and check the HAS STRINGS box.
-//                Using Class Wizard, create a variable for
-//                the listbox.  Finally, manually edit the
-//                dialog's .h file and replace CListBox with
-//                CXListBox, and #include XListBox.h.
-//
-///////////////////////////////////////////////////////////////////////////////
-
 #include "pch.h"
-#include "XListBox.h"
-#include "Clipboard.h"
+#include "HF_ListBox.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-#pragma warning(disable : 4996)	// disable bogus deprecation warning
+#pragma warning(disable : 4996)
 
 
 // NOTE - following table must be kept in sync with ColorPickerCB.cpp
-
 static COLORREF ColorTable[16] = { RGB(  0,   0,   0),		// Black
 								   RGB(255, 255, 255),		// White
 								   RGB(128,   0,   0),		// Maroon
@@ -52,22 +27,17 @@ static COLORREF ColorTable[16] = { RGB(  0,   0,   0),		// Black
 								   RGB(255,   0, 255),		// Fuschia
 								   RGB(  0, 255, 255) };	// Aqua
 
-BEGIN_MESSAGE_MAP(CXListBox, CListBox)
-	//{{AFX_MSG_MAP(CXListBox)
+BEGIN_MESSAGE_MAP(HF_ListBox, CListBox)
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_EDIT_SELECT_ALL, OnEditSelectAll)
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_CLEAR, OnEditClear)
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 #define new DEBUG_NEW
 
-/////////////////////////////////////////////////////////////////////////////
-// CXListBox
-
-CXListBox::CXListBox()
+HF_ListBox::HF_ListBox()
 {
 	m_ColorWindow        = ::GetSysColor(COLOR_WINDOW);
 	m_ColorHighlight     = ::GetSysColor(COLOR_HIGHLIGHT);
@@ -82,26 +52,20 @@ CXListBox::CXListBox()
 		m_nTabStopPositions[i] = (i+1) * m_nTabPosition * m_nSpaceWidth;
 }
 
-CXListBox::~CXListBox()
+HF_ListBox::~HF_ListBox()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// MeasureItem
-void CXListBox::MeasureItem(LPMEASUREITEMSTRUCT)
+void HF_ListBox::MeasureItem(LPMEASUREITEMSTRUCT)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CompareItem
-int CXListBox::CompareItem(LPCOMPAREITEMSTRUCT)
+int HF_ListBox::CompareItem(LPCOMPAREITEMSTRUCT)
 {
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DrawItem
-void CXListBox::DrawItem(LPDRAWITEMSTRUCT lpDIS)
+void HF_ListBox::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 {
 	COLORREF oldtextcolor, oldbackgroundcolor;
 
@@ -180,9 +144,7 @@ void CXListBox::DrawItem(LPDRAWITEMSTRUCT lpDIS)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetTextWithColor - get text string with color bytes
-int CXListBox::GetTextWithColor(int nIndex, LPTSTR lpszBuffer) const
+int HF_ListBox::GetTextWithColor(int nIndex, LPTSTR lpszBuffer) const
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -195,9 +157,7 @@ int CXListBox::GetTextWithColor(int nIndex, LPTSTR lpszBuffer) const
 	return CListBox::GetText(nIndex, lpszBuffer);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetTextWithColor - get text string with color bytes
-void CXListBox::GetTextWithColor(int nIndex, CString& rString) const
+void HF_ListBox::GetTextWithColor(int nIndex, CString& rString) const
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -209,9 +169,7 @@ void CXListBox::GetTextWithColor(int nIndex, CString& rString) const
 	CListBox::GetText(nIndex, rString);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetText - for compatibility with CListBox (no color bytes)
-int CXListBox::GetText(int nIndex, LPTSTR lpszBuffer) const
+int HF_ListBox::GetText(int nIndex, LPTSTR lpszBuffer) const
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -232,9 +190,7 @@ int CXListBox::GetText(int nIndex, LPTSTR lpszBuffer) const
 	return nRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetText - for compatibility with CListBox (no color bytes)
-void CXListBox::GetText(int nIndex, CString& rString) const
+void HF_ListBox::GetText(int nIndex, CString& rString) const
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -251,9 +207,7 @@ void CXListBox::GetText(int nIndex, CString& rString) const
 		rString.Empty();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetTextLen - for compatibility with CListBox (no color bytes)
-int CXListBox::GetTextLen(int nIndex) const
+int HF_ListBox::GetTextLen(int nIndex) const
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -267,9 +221,7 @@ int CXListBox::GetTextLen(int nIndex) const
 	return n;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// SearchString
-int CXListBox::SearchString(int nStartAfter, LPCTSTR lpszItem, BOOL bExact) const
+int HF_ListBox::SearchString(int nStartAfter, LPCTSTR lpszItem, BOOL bExact) const
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -321,16 +273,12 @@ int CXListBox::SearchString(int nStartAfter, LPCTSTR lpszItem, BOOL bExact) cons
 	return LB_ERR;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// FindString
-int CXListBox::FindString(int nStartAfter, LPCTSTR lpszItem) const
+int HF_ListBox::FindString(int nStartAfter, LPCTSTR lpszItem) const
 {
 	return SearchString(nStartAfter, lpszItem, FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// SelectString
-int CXListBox::SelectString(int nStartAfter, LPCTSTR lpszItem)
+int HF_ListBox::SelectString(int nStartAfter, LPCTSTR lpszItem)
 {
 	int rc = SearchString(nStartAfter, lpszItem, FALSE);
 	if (rc != LB_ERR)
@@ -338,16 +286,12 @@ int CXListBox::SelectString(int nStartAfter, LPCTSTR lpszItem)
 	return rc;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// FindStringExact
-int CXListBox::FindStringExact(int nStartAfter, LPCTSTR lpszItem) const
+int HF_ListBox::FindStringExact(int nStartAfter, LPCTSTR lpszItem) const
 {
 	return SearchString(nStartAfter, lpszItem, TRUE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// InsertString - override to add text color
-int CXListBox::InsertString(int nIndex, LPCTSTR lpszItem)
+int HF_ListBox::InsertString(int nIndex, LPCTSTR lpszItem)
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -386,16 +330,12 @@ int CXListBox::InsertString(int nIndex, LPCTSTR lpszItem)
 	return i;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// AddString - override to add text color
-void CXListBox::AddString(LPCTSTR lpszItem)
+void HF_ListBox::AddString(LPCTSTR lpszItem)
 {
-	AddLine(CXListBox::Black, CXListBox::White, lpszItem);
+	AddLine(HF_ListBox::Black, HF_ListBox::White, lpszItem);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// AddLine
-void CXListBox::AddLine(Color tc, Color bc, LPCTSTR lpszLine)
+void HF_ListBox::AddLine(Color tc, Color bc, LPCTSTR lpszLine)
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -409,7 +349,7 @@ void CXListBox::AddLine(Color tc, Color bc, LPCTSTR lpszLine)
 
 	if (!m_bColor)
 	{
-		tc = Black;			// to force black-only text
+		tc = Black;
 		bc = White;
 	}
 
@@ -468,9 +408,7 @@ void CXListBox::AddLine(Color tc, Color bc, LPCTSTR lpszLine)
 	SetCurSel(-1);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Printf
-void _cdecl CXListBox::Printf(Color tc, Color bc, UINT nID, LPCTSTR lpszFmt, ...)
+void _cdecl HF_ListBox::Printf(Color tc, Color bc, UINT nID, LPCTSTR lpszFmt, ...)
 {
 	TCHAR buf[1024], fmt[1024];
 	va_list marker;
@@ -504,16 +442,12 @@ void _cdecl CXListBox::Printf(Color tc, Color bc, UINT nID, LPCTSTR lpszFmt, ...
 	AddLine(tc, bc, buf);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// EnableColor
-void CXListBox::EnableColor (BOOL bEnable)
+void HF_ListBox::EnableColor (BOOL bEnable)
 {
 	m_bColor = bEnable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// SetTabPosition
-void CXListBox::SetTabPosition(int nSpacesPerTab)
+void HF_ListBox::SetTabPosition(int nSpacesPerTab)
 {
 	ASSERT(nSpacesPerTab > 0 && nSpacesPerTab < 11);
 
@@ -536,9 +470,7 @@ void CXListBox::SetTabPosition(int nSpacesPerTab)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetVisibleLines
-int CXListBox::GetVisibleLines()
+int HF_ListBox::GetVisibleLines()
 {
 	int nCount = 0;
 
@@ -558,9 +490,7 @@ int CXListBox::GetVisibleLines()
 	return nCount;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ResetContent
-void CXListBox::ResetContent()
+void HF_ListBox::ResetContent()
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -575,9 +505,7 @@ void CXListBox::ResetContent()
 	SetHorizontalExtent(m_cxExtent);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// SetFont
-void CXListBox::SetFont(CFont *pFont, BOOL bRedraw)
+void HF_ListBox::SetFont(CFont *pFont, BOOL bRedraw)
 {
 	if (!::IsWindow(m_hWnd))
 	{
@@ -612,16 +540,14 @@ void CXListBox::SetFont(CFont *pFont, BOOL bRedraw)
 	m_cxExtent = 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnLButtonDblClk
-void CXListBox::OnLButtonDblClk(UINT nFlags, CPoint point)
+void HF_ListBox::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	CListBox::OnLButtonDblClk(nFlags, point);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 // OnContextMenu
-void CXListBox::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+void HF_ListBox::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 {
 	if (m_nContextMenuId == -1)
 	{
@@ -640,9 +566,7 @@ void CXListBox::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 		point.x, point.y, this, NULL);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnEditCopy
-void CXListBox::OnEditCopy()
+void HF_ListBox::OnEditCopy()
 {
 	CString str;
 	str.Empty();
@@ -671,19 +595,15 @@ void CXListBox::OnEditCopy()
 	}
 
 	if (!str.IsEmpty())
-		CClipboard::SetText(str);
+		HF_Clipboard::SetText(str);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnEditClear
-void CXListBox::OnEditClear()
+void HF_ListBox::OnEditClear()
 {
 	ResetContent();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// OnEditSelectAll
-void CXListBox::OnEditSelectAll()
+void HF_ListBox::OnEditSelectAll()
 {
 	if (!::IsWindow(m_hWnd))
 	{

@@ -1,31 +1,12 @@
-// XListBox.h
-//
-// Author:  Hans Dietrich
-//          hdietrich@gmail.com
-//
-// This software is released into the public domain.
-// You are free to use it in any way you like.
-//
-// This software is provided "as is" with no expressed
-// or implied warranty.  I accept no liability for any
-// damage or loss of business that this software may cause.
-//
-///////////////////////////////////////////////////////////////////////////////
-
 #ifndef XLISTBOX_H
 #define XLISTBOX_H
 
-///////////////////////////////////////////////////////////////////////////////
-//  CXListBox class
-
-class CXListBox : public CListBox
+class HF_ListBox : public CListBox
 {
-// Constructors
 public:
-	CXListBox();
-	~CXListBox();
+	HF_ListBox();
+	~HF_ListBox();
 
-// Attributes
 public:
 	int				m_cxExtent;
 	int				m_nTabPosition;
@@ -44,7 +25,6 @@ public:
 
 	void EnableColor(BOOL bEnable);
 
-// Operations
 public:
 	void AddLine(Color tc, Color bc, LPCTSTR lpszLine);
 	void AddString(LPCTSTR lpszItem);
@@ -64,7 +44,6 @@ public:
 	virtual void SetFont(CFont *pFont, BOOL bRedraw = TRUE);
 	void SetTabPosition(int nSpacesPerTab);
 
-// Implementation
 protected:
 	int SearchString(int nStartAfter, LPCTSTR lpszItem, BOOL bExact) const;
 
@@ -78,16 +57,12 @@ protected:
 	virtual void DrawItem (LPDRAWITEMSTRUCT lpDIS);
 	virtual void MeasureItem (LPMEASUREITEMSTRUCT lpMIS);
 
-	// Generated message map functions
-	//{{AFX_MSG(CXListBox)
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnEditCopy();
 	afx_msg void OnEditClear();
 	afx_msg void OnEditSelectAll();
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
 
 #endif
-///////////////////////////////////////////////////////////////////////////////
