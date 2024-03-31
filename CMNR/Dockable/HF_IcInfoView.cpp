@@ -3,36 +3,33 @@
 #include "HF_MainFrm.h"
 #include "CMNR.h"
 
-namespace HF
+HF_IcInfoView::HF_IcInfoView()  noexcept {}
+HF_IcInfoView::~HF_IcInfoView() {}
+
+BEGIN_MESSAGE_MAP(HF_IcInfoView, CDockablePane)
+	ON_WM_CREATE()
+	ON_WM_SIZE()
+END_MESSAGE_MAP()
+
+int HF_IcInfoView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	HF_IcInfoView::HF_IcInfoView()  noexcept {}
-	HF_IcInfoView::~HF_IcInfoView() {}
+	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+		return -1;
 
-	BEGIN_MESSAGE_MAP(HF_IcInfoView, CDockablePane)
-		ON_WM_CREATE()
-		ON_WM_SIZE()
-	END_MESSAGE_MAP()
+	CRect rectDummy;
+	rectDummy.SetRectEmpty();
 
-	int HF_IcInfoView::OnCreate(LPCREATESTRUCT lpCreateStruct)
-	{
-		if (CDockablePane::OnCreate(lpCreateStruct) == -1)
-			return -1;
+	m_Dialog.Create(IDD_DIALOG_IC_VIEW, this);
+	m_Dialog.ShowWindow(SW_SHOW);
+	return 0;
+}
 
-		CRect rectDummy;
-		rectDummy.SetRectEmpty();
+void HF_IcInfoView::OnSize(UINT nType, int cx, int cy)
+{
+	CDockablePane::OnSize(nType, cx, cy);
 
-		m_Dialog.Create(IDD_DIALOG_TEST_PAN, this);
-		m_Dialog.ShowWindow(SW_SHOW);
-		return 0;
-	}
+	CRect rectClient;
+	GetClientRect(rectClient);
 
-	void HF_IcInfoView::OnSize(UINT nType, int cx, int cy)
-	{
-		CDockablePane::OnSize(nType, cx, cy);
-
-		CRect rectClient;
-		GetClientRect(rectClient);
-
-		m_Dialog.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
-	}
+	m_Dialog.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
 }

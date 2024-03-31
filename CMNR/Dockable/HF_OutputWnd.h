@@ -4,43 +4,40 @@
 #include "HF_ListBox.h"
 #include "HF_Header.h"
 
-namespace HF
+class HF_OutputWnd : public CDockablePane
 {
-	class HF_OutputWnd : public CDockablePane
-	{
-		// 构造
-	public:
-		HF_OutputWnd() noexcept;
+	// 构造
+public:
+	HF_OutputWnd() noexcept;
 
-		void UpdateFonts();
+	void UpdateFonts();
 
-		// 特性
-	protected:
-		CMFCTabCtrl	m_wndTabs;
+	// 特性
+protected:
+	CMFCTabCtrl	m_wndTabs;
 
-		HF_ListBox m_wndOutputBuild;
-		HF_ListBox m_wndOutputDebug;
-		HF_ListBox m_wndOutputFind;
+	HF_ListBox m_wndOutputBuild;
+	HF_ListBox m_wndOutputDebug;
+	HF_ListBox m_wndOutputFind;
 
-		CFont	  m_Font;
+	CFont	  m_Font;
 
-	protected:
-		void AdjustHorzScroll(CListBox& wndListBox);
+protected:
+	void AdjustHorzScroll(CListBox& wndListBox);
 
-		// 实现
-	public:
-		virtual ~HF_OutputWnd();
+	// 实现
+public:
+	virtual ~HF_OutputWnd();
 
-	protected:
-		afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-		afx_msg void OnSize(UINT nType, int cx, int cy);
+protected:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 
-		DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-	public:
-		void AddString(LogType type, const CString& str);
-	};
-}
+public:
+	void AddString(LogType type, const CString& str);
+};
 
 #endif //__HF_OUTPUT_WND_H__
 

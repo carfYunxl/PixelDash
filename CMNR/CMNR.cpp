@@ -75,7 +75,7 @@ BOOL CCMNRApp::InitInstance()
 
 	// 若要创建主窗口，此代码将创建新的框架窗口
 	// 对象，然后将其设置为应用程序的主窗口对象
-	CFrameWnd* pFrame = new HF::HF_MainFrame;
+	CFrameWnd* pFrame = new HF_MainFrame;
 	if (!pFrame)
 		return FALSE;
 	m_pMainWnd = pFrame;

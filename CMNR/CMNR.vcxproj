@@ -206,7 +206,7 @@
     <ClInclude Include="Dockable\HF_IcInfoDlg.h" />
     <ClInclude Include="Dockable\HF_ChildView.h" />
     <ClInclude Include="Dockable\HF_MachineView.h" />
-    <ClInclude Include="Dockable\HF_FileView.h" />
+    <ClInclude Include="Dockable\HF_TestView.h" />
     <ClInclude Include="Dockable\HF_OutputWnd.h" />
     <ClInclude Include="Dockable\HF_PropertiesWnd.h" />
     <ClInclude Include="Dockable\HF_IcInfoView.h" />
@@ -214,6 +214,7 @@
     <ClInclude Include="Dockable\HF_ListBox.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HF_MainFrm.h" />
+    <ClInclude Include="HF_SettingDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -225,13 +226,14 @@
     <ClCompile Include="Dockable\HF_Clipboard.cpp" />
     <ClCompile Include="Dockable\HF_IcInfoDlg.cpp" />
     <ClCompile Include="Dockable\HF_ChildView.cpp" />
-    <ClCompile Include="Dockable\HF_FileView.cpp" />
+    <ClCompile Include="Dockable\HF_TestView.cpp" />
     <ClCompile Include="Dockable\HF_OutputWnd.cpp" />
     <ClCompile Include="Dockable\HF_PropertiesWnd.cpp" />
     <ClCompile Include="Dockable\HF_IcInfoView.cpp" />
     <ClCompile Include="Dockable\HF_ViewTree.cpp" />
     <ClCompile Include="Dockable\HF_ListBox.cpp" />
     <ClCompile Include="HF_MainFrm.cpp" />
+    <ClCompile Include="HF_SettingDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -247,16 +249,21 @@
     <Image Include="res\bmp00001.bmp" />
     <Image Include="res\Center.png" />
     <Image Include="res\CMNR.ico" />
+    <Image Include="res\green_circle.png" />
+    <Image Include="res\IC_Fold.png" />
+    <Image Include="res\IC_More.png" />
     <Image Include="res\MoveBack.png" />
     <Image Include="res\MoveDown.png" />
     <Image Include="res\MoveFront.png" />
     <Image Include="res\MoveLeft.png" />
     <Image Include="res\MoveRight.png" />
     <Image Include="res\MoveUp.png" />
+    <Image Include="res\red_circle.png" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\toolbar1.bmp" />
     <Image Include="res\Toolbar256.bmp" />
     <Image Include="res\userimages.bmp" />
+    <Image Include="res\yellow_circle.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\CMNR.rc2" />

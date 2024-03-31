@@ -3,33 +3,30 @@
 #include "HF_MainFrm.h"
 #include "CMNR.h"
 
-namespace HF
+HF_MachineView::HF_MachineView()  noexcept {}
+HF_MachineView::~HF_MachineView() {}
+
+BEGIN_MESSAGE_MAP(HF_MachineView, CDockablePane)
+	ON_WM_CREATE()
+	ON_WM_SIZE()
+END_MESSAGE_MAP()
+
+int HF_MachineView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	HF_MachineView::HF_MachineView()  noexcept {}
-	HF_MachineView::~HF_MachineView() {}
+	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
+		return -1;
 
-	BEGIN_MESSAGE_MAP(HF_MachineView, CDockablePane)
-		ON_WM_CREATE()
-		ON_WM_SIZE()
-	END_MESSAGE_MAP()
+	m_dlgCtl.Create(IDD_DIALOG_MACHINE_VIEW, this);
+	m_dlgCtl.ShowWindow(SW_SHOW);
+	return 0;
+}
 
-	int HF_MachineView::OnCreate(LPCREATESTRUCT lpCreateStruct)
-	{
-		if (CDockablePane::OnCreate(lpCreateStruct) == -1)
-			return -1;
+void HF_MachineView::OnSize(UINT nType, int cx, int cy)
+{
+	CDockablePane::OnSize(nType, cx, cy);
 
-		m_dlgCtl.Create(IDD_DIALOG_LINEAR_CONTROL, this);
-		m_dlgCtl.ShowWindow(SW_SHOW);
-		return 0;
-	}
+	CRect rectClient;
+	GetClientRect(rectClient);
 
-	void HF_MachineView::OnSize(UINT nType, int cx, int cy)
-	{
-		CDockablePane::OnSize(nType, cx, cy);
-
-		CRect rectClient;
-		GetClientRect(rectClient);
-
-		m_dlgCtl.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
-	}
+	m_dlgCtl.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
 }

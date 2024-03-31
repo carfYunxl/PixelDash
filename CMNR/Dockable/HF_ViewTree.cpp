@@ -7,32 +7,29 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-namespace HF
+CViewTree::CViewTree() noexcept
 {
-	CViewTree::CViewTree() noexcept
-	{
-	}
+}
 
-	CViewTree::~CViewTree()
-	{
-	}
+CViewTree::~CViewTree()
+{
+}
 
-	BEGIN_MESSAGE_MAP(CViewTree, CTreeCtrl)
-	END_MESSAGE_MAP()
+BEGIN_MESSAGE_MAP(CViewTree, CTreeCtrl)
+END_MESSAGE_MAP()
 
-	BOOL CViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
-	{
-		BOOL bRes = CTreeCtrl::OnNotify(wParam, lParam, pResult);
+BOOL CViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+	BOOL bRes = CTreeCtrl::OnNotify(wParam, lParam, pResult);
 
-		NMHDR* pNMHDR = (NMHDR*)lParam;
-		ASSERT(pNMHDR != nullptr);
+	NMHDR* pNMHDR = (NMHDR*)lParam;
+	ASSERT(pNMHDR != nullptr);
 
 #pragma warning(suppress : 26454)
-		if (pNMHDR && pNMHDR->code == TTN_SHOW && GetToolTips() != nullptr)
-		{
-			GetToolTips()->SetWindowPos(&wndTop, -1, -1, -1, -1, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOSIZE);
-		}
-
-		return bRes;
+	if (pNMHDR && pNMHDR->code == TTN_SHOW && GetToolTips() != nullptr)
+	{
+		GetToolTips()->SetWindowPos(&wndTop, -1, -1, -1, -1, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOSIZE);
 	}
+
+	return bRes;
 }

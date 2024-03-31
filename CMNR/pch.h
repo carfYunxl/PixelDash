@@ -6,5 +6,6 @@
 #include <chrono>
 #include "HF_Clipboard.h"
 #include "Resource.h"
+#include <afxwin.h>
 
 #endif //__HFST_PCH_H__
