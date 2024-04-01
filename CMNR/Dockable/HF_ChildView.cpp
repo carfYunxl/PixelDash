@@ -21,6 +21,12 @@ BEGIN_MESSAGE_MAP(HF_ChildView, CWnd)
 	ON_WM_PAINT()
 	ON_WM_CREATE()
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(IDC_BUTTON_VIEW_LEFT, &HF_ChildView::OnButtonViewLeft)
+	ON_COMMAND(IDC_BUTTON_VIEW_RIGHT, &HF_ChildView::OnButtonViewRight)
+	ON_COMMAND(IDC_BUTTON_VIEW_UP, &HF_ChildView::OnButtonViewUp)
+	ON_COMMAND(IDC_BUTTON_VIEW_FRONT, &HF_ChildView::OnButtonViewFront)
+	ON_COMMAND(IDC_BUTTON_VIEW_DOWN, &HF_ChildView::OnButtonViewDown)
+	ON_COMMAND(IDC_BUTTON_VIEW_BACK, &HF_ChildView::OnButtonViewBack)
 END_MESSAGE_MAP()
 
 BOOL HF_ChildView::PreCreateWindow(CREATESTRUCT& cs)
@@ -119,7 +125,7 @@ void HF_ChildView::OnPaint()
 		m_BtnCenter.Create(_T(""), WS_CHILD | WS_VISIBLE, recCenter, this, IDC_BUTTON_VIEW_DOWN);
 		m_BtnCenter.SetImage(IDB_PNG_CENTER);
 
-		m_IcInfoDlg.Create(IDD_DIALOG_IC_VIEW, this);
+		m_IcInfoDlg.Create(IDD_DIALOG_IC_VIEW);
 		m_IcInfoDlg.ShowWindow(SW_SHOW);
 	}
 	else
@@ -131,27 +137,6 @@ void HF_ChildView::OnPaint()
 		m_BtnUp.MoveWindow(recUp);
 		m_BtnDown.MoveWindow(recDown);
 		m_BtnCenter.MoveWindow(recCenter);
-
-		/*GetWindowRect(&rect);
-
-		CRect info;
-		m_IcInfoDlg.GetWindowRect(&info);
-
-		CRect recMenu;
-		((HF_MainFrame*)GetParent())->m_wndMenuBar.GetWindowRect(&recMenu);
-
-		CString strWinTitle;
-		m_IcInfoDlg.m_btnIcInfoMore.GetWindowTextW(strWinTitle);
-		if (strWinTitle == _T("显示更多"))
-		{
-			CRect iRec;
-			m_IcInfoDlg.m_btnIcInfoMore.GetWindowRect(&iRec);
-			m_IcInfoDlg.SetWindowPos(nullptr, 200, 200, info.Width(), iRec.bottom, SWP_SHOWWINDOW);
-		}
-		else if(strWinTitle == _T("隐藏"))
-		{
-
-		}*/
 	}
 }
 
@@ -164,7 +149,62 @@ int HF_ChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void HF_ChildView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	TRACE("Mouse Move!\n");
+	//CRect rect;
+	//m_IcInfoDlg.GetClientRect(&rect);
 
+	//if (rect.PtInRect(point))
+	//{
+	//	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	//	pMainWnd->Log(LogType::WARN, _T("Mouse Move In Info Dialog!!!!!!!!!!!"));
+	//}
 	CWnd::OnMouseMove(nFlags, point);
+}
+
+void HF_ChildView::OnButtonViewLeft()
+{
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::ERR, _T("Move Left"));
+}
+
+void HF_ChildView::OnButtonViewRight()
+{
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::INFO, _T("Move Right"));
+}
+
+void HF_ChildView::OnButtonViewUp()
+{
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::WARN, _T("Move Up"));
+}
+
+void HF_ChildView::OnButtonViewFront()
+{
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::INFO, _T("Move Front"));
+}
+
+void HF_ChildView::OnButtonViewDown()
+{
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::ERR, _T("Move Down"));
+}
+
+void HF_ChildView::OnButtonViewBack()
+{
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::WARN, _T("Move Back"));
+}
+
+BOOL HF_ChildView::PreTranslateMessage(MSG* pMsg)
+{
+	//if ( WM_MOUSEMOVE == pMsg->message )
+	//{
+	//	if (pMsg->hwnd == m_IcInfoDlg.m_hWnd)
+	//	{
+	//		return FALSE;
+	//	}
+	//}
+
+	return CWnd::PreTranslateMessage(pMsg);
 }

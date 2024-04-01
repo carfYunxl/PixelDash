@@ -15,8 +15,16 @@ public:
 	virtual ~HF_ChildView();
 
 protected:
-	afx_msg void OnPaint();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void	OnPaint();
+	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void	OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void	OnButtonViewLeft();
+	afx_msg void	OnButtonViewRight();
+	afx_msg void	OnButtonViewUp();
+	afx_msg void	OnButtonViewFront();
+	afx_msg void	OnButtonViewDown();
+	afx_msg void	OnButtonViewBack();
+	virtual BOOL	PreTranslateMessage(MSG* pMsg);
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -38,7 +46,6 @@ private:
 
 	HF_IcInfoDlg m_IcInfoDlg;
 public:
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #endif //__HF_CHILD_VIEW_H__

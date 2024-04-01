@@ -23,13 +23,13 @@ protected:
 	afx_msg void	OnBnClickedMfcbuttonIcInfoMore();
 	afx_msg void	OnMouseHover(UINT nFlags, CPoint point);
 	afx_msg void	OnMouseLeave();
+	afx_msg void	OnMouseMove(UINT nFlags, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
 	CMFCButton	m_btnIcInfoMore;
 	int			m_nWinHeight{0};
 	int			m_nWinWidth{0};
 	BOOL		m_bMouseTrack{ FALSE };
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #endif //__HF_IC_INFO_DLG_H__

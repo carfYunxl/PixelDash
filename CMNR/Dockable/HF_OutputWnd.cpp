@@ -122,7 +122,7 @@ void HF_OutputWnd::AddString(LogType type, const CString& message)
 		m_wndOutputBuild.AddLine(HF_ListBox::Color::Yellow, HF_ListBox::Color::Gray, _T("[WARN]\t") + message);
 		break;
 	case LogType::ERR:
-		m_wndOutputBuild.AddLine(HF_ListBox::Color::Red, HF_ListBox::Color::White, _T("[EROR]\t") + message);
+		m_wndOutputBuild.AddLine(HF_ListBox::Color::Red, HF_ListBox::Color::Black, _T("[EROR]\t") + message);
 		break;
 	default:
 		m_wndOutputBuild.AddLine(HF_ListBox::Color::Gray, HF_ListBox::Color::White, _T("[UnKnown]") + message);

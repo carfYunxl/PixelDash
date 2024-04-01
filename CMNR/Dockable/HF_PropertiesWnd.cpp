@@ -9,8 +9,6 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-extern CCMNRApp theApp;
-
 HF_PropertiesWnd::HF_PropertiesWnd() noexcept
 {
 	m_nComboHeight = 0;

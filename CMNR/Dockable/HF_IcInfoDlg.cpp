@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "CMNR.h"
 #include "HF_IcInfoDlg.h"
+#include "HF_MainFrm.h"
 
 IMPLEMENT_DYNAMIC(HF_IcInfoDlg, CDialogEx)
 
@@ -93,8 +94,8 @@ void HF_IcInfoDlg::OnPaint()
 LRESULT HF_IcInfoDlg::OnNcHitTest(CPoint point)
 {
 	UINT nHitTest = CDialogEx::OnNcHitTest(point);
-	if (nHitTest == HTCLIENT)
-		nHitTest = HTCAPTION;
+	//if (nHitTest == HTCLIENT)
+	//	nHitTest = HTCAPTION;
 	return nHitTest;
 }
 
@@ -155,19 +156,20 @@ void HF_IcInfoDlg::OnMouseLeave()
 
 void HF_IcInfoDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
-	TRACE("Mouse Move!\n");
-	if (!m_bMouseTrack)
-	{
-		TRACKMOUSEEVENT tme;
-		tme.cbSize = sizeof(tme);
-		tme.dwFlags = TME_LEAVE | TME_HOVER;
-		tme.dwHoverTime = 10;
-		tme.hwndTrack = m_hWnd;
-		TrackMouseEvent(&tme);
+	HF_MainFrame* pMain = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMain->Log(LogType::WARN, _T("Mouse Move"));
+	//if (!m_bMouseTrack)
+	//{
+	//	TRACKMOUSEEVENT tme;
+	//	tme.cbSize = sizeof(tme);
+	//	tme.dwFlags = TME_LEAVE | TME_HOVER;
+	//	tme.dwHoverTime = 10;
+	//	tme.hwndTrack = m_hWnd;
+	//	TrackMouseEvent(&tme);
 
-		m_bMouseTrack = TRUE;
-		Invalidate(FALSE);
-	}
+	//	m_bMouseTrack = TRUE;
+	//	Invalidate(FALSE);
+	//}
 
 	CDialogEx::OnMouseMove(nFlags, point);
 }

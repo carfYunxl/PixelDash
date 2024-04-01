@@ -8,8 +8,6 @@
 
 IMPLEMENT_DYNAMIC(HF_MainFrame, CFrameWndEx)
 
-extern CCMNRApp theApp;
-
 BEGIN_MESSAGE_MAP(HF_MainFrame, CFrameWndEx)
 	ON_WM_CREATE()
 	ON_WM_SETFOCUS()
