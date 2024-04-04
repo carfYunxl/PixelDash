@@ -78,47 +78,57 @@ void HF_TestView::FillFileView()
 	HTREEITEM hRoot = m_wndTestView.InsertItem(_T("测试选项"), 0, 0);
 	m_wndTestView.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
 
-	HTREEITEM hSrc = m_wndTestView.InsertItem(_T("灵敏度"), 1, 1, hRoot);
+	HTREEITEM line = m_wndTestView.InsertItem(_T("线性度"), 1, 1, hRoot);
 
-	m_wndTestView.InsertItem(_T("直线"), 0, 1, hSrc);
-	m_wndTestView.InsertItem(_T("米字型"), 1, 1, hSrc);
-	m_wndTestView.InsertItem(_T("圆形"), 2, 1, hSrc);
-	m_wndTestView.InsertItem(_T("口字形"), 3, 1, hSrc);
-	m_wndTestView.InsertItem(_T("回字形"), 4, 1, hSrc);
-	m_wndTestView.InsertItem(_T("螺旋"), 5, 1, hSrc);
+	m_wndTestView.InsertItem(_T("直线"),		0, 1, line);
+	m_wndTestView.InsertItem(_T("米字型"),	1, 1, line);
+	m_wndTestView.InsertItem(_T("圆形"),		2, 1, line);
+	m_wndTestView.InsertItem(_T("口字形"),	3, 1, line);
+	m_wndTestView.InsertItem(_T("回字形"),	4, 1, line);
+	m_wndTestView.InsertItem(_T("螺旋"),		5, 1, line);
 
-	HTREEITEM hInc = m_wndTestView.InsertItem(_T("精准度"), 2, 2, hRoot);
+	HTREEITEM accuracy = m_wndTestView.InsertItem(_T("精准度"), 2, 2, hRoot);
 
-	m_wndTestView.InsertItem(_T("直线"), 0, 2, hInc);
-	m_wndTestView.InsertItem(_T("米字型"), 1, 2, hInc);
-	m_wndTestView.InsertItem(_T("圆形"), 2, 2, hInc);
-	m_wndTestView.InsertItem(_T("口字形"), 3, 2, hInc);
-	m_wndTestView.InsertItem(_T("回字形"), 4, 2, hInc);
-	m_wndTestView.InsertItem(_T("螺旋"), 5, 2, hInc);
+	m_wndTestView.InsertItem(_T("直线"),		0, 2, accuracy);
+	m_wndTestView.InsertItem(_T("米字型"),	1, 2, accuracy);
+	m_wndTestView.InsertItem(_T("圆形"),		2, 2, accuracy);
+	m_wndTestView.InsertItem(_T("口字形"),	3, 2, accuracy);
+	m_wndTestView.InsertItem(_T("回字形"),	4, 2, accuracy);
+	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, accuracy);
 
-	HTREEITEM hRes = m_wndTestView.InsertItem(_T("直线度"), 3, 3, hRoot);
+	HTREEITEM jump = m_wndTestView.InsertItem(_T("抖动性"), 3, 3, hRoot);
 
-	m_wndTestView.InsertItem(_T("直线"), 0, 2, hRes);
-	m_wndTestView.InsertItem(_T("米字型"), 1, 2, hRes);
-	m_wndTestView.InsertItem(_T("圆形"), 2, 2, hRes);
-	m_wndTestView.InsertItem(_T("口字形"), 3, 2, hRes);
-	m_wndTestView.InsertItem(_T("回字形"), 4, 2, hRes);
-	m_wndTestView.InsertItem(_T("螺旋"), 5, 2, hRes);
+	m_wndTestView.InsertItem(_T("直线"),		0, 2, jump);
+	m_wndTestView.InsertItem(_T("米字型"),	1, 2, jump);
+	m_wndTestView.InsertItem(_T("圆形"),		2, 2, jump);
+	m_wndTestView.InsertItem(_T("口字形"),	3, 2, jump);
+	m_wndTestView.InsertItem(_T("回字形"),	4, 2, jump);
+	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, jump);
 
-	HTREEITEM hRes1 = m_wndTestView.InsertItem(_T("光滑度"), 4, 4, hRoot);
+	HTREEITEM cute = m_wndTestView.InsertItem(_T("灵敏度"), 4, 4, hRoot);
 
-	m_wndTestView.InsertItem(_T("直线"), 0, 2, hRes1);
-	m_wndTestView.InsertItem(_T("米字型"), 1, 2, hRes1);
-	m_wndTestView.InsertItem(_T("圆形"), 2, 2, hRes1);
-	m_wndTestView.InsertItem(_T("口字形"), 3, 2, hRes1);
-	m_wndTestView.InsertItem(_T("回字形"), 4, 2, hRes1);
-	m_wndTestView.InsertItem(_T("螺旋"), 5, 2, hRes1);
+	m_wndTestView.InsertItem(_T("直线"),		0, 2, cute);
+	m_wndTestView.InsertItem(_T("米字型"),	1, 2, cute);
+	m_wndTestView.InsertItem(_T("圆形"),		2, 2, cute);
+	m_wndTestView.InsertItem(_T("口字形"),	3, 2, cute);
+	m_wndTestView.InsertItem(_T("回字形"),	4, 2, cute);
+	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, cute);
+
+	HTREEITEM snr = m_wndTestView.InsertItem(_T("信噪比"), 5, 5, hRoot);
+
+	m_wndTestView.InsertItem(_T("直线"),		0, 2, snr);
+	m_wndTestView.InsertItem(_T("米字型"),	1, 2, snr);
+	m_wndTestView.InsertItem(_T("圆形"),		2, 2, snr);
+	m_wndTestView.InsertItem(_T("口字形"),	3, 2, snr);
+	m_wndTestView.InsertItem(_T("回字形"),	4, 2, snr);
+	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, snr);
 
 	m_wndTestView.Expand(hRoot, TVE_EXPAND);
-	m_wndTestView.Expand(hSrc, TVE_EXPAND);
-	m_wndTestView.Expand(hInc, TVE_EXPAND);
-	m_wndTestView.Expand(hRes, TVE_EXPAND);
-	m_wndTestView.Expand(hRes1, TVE_EXPAND);
+	m_wndTestView.Expand(line, TVE_EXPAND);
+	m_wndTestView.Expand(accuracy, TVE_EXPAND);
+	m_wndTestView.Expand(jump, TVE_EXPAND);
+	m_wndTestView.Expand(cute, TVE_EXPAND);
+	m_wndTestView.Expand(snr, TVE_EXPAND);
 
 	GetStockObject(NULL_BRUSH);
 }

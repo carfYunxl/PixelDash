@@ -39,7 +39,6 @@ BOOL CCMNRApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
-
 	// 初始化 OLE 库
 	if (!AfxOleInit())
 	{
@@ -87,6 +86,7 @@ BOOL CCMNRApp::InitInstance()
 	// 唯一的一个窗口已初始化，因此显示它并对其进行更新
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();
+
 	return TRUE;
 }
 

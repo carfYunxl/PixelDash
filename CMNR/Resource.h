@@ -46,6 +46,14 @@
 #define IDB_PNG_IC_INFO_MORE            336
 #define IDB_PNG3                        337
 #define IDB_PNG_IC_INFO_FOLD            337
+#define IDR_MENU1                       338
+#define IDR_CONTEXTMENU                 338
+#define IDB_PNG5                        341
+#define IDB_PNG_CONNECT                 341
+#define IDB_PNG6                        342
+#define IDB_PNG_DISCONNECT              342
+#define IDB_PNG7                        343
+#define IDB_PNG_FOLD                    343
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON2                     1001
 #define IDC_EDIT1                       1001
@@ -70,6 +78,8 @@
 #define IDC_STATIC_IC_ID                1008
 #define IDC_STATIC_IC_I2C_ADDR          1009
 #define IDC_STATIC_IC_BRIDGE            1010
+#define IDC_MFCBUTTON_IC_INFO_MORE2     1011
+#define IDC_MFCBUTTON_IC_INFO_STATUS    1011
 #define IDR_PROPERTIES                  1125
 #define IDB_PROPERTIES_HC               1126
 #define ID_VIEW_PROPERTIESWND           1127
@@ -87,13 +97,33 @@
 #define ID_XLISTBOX_SELECTALL           32786
 #define ID_XLISTBOX_COPY                32787
 #define ID_XLISTBOX_CLEAR               32788
+#define ID_32789                        32789
+#define ID_VIEW_TEST_ITEM               32790
+#define ID_32791                        32791
+#define ID_32792                        32792
+#define ID_32793                        32793
+#define ID_VIEW_PROPERTY                32794
+#define ID_VIEW_OUTPUT                  32795
+#define ID_VIEW_MACHINE                 32796
+#define IDM_COLOR_RED                   32801
+#define IDM_COLOR_GREEN                 32802
+#define IDM_COLOR_BLACK                 32803
+#define IDM_COLOR_YELLOW                32804
+#define IDM_SHAPE_CIRCLE                32821
+#define IDM_SHAPE_TRIANGLE              32822
+#define IDM_SHAPE_SQUARE                32823
+#define IDM_SHAPE_RED                   32824
+#define IDM_SHAPE_YELLOW                32825
+#define IDM_SHAPE_GREEN                 32826
+#define IDM_SHAPE_CYAN                  32827
+#define IDM_SHAPE_BLUE                  32828
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        338
-#define _APS_NEXT_COMMAND_VALUE         32789
+#define _APS_NEXT_RESOURCE_VALUE        344
+#define _APS_NEXT_COMMAND_VALUE         32829
 #define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

@@ -6,6 +6,8 @@ class HF_IcInfoDlg : public CDialogEx
 	DECLARE_DYNAMIC(HF_IcInfoDlg)
 
 public:
+	typedef    BOOL(WINAPI* fnSetLayeredWindowAttributes)(HWND, COLORREF, BYTE, DWORD);
+
 	HF_IcInfoDlg(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~HF_IcInfoDlg();
 	// 对话框数据
@@ -30,6 +32,13 @@ public:
 	int			m_nWinHeight{0};
 	int			m_nWinWidth{0};
 	BOOL		m_bMouseTrack{ FALSE };
+	HINSTANCE   m_hInst{NULL};
+	CString		m_strI2cClock;
+
+	fnSetLayeredWindowAttributes    m_pFun{ NULL };
+private:
+	CMFCButton m_btnInfoStatus;
+	CFont		m_Font;
 };
 
 #endif //__HF_IC_INFO_DLG_H__

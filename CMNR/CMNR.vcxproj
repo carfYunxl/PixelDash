@@ -249,6 +249,9 @@
     <Image Include="res\bmp00001.bmp" />
     <Image Include="res\Center.png" />
     <Image Include="res\CMNR.ico" />
+    <Image Include="res\connect.png" />
+    <Image Include="res\disconnect.png" />
+    <Image Include="res\Fold.png" />
     <Image Include="res\green_circle.png" />
     <Image Include="res\IC_Fold.png" />
     <Image Include="res\IC_More.png" />

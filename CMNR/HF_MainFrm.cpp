@@ -20,6 +20,20 @@ BEGIN_MESSAGE_MAP(HF_MainFrame, CFrameWndEx)
 	ON_COMMAND(ID_BUTTON_TEST2, &HF_MainFrame::OnButtonTest2)
 	ON_COMMAND(ID_BUTTON_TEST3, &HF_MainFrame::OnButtonTest3)
 	ON_WM_PAINT()
+	ON_COMMAND(ID_VIEW_TEST_ITEM, &HF_MainFrame::OnViewTestItem)
+	ON_COMMAND(ID_VIEW_PROPERTY, &HF_MainFrame::OnViewProperty)
+	ON_COMMAND(ID_VIEW_MACHINE, &HF_MainFrame::OnViewMachine)
+	ON_COMMAND(ID_VIEW_OUTPUT, &HF_MainFrame::OnViewOutput)
+
+	ON_COMMAND_RANGE(IDM_COLOR_RED, IDM_COLOR_YELLOW, &HF_MainFrame::OnColor)
+	//ON_UPDATE_COMMAND_UI(IDM_COLOR_BLACK, &HF_MainFrame::OnUpdateColorBlack)
+	//ON_UPDATE_COMMAND_UI(IDM_COLOR_GREEN, &HF_MainFrame::OnUpdateColorGreen)
+	//ON_UPDATE_COMMAND_UI(IDM_COLOR_RED, &HF_MainFrame::OnUpdateColorRed)
+	//ON_UPDATE_COMMAND_UI(IDM_COLOR_YELLOW, &HF_MainFrame::OnUpdateColorYellow)
+
+	ON_UPDATE_COMMAND_UI_RANGE(IDM_COLOR_RED, IDM_COLOR_YELLOW, &HF_MainFrame::OnUpdateColorUI)
+	ON_WM_MEASUREITEM()
+	ON_WM_DRAWITEM()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -31,7 +45,8 @@ static UINT indicators[] =
 	ID_INDICATOR_SCRL,
 };
 
-HF_MainFrame::HF_MainFrame() noexcept {
+HF_MainFrame::HF_MainFrame()noexcept 
+	: m_nCurrentColor() {
 }
 
 HF_MainFrame::~HF_MainFrame()
@@ -44,6 +59,8 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	BOOL bNameValid;
+
+	//EnableLoadDockState(FALSE);
 
 	if (!m_wndMenuBar.Create(this)) {
 		return -1;
@@ -117,13 +134,6 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndOutput);
 
-
-	//if (!m_wndIcView.Create(_T("IC连接"), this, CRect(0, 0, 100, 100), TRUE, 1351, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
-	//{
-	//	Log(LogType::ERR, _T("未能创建IC连接信息窗口"));
-	//	return FALSE;
-	//}
-
 	if (!m_wndMachineView.Create(_T("线性机台控制"), this, CRect(0, 0, 100, 100), TRUE, 1355, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
 	{
 		Log(LogType::ERR, _T("未能创建线性机台控制窗口"));
@@ -131,12 +141,14 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	m_wndTestView.EnableDocking(CBRS_ALIGN_LEFT);
+	//m_wndTestView.SetControlBarStyle(~AFX_CBRS_CLOSE);
+	//m_wndTestView.SetControlBarStyle(AFX_CBRS_RESIZE);
 	m_wndProperty.EnableDocking(CBRS_ALIGN_ANY);
-	//m_wndIcView.EnableDocking(CBRS_ALIGN_ANY);
+	//m_wndProperty.SetControlBarStyle(~AFX_CBRS_CLOSE);
+	//m_wndProperty.SetControlBarStyle(AFX_CBRS_RESIZE);
 	m_wndMachineView.EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndMachineView);
 	DockPane(&m_wndProperty);
-	//DockPane(&m_wndIcView);
 	DockPane(&m_wndTestView);
 
 	CDockingManager::SetDockingMode(DT_SMART);
@@ -174,6 +186,13 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	memset(&font, 0, sizeof(LOGFONT));
 	m_Font.GetLogFont(&font);
 	m_wndMenuBar.SetMenuFont(&font);
+
+	CMenu* pMenu = CMenu::FromHandle(m_wndMenuBar.GetDefaultMenu());
+	CMenu* pSubMenu = pMenu->GetSubMenu(4);
+	for (UINT i = IDM_COLOR_RED; i <= IDM_COLOR_YELLOW; ++i)
+	{
+		pSubMenu->ModifyMenuW(IDM_COLOR_RED + i, MF_OWNERDRAW, IDM_COLOR_RED + i);
+	}
 	return 0;
 }
 
@@ -311,4 +330,108 @@ void HF_MainFrame::OnPaint()
 inline void HF_MainFrame::Log(LogType type, const CString& message)
 {
 	m_wndOutput.AddString(type, message);
+}
+
+
+void HF_MainFrame::OnViewTestItem()
+{
+	BOOL bShow = !m_wndTestView.IsWindowVisible();
+	m_wndTestView.ShowPane(bShow, FALSE, bShow);
+}
+
+
+void HF_MainFrame::OnViewProperty()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void HF_MainFrame::OnViewMachine()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void HF_MainFrame::OnViewOutput()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+void HF_MainFrame::OnColor(UINT nID)
+{
+	m_nCurrentColor = nID - IDM_COLOR_RED;
+}
+
+//
+//void HF_MainFrame::OnUpdateColorBlack(CCmdUI* pCmdUI)
+//{
+//	pCmdUI->SetCheck(m_nCurrentColor == 2);
+//}
+//
+//
+//void HF_MainFrame::OnUpdateColorGreen(CCmdUI* pCmdUI)
+//{
+//	pCmdUI->SetCheck(m_nCurrentColor == 1);
+//}
+//
+//
+//void HF_MainFrame::OnUpdateColorRed(CCmdUI* pCmdUI)
+//{
+//	pCmdUI->SetCheck(m_nCurrentColor == 0);
+//}
+//
+//
+//void HF_MainFrame::OnUpdateColorYellow(CCmdUI* pCmdUI)
+//{
+//	pCmdUI->SetCheck(m_nCurrentColor == 3);
+//}
+
+void HF_MainFrame::OnUpdateColorUI(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetRadio( m_nCurrentColor == (pCmdUI->m_nID - IDM_COLOR_RED) );
+}
+
+
+void HF_MainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct)
+{
+	int width = ::GetSystemMetrics(SM_CYMENU);
+	lpMeasureItemStruct->itemHeight = width * 4;
+	lpMeasureItemStruct->itemHeight = width;
+	CFrameWndEx::OnMeasureItem(nIDCtl, lpMeasureItemStruct);
+}
+
+
+void HF_MainFrame::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
+{
+	BITMAP bm;
+	CBitmap bitmap;
+	bitmap.LoadOEMBitmap(IDB_BITMAP_TREE_VIEW);
+	bitmap.GetObject(sizeof(bm), &bm);
+	CDC dc;
+	dc.Attach(lpDrawItemStruct->hDC);
+	CBrush* pBrush = new CBrush(::GetSysColor((lpDrawItemStruct->itemState &
+		ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_MENU));
+	dc.FrameRect(&(lpDrawItemStruct->rcItem), pBrush);
+	delete pBrush;
+	if (lpDrawItemStruct->itemState & ODS_CHECKED) {
+		CDC dcMem;
+		dcMem.CreateCompatibleDC(&dc);
+		CBitmap* pOldBitmap = dcMem.SelectObject(&bitmap);
+
+	CFrameWndEx::OnDrawItem(nIDCtl, lpDrawItemStruct);
+	dc.BitBlt(lpDrawItemStruct->rcItem.left + 4, lpDrawItemStruct->rcItem.top +
+		(((lpDrawItemStruct->rcItem.bottom - lpDrawItemStruct->rcItem.top) -
+			bm.bmHeight) / 2), bm.bmWidth, bm.bmHeight, &dcMem,
+		0, 0, SRCCOPY);
+	dcMem.SelectObject(pOldBitmap);
+	}
+	UINT itemID = lpDrawItemStruct->itemID & 0xFFFF; // Fix for Win95 bug. 
+	pBrush = new CBrush(m_wndView.m_clrColors[itemID -
+		IDM_COLOR_RED]);
+	CRect rect = lpDrawItemStruct->rcItem;
+	rect.DeflateRect(6, 4);
+	rect.left += bm.bmWidth;
+	dc.FillRect(rect, pBrush);
+	delete pBrush;
+	dc.Detach();
 }

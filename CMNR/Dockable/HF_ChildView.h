@@ -3,6 +3,8 @@
 
 #include "HF_IcInfoDlg.h"
 
+constexpr int SZ = 200;
+
 class HF_ChildView : public CWnd
 {
 public:
@@ -12,7 +14,8 @@ protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
 public:
-	virtual ~HF_ChildView();
+	virtual			~HF_ChildView();
+	virtual BOOL	PreTranslateMessage(MSG* pMsg);
 
 protected:
 	afx_msg void	OnPaint();
@@ -24,7 +27,11 @@ protected:
 	afx_msg void	OnButtonViewFront();
 	afx_msg void	OnButtonViewDown();
 	afx_msg void	OnButtonViewBack();
-	virtual BOOL	PreTranslateMessage(MSG* pMsg);
+	afx_msg void	OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void	OnShape(UINT id);
+	afx_msg void	OnColor(UINT id);
+	afx_msg void	OnShapeUI(CCmdUI* pCmd);
+	afx_msg void	OnColorUI(CCmdUI* pCmd);
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -36,16 +43,24 @@ private:
 	CMFCButton	m_BtnUp;
 	CMFCButton	m_BtnDown;
 	CMFCButton	m_BtnCenter;
-
 	CStatic		m_StaI2cClk;
 	CEdit		m_EdtI2cClk;
 	CStatic		m_StaI2cAddr;
 	CComboBox	m_ComboI2cAddr;
 	CStatic		m_StaBridge;
 	CComboBox	m_ComboBridge;
-
 	HF_IcInfoDlg m_IcInfoDlg;
+
+	UINT		m_nColor{0};
+	UINT		m_nShape{0};
 public:
+	inline static const COLORREF m_clrColors[5] = {
+	RGB(255, 0, 0),
+	RGB(255, 255, 0),
+	RGB(0, 255, 0),
+	RGB(0, 255, 255),
+	RGB(0, 0, 255)
+	};
 };
 
 #endif //__HF_CHILD_VIEW_H__

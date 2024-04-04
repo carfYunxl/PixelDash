@@ -2,6 +2,7 @@
 #include "CMNR.h"
 #include "HF_ChildView.h"
 #include "HF_MainFrm.h"
+#include "afxdockablepane.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -16,7 +17,6 @@ HF_ChildView::~HF_ChildView()
 
 }
 
-
 BEGIN_MESSAGE_MAP(HF_ChildView, CWnd)
 	ON_WM_PAINT()
 	ON_WM_CREATE()
@@ -27,6 +27,13 @@ BEGIN_MESSAGE_MAP(HF_ChildView, CWnd)
 	ON_COMMAND(IDC_BUTTON_VIEW_FRONT, &HF_ChildView::OnButtonViewFront)
 	ON_COMMAND(IDC_BUTTON_VIEW_DOWN, &HF_ChildView::OnButtonViewDown)
 	ON_COMMAND(IDC_BUTTON_VIEW_BACK, &HF_ChildView::OnButtonViewBack)
+
+	ON_COMMAND_RANGE(IDM_SHAPE_CIRCLE, IDM_SHAPE_SQUARE, &HF_ChildView::OnShape)
+	ON_COMMAND_RANGE(IDM_SHAPE_RED, IDM_SHAPE_BLUE, &HF_ChildView::OnColor)
+
+	ON_UPDATE_COMMAND_UI_RANGE(IDM_SHAPE_CIRCLE, IDM_SHAPE_SQUARE, &HF_ChildView::OnShapeUI)
+	ON_UPDATE_COMMAND_UI_RANGE(IDM_SHAPE_RED, IDM_SHAPE_BLUE, &HF_ChildView::OnColorUI)
+	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
 BOOL HF_ChildView::PreCreateWindow(CREATESTRUCT& cs)
@@ -126,7 +133,7 @@ void HF_ChildView::OnPaint()
 		m_BtnCenter.SetImage(IDB_PNG_CENTER);
 
 		m_IcInfoDlg.Create(IDD_DIALOG_IC_VIEW);
-		m_IcInfoDlg.ShowWindow(SW_SHOW);
+		m_IcInfoDlg.SetWindowPos( nullptr, 300, 300, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE );
 	}
 	else
 	{
@@ -138,12 +145,43 @@ void HF_ChildView::OnPaint()
 		m_BtnDown.MoveWindow(recDown);
 		m_BtnCenter.MoveWindow(recCenter);
 	}
+
+	CPoint points[3];
+
+	CRect rcClient;
+	GetClientRect(&rcClient);
+	int cx = rcClient.Width() / 2;
+	int cy = rcClient.Height() / 2;
+
+	CRect rcShape(cx - SZ, cy - SZ, cx + SZ, cy + SZ);
+	CBrush brush(m_clrColors[m_nColor]);
+	CBrush* pOldBrush = dc.SelectObject(&brush);
+	switch (m_nShape) {
+	case 0: // Circle 
+		dc.Ellipse(rcShape);
+		break;
+	case 1: // Triangle 
+		points[0].x = cx - SZ;
+		points[0].y = cy + SZ;
+		points[1].x = cx;
+		points[1].y = cy - SZ;
+		points[2].x = cx + SZ;
+		points[2].y = cy + SZ;
+		dc.Polygon(points, 3);
+		break;
+	case 2: // Square 
+		dc.Rectangle(rcShape);
+		break;
+	}
+	dc.SelectObject(pOldBrush);
 }
 
 int HF_ChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
+
+	//CDockablePane::ShowPane(TRUE, FALSE, TRUE);
 	return 0;
 }
 
@@ -198,13 +236,82 @@ void HF_ChildView::OnButtonViewBack()
 
 BOOL HF_ChildView::PreTranslateMessage(MSG* pMsg)
 {
-	//if ( WM_MOUSEMOVE == pMsg->message )
-	//{
-	//	if (pMsg->hwnd == m_IcInfoDlg.m_hWnd)
-	//	{
-	//		return FALSE;
-	//	}
-	//}
-
 	return CWnd::PreTranslateMessage(pMsg);
+}
+
+void HF_ChildView::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	CRect rcClient;
+	GetClientRect(&rcClient);
+	int cx = rcClient.Width() / 2;
+	int cy = rcClient.Height() / 2;
+	CRect rcShape(cx - SZ, cy - SZ, cx + SZ, cy + SZ);
+
+	CPoint pos = point;
+	ScreenToClient(&pos);
+	CPoint points[3];
+	BOOL bShapeClicked = FALSE;
+	int dx, dy;
+	// 
+	// Hit test the shape. 
+	// 
+	switch (1) {
+	case 0: // Circle 
+		dx = pos.x - cx;
+		dy = pos.y - cy;
+		if ((dx * dx) + (dy * dy) <= (SZ * SZ))
+			bShapeClicked = TRUE;
+		break;
+	case 1: // Triangle 
+		if (rcShape.PtInRect(pos)) {
+			dx = min(pos.x - rcShape.left, rcShape.right - pos.x);
+			if ((rcShape.bottom - pos.y) < (2 * dx))
+				bShapeClicked = TRUE;
+		}
+		break;
+	case 2: // Square 
+		if (rcShape.PtInRect(pos))
+			bShapeClicked = TRUE;
+		break;
+	}
+	// 
+	// Display a context menu if the shape was clicked. 
+	// 
+	if (bShapeClicked) {
+		CMenu menu;
+		menu.LoadMenu(IDR_CONTEXTMENU);
+		CMenu* pContextMenu = menu.GetSubMenu(0);
+		for (int i = 0; i < 5; i++)
+			pContextMenu->ModifyMenu(IDM_COLOR_RED + i,
+				MF_BYCOMMAND | MF_OWNERDRAW,
+				IDM_COLOR_RED + i);
+		pContextMenu->TrackPopupMenu(TPM_LEFTALIGN |
+			TPM_LEFTBUTTON |
+			TPM_RIGHTBUTTON, point.x, point.y, AfxGetMainWnd());
+		return;
+	}
+	// 
+	// Call the base class if the shape was not clicked. 
+	// 
+	CWnd::OnContextMenu(pWnd, point);
+}
+
+void HF_ChildView::OnShape(UINT id)
+{
+	m_nShape = id - IDM_SHAPE_CIRCLE;
+	Invalidate();
+}
+void HF_ChildView::OnColor(UINT id)
+{
+	m_nColor = id - IDM_SHAPE_RED;
+	Invalidate();
+}
+
+void HF_ChildView::OnShapeUI(CCmdUI* pCmd)
+{
+	pCmd->SetCheck(m_nShape == (pCmd->m_nID - IDM_SHAPE_CIRCLE));
+}
+void HF_ChildView::OnColorUI(CCmdUI* pCmd)
+{
+	pCmd->SetCheck(m_nColor == (pCmd->m_nID - IDM_SHAPE_RED));
 }

@@ -6,17 +6,28 @@
 IMPLEMENT_DYNAMIC(HF_IcInfoDlg, CDialogEx)
 
 HF_IcInfoDlg::HF_IcInfoDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_DIALOG_IC_VIEW, pParent) {
+	: CDialogEx(IDD_DIALOG_IC_VIEW, pParent)
+	, m_strI2cClock(_T("1500000"))
+{
+	m_Font.CreatePointFont(100, _T("Consolas"));
 }
 
 HF_IcInfoDlg::~HF_IcInfoDlg()
 {
+	if (m_hInst)
+	{
+		FreeLibrary(m_hInst);
+	}
+
+	DeleteObject(&m_Font);
 }
 
 void HF_IcInfoDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_MFCBUTTON_IC_INFO_MORE, m_btnIcInfoMore);
+	DDX_Text(pDX, IDC_EDIT_IC_I2C_CLOCK, m_strI2cClock);
+	DDX_Control(pDX, IDC_MFCBUTTON_IC_INFO_STATUS, m_btnInfoStatus);
 }
 
 
@@ -36,20 +47,20 @@ BOOL HF_IcInfoDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	SetWindowLong(this->GetSafeHwnd(), GWL_EXSTYLE, GetWindowLong(this->GetSafeHwnd(), GWL_EXSTYLE) | WS_EX_LAYERED);
-	HINSTANCE    hInst = LoadLibrary(L"User32.DLL");
-	if (hInst)
-	{
-		typedef    BOOL(WINAPI* MYFUNC)(HWND, COLORREF, BYTE, DWORD);
-		MYFUNC    fun = NULL;
-		//取得SetLayeredWindowAttributes函数指针     
-		fun = (MYFUNC)GetProcAddress(hInst, "SetLayeredWindowAttributes");
-		if (fun)fun(this->GetSafeHwnd(), 0, 255, LWA_ALPHA);
-		FreeLibrary(hInst);
+	m_hInst = LoadLibrary(L"User32.DLL");
+	if (m_hInst)
+	{   
+		m_pFun = (fnSetLayeredWindowAttributes)GetProcAddress(m_hInst, "SetLayeredWindowAttributes");
+		/*if (m_pFun)
+			m_pFun(this->GetSafeHwnd(), 0, 25, LWA_ALPHA);*/
 	}
 
-	m_btnIcInfoMore.SetImage(IDB_PNG_IC_INFO_FOLD);
+	m_btnIcInfoMore.SetImage(IDB_PNG_FOLD);
 	m_btnIcInfoMore.m_bRightImage = TRUE;
 
+	m_btnInfoStatus.SetImage( IDB_PNG_CONNECT );
+	m_btnInfoStatus.m_bRightImage = TRUE;
+	m_btnInfoStatus.SetFont(&m_Font);
 	return TRUE;
 }
 
@@ -68,12 +79,11 @@ HBRUSH HF_IcInfoDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	return hbr;
 }
 
-
 void HF_IcInfoDlg::OnPaint()
 {
 	CPaintDC dc(this);
 
-	CRect rect;
+	/*CRect rect;
 	GetClientRect(&rect);
 
 	CBrush red_brush(RGB(255,0,0));
@@ -87,15 +97,19 @@ void HF_IcInfoDlg::OnPaint()
 	dc.Ellipse(nCenterX - nRadius, nCenterY - nRadius, nCenterX + nRadius, nCenterY + nRadius);
 
 	dc.SelectObject(pOldBrush);
-	dc.SelectObject(pOldPen);
+	dc.SelectObject(pOldPen);*/
+
+	return CDialogEx::OnPaint();
 }
 
 
 LRESULT HF_IcInfoDlg::OnNcHitTest(CPoint point)
 {
 	UINT nHitTest = CDialogEx::OnNcHitTest(point);
-	//if (nHitTest == HTCLIENT)
-	//	nHitTest = HTCAPTION;
+	if ( nHitTest == HTCLIENT )
+	{
+		nHitTest = HTCAPTION;
+	}
 	return nHitTest;
 }
 
@@ -141,15 +155,15 @@ void HF_IcInfoDlg::OnBnClickedMfcbuttonIcInfoMore()
 void HF_IcInfoDlg::OnMouseHover(UINT nFlags, CPoint point)
 {
 	m_bMouseTrack = FALSE;
-	TRACE("Mouse Hover!\n");
+	//m_pFun(this->GetSafeHwnd(), 0, 255, LWA_ALPHA);
 	CDialogEx::OnMouseHover(nFlags, point);
 }
 
 
 void HF_IcInfoDlg::OnMouseLeave()
 {
-	m_bMouseTrack = TRUE;
-	TRACE("Mouse Leave!\n");
+	m_bMouseTrack = FALSE;
+	//m_pFun(this->GetSafeHwnd(), 0, 25, LWA_ALPHA);
 	CDialogEx::OnMouseLeave();
 }
 
@@ -157,19 +171,19 @@ void HF_IcInfoDlg::OnMouseLeave()
 void HF_IcInfoDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	HF_MainFrame* pMain = (HF_MainFrame*)theApp.m_pMainWnd;
-	pMain->Log(LogType::WARN, _T("Mouse Move"));
-	//if (!m_bMouseTrack)
-	//{
-	//	TRACKMOUSEEVENT tme;
-	//	tme.cbSize = sizeof(tme);
-	//	tme.dwFlags = TME_LEAVE | TME_HOVER;
-	//	tme.dwHoverTime = 10;
-	//	tme.hwndTrack = m_hWnd;
-	//	TrackMouseEvent(&tme);
+	if (!m_bMouseTrack)
+	{
+		TRACKMOUSEEVENT tme;
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_LEAVE | TME_HOVER;
+		tme.hwndTrack = this->m_hWnd;
+		tme.dwHoverTime = 1;
 
-	//	m_bMouseTrack = TRUE;
-	//	Invalidate(FALSE);
-	//}
+		if (::_TrackMouseEvent(&tme))
+		{
+			m_bMouseTrack = TRUE;
+		}
+	}
 
 	CDialogEx::OnMouseMove(nFlags, point);
 }
