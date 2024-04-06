@@ -1,9 +1,0 @@
-LIBRARY
-EXPORTS
-
-HFST_HID_SDK_Open							@1		NONAME
-HFST_HID_SDK_Close							@2		NONAME
-HFST_HID_SDK_Read							@3		NONAME
-HFST_HID_SDK_Write							@4		NONAME
-HFST_HID_SDK_GetErrorDetailMessage			@5		NONAME
-HFST_HID_SDK_GetCommunicationMaxDataLength	@6		NONAME

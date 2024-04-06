@@ -1,7 +1,0 @@
-LIBRARY
-EXPORTS
-
-HFST_WIFI_SDK_Connect						@1		NONAME
-HFST_WIFI_SDK_DisConnect					@2		NONAME
-HFST_WIFI_SDK_Recv							@3		NONAME
-HFST_WIFI_SDK_Send							@4		NONAME
