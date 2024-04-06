@@ -8,6 +8,14 @@ constexpr int SZ = 200;
 class HF_ChildView : public CWnd
 {
 public:
+	inline static const COLORREF m_clrColors[5] = {
+		RGB(255, 0, 0),
+		RGB(255, 255, 0),
+		RGB(0, 255, 0),
+		RGB(0, 255, 255),
+		RGB(0, 0, 255)
+	};
+
 	HF_ChildView();
 
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
@@ -49,14 +57,14 @@ private:
 
 	UINT		m_nColor{0};
 	UINT		m_nShape{0};
+
+	CD2DTextFormat* m_pTextFormat;
+	CD2DSolidColorBrush* m_pBlackBrush;
+	CD2DLinearGradientBrush* m_pLinearGradientBrush;
 public:
-	inline static const COLORREF m_clrColors[5] = {
-		RGB(255, 0, 0),
-		RGB(255, 255, 0),
-		RGB(0, 255, 0),
-		RGB(0, 255, 255),
-		RGB(0, 0, 255)
-	};
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+protected:
+	afx_msg LRESULT OnDraw2D(WPARAM wParam, LPARAM lParam);
 };
 
 #endif //__HF_CHILD_VIEW_H__

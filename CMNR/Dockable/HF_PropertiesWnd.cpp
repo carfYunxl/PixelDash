@@ -144,9 +144,11 @@ void HF_PropertiesWnd::InitPropList()
 	SetPropListFont();
 
 	m_wndPropList.EnableHeaderCtrl(FALSE);
-	//m_wndPropList.EnableDescriptionArea();
+	m_wndPropList.EnableDescriptionArea();
 	m_wndPropList.SetVSDotNetLook();
 	m_wndPropList.MarkModifiedProperties();
+	m_wndPropList.SetDescriptionRows(1);
+
 
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("外观"));
 
