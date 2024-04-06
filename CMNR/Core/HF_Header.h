@@ -8,5 +8,4 @@ enum class LogType
 	ERR
 };
 
-
 #endif //__HF_HEADER_HPP__

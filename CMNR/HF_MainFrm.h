@@ -6,8 +6,6 @@
 #include "HF_TestView.h"
 #include "HF_OutputWnd.h"
 #include "HF_PropertiesWnd.h"
-#include "HF_IcInfoView.h"
-#include "HF_MachineView.h"
 
 class HF_MainFrame : public CFrameWndEx
 {
@@ -15,23 +13,19 @@ public:
 	const int  MAX_USR_TOOBARS = 10;
 	const UINT USR_TOOLBAR_BG_ID = AFX_IDW_CONTROLBAR_FIRST + 40;
 	const UINT USR_TOOLBAR_ED_ID = USR_TOOLBAR_BG_ID + MAX_USR_TOOBARS - 1;
-public:
+
 	HF_MainFrame() noexcept;
+	virtual ~HF_MainFrame();
 protected:
 	DECLARE_DYNAMIC(HF_MainFrame)
 
-protected:
 	//CSplitterWnd m_wndSplitter;
-public:
-
-	void Log(LogType type, const CString& message);
 public:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = nullptr, CCreateContext* pContext = nullptr);
 
-	virtual ~HF_MainFrame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -48,7 +42,6 @@ protected:
 
 	CMFCToolBar       m_NewToolBar;
 	HF_PropertiesWnd  m_wndProperty;
-	HF_MachineView	  m_wndMachineView;
 	CFont			  m_Font;
 protected:
 	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -72,6 +65,8 @@ protected:
 	afx_msg void	OnUpdateColorUI(CCmdUI* pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	void Log(LogType type, const CString& message);
 private:
 	UINT m_nCurrentColor{0};
 };

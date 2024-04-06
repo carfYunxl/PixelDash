@@ -2,19 +2,15 @@
 #include "CMNR.h"
 #include "HF_ChildView.h"
 #include "HF_MainFrm.h"
-#include "afxdockablepane.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-HF_ChildView::HF_ChildView()
-{
+HF_ChildView::HF_ChildView(){
 }
 
-HF_ChildView::~HF_ChildView()
-{
-
+HF_ChildView::~HF_ChildView(){
 }
 
 BEGIN_MESSAGE_MAP(HF_ChildView, CWnd)
@@ -153,33 +149,30 @@ void HF_ChildView::OnPaint()
 	CRect rcShape(cx - SZ, cy - SZ, cx + SZ, cy + SZ);
 	CBrush brush(m_clrColors[m_nColor]);
 	CBrush* pOldBrush = dc.SelectObject(&brush);
-	switch (m_nShape) {
-	case 0: // Circle 
-		dc.Ellipse(rcShape);
-		break;
-	case 1: // Triangle 
-		points[0].x = cx - SZ;
-		points[0].y = cy + SZ;
-		points[1].x = cx;
-		points[1].y = cy - SZ;
-		points[2].x = cx + SZ;
-		points[2].y = cy + SZ;
-		dc.Polygon(points, 3);
-		break;
-	case 2: // Square 
-		dc.Rectangle(rcShape);
-		break;
+	switch (m_nShape)
+	{
+		case 0:
+			dc.Ellipse(rcShape);
+			break;
+		case 1:
+			points[0].x = cx - SZ;
+			points[0].y = cy + SZ;
+			points[1].x = cx;
+			points[1].y = cy - SZ;
+			points[2].x = cx + SZ;
+			points[2].y = cy + SZ;
+			dc.Polygon(points, 3);
+			break;
+		case 2:
+			dc.Rectangle(rcShape);
+			break;
 	}
 	dc.SelectObject(pOldBrush);
 }
 
 int HF_ChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CWnd::OnCreate(lpCreateStruct) == -1)
-		return -1;
-
-	//CDockablePane::ShowPane(TRUE, FALSE, TRUE);
-	return 0;
+	return CWnd::OnCreate(lpCreateStruct);
 }
 
 void HF_ChildView::OnMouseMove(UINT nFlags, CPoint point)
@@ -241,32 +234,29 @@ void HF_ChildView::OnContextMenu(CWnd* pWnd, CPoint point)
 	CPoint points[3];
 	BOOL bShapeClicked = FALSE;
 	int dx, dy;
-	// 
-	// Hit test the shape. 
-	// 
-	switch (1) {
-	case 0: // Circle 
-		dx = pos.x - cx;
-		dy = pos.y - cy;
-		if ((dx * dx) + (dy * dy) <= (SZ * SZ))
-			bShapeClicked = TRUE;
-		break;
-	case 1: // Triangle 
-		if (rcShape.PtInRect(pos)) {
-			dx = min(pos.x - rcShape.left, rcShape.right - pos.x);
-			if ((rcShape.bottom - pos.y) < (2 * dx))
+	switch (1)
+	{
+		case 0:
+			dx = pos.x - cx;
+			dy = pos.y - cy;
+			if ((dx * dx) + (dy * dy) <= (SZ * SZ))
 				bShapeClicked = TRUE;
-		}
-		break;
-	case 2: // Square 
-		if (rcShape.PtInRect(pos))
-			bShapeClicked = TRUE;
-		break;
+			break;
+		case 1:
+			if (rcShape.PtInRect(pos)) {
+				dx = min(pos.x - rcShape.left, rcShape.right - pos.x);
+				if ((rcShape.bottom - pos.y) < (2 * dx))
+					bShapeClicked = TRUE;
+			}
+			break;
+		case 2:
+			if (rcShape.PtInRect(pos))
+				bShapeClicked = TRUE;
+			break;
 	}
-	// 
-	// Display a context menu if the shape was clicked. 
-	// 
-	if (bShapeClicked) {
+
+	if (bShapeClicked)
+	{
 		CMenu menu;
 		menu.LoadMenu(IDR_CONTEXTMENU);
 		CMenu* pContextMenu = menu.GetSubMenu(0);
@@ -279,9 +269,7 @@ void HF_ChildView::OnContextMenu(CWnd* pWnd, CPoint point)
 			TPM_RIGHTBUTTON, point.x, point.y, AfxGetMainWnd());
 		return;
 	}
-	// 
-	// Call the base class if the shape was not clicked. 
-	// 
+
 	CWnd::OnContextMenu(pWnd, point);
 }
 
@@ -290,6 +278,7 @@ void HF_ChildView::OnShape(UINT id)
 	m_nShape = id - IDM_SHAPE_CIRCLE;
 	Invalidate();
 }
+
 void HF_ChildView::OnColor(UINT id)
 {
 	m_nColor = id - IDM_SHAPE_RED;
@@ -300,6 +289,7 @@ void HF_ChildView::OnShapeUI(CCmdUI* pCmd)
 {
 	pCmd->SetCheck(m_nShape == (pCmd->m_nID - IDM_SHAPE_CIRCLE));
 }
+
 void HF_ChildView::OnColorUI(CCmdUI* pCmd)
 {
 	pCmd->SetCheck(m_nColor == (pCmd->m_nID - IDM_SHAPE_RED));

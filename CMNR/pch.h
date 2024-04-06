@@ -9,6 +9,7 @@
 #include "Resource.h"
 #include <afxwin.h>
 #include "CMNR.h"
+#include "HF_Header.h"
 
 extern CCMNRApp theApp;
 

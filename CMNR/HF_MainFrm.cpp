@@ -36,8 +36,8 @@ static UINT indicators[] =
 {
 	ID_SEPARATOR,
 	IDS_PROGRESS,
-	ID_INDICATOR_CAPS,
-	ID_INDICATOR_NUM,
+	//ID_INDICATOR_CAPS,
+	//ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
 };
 
@@ -130,20 +130,12 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndOutput);
 
-	if (!m_wndMachineView.Create(_T("线性机台控制"), this, CRect(0, 0, 100, 100), TRUE, 1355, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
-	{
-		Log(LogType::ERR, _T("未能创建线性机台控制窗口"));
-		return FALSE;
-	}
-
 	m_wndTestView.EnableDocking(CBRS_ALIGN_LEFT);
 	//m_wndTestView.SetControlBarStyle(~AFX_CBRS_CLOSE);
 	//m_wndTestView.SetControlBarStyle(AFX_CBRS_RESIZE);
 	m_wndProperty.EnableDocking(CBRS_ALIGN_ANY);
 	//m_wndProperty.SetControlBarStyle(~AFX_CBRS_CLOSE);
 	//m_wndProperty.SetControlBarStyle(AFX_CBRS_RESIZE);
-	m_wndMachineView.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndMachineView);
 	DockPane(&m_wndProperty);
 	DockPane(&m_wndTestView);
 
@@ -173,9 +165,9 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
 
 	m_wndStatusBar.SetPaneInfo(1, IDS_PROGRESS, SBPS_NORMAL, 400);
-	m_wndStatusBar.EnablePaneProgressBar(1, 100, TRUE);
+	m_wndStatusBar.EnablePaneProgressBar(1, 100, TRUE, RGB(0,255,0), -1, RGB(0, 0, 0));
 	m_wndStatusBar.SetPaneProgress(1, 50);
-	m_wndStatusBar.SetPaneBackgroundColor(0, RGB(192, 192, 192));
+	m_wndStatusBar.SetPaneBackgroundColor(0, RGB(230, 230, 230));
 
 	m_Font.CreatePointFont(120, _T("微软雅黑"));
 	LOGFONT font;
@@ -290,12 +282,12 @@ BOOL HF_MainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pPare
 
 void HF_MainFrame::OnButtonIc()
 {
-	m_wndStatusBar.SetPaneBackgroundColor(4, RGB(230, 230, 230));
-	m_wndStatusBar.SetPaneInfo(4, ID_INDICATOR_CAPS, SBPS_NORMAL, 200);
+	m_wndStatusBar.SetPaneBackgroundColor(2, RGB(230, 230, 230));
+	m_wndStatusBar.SetPaneInfo(2, ID_INDICATOR_CAPS, SBPS_NORMAL, 200);
 	//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
-	m_wndStatusBar.SetPaneIcon(4, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_CONNECT64)), TRUE);
-	m_wndStatusBar.SetPaneText(4, _T("ISP Status！"), TRUE);
-	m_wndStatusBar.SetPaneTextColor(4, RGB(255, 255, 255), TRUE);
+	m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_ISP)), TRUE);
+	m_wndStatusBar.SetPaneText(2, _T("ISP Status！"), TRUE);
+	m_wndStatusBar.SetPaneTextColor(2, RGB(0, 0, 0), TRUE);
 	
 	RecalcLayout();
 }
@@ -330,11 +322,10 @@ void HF_MainFrame::OnPaint()
 	CPaintDC dc(this);
 }
 
-inline void HF_MainFrame::Log(LogType type, const CString& message)
+void HF_MainFrame::Log(LogType type, const CString& message) 
 {
 	m_wndOutput.AddString(type, message);
 }
-
 
 void HF_MainFrame::OnViewTestItem()
 {
@@ -342,18 +333,15 @@ void HF_MainFrame::OnViewTestItem()
 	m_wndTestView.ShowPane(bShow, FALSE, bShow);
 }
 
-
 void HF_MainFrame::OnViewProperty()
 {
 	// TODO: 在此添加命令处理程序代码
 }
 
-
 void HF_MainFrame::OnViewMachine()
 {
 	// TODO: 在此添加命令处理程序代码
 }
-
 
 void HF_MainFrame::OnViewOutput()
 {
@@ -365,35 +353,10 @@ void HF_MainFrame::OnColor(UINT nID)
 	m_nCurrentColor = nID - IDM_COLOR_RED;
 }
 
-//
-//void HF_MainFrame::OnUpdateColorBlack(CCmdUI* pCmdUI)
-//{
-//	pCmdUI->SetCheck(m_nCurrentColor == 2);
-//}
-//
-//
-//void HF_MainFrame::OnUpdateColorGreen(CCmdUI* pCmdUI)
-//{
-//	pCmdUI->SetCheck(m_nCurrentColor == 1);
-//}
-//
-//
-//void HF_MainFrame::OnUpdateColorRed(CCmdUI* pCmdUI)
-//{
-//	pCmdUI->SetCheck(m_nCurrentColor == 0);
-//}
-//
-//
-//void HF_MainFrame::OnUpdateColorYellow(CCmdUI* pCmdUI)
-//{
-//	pCmdUI->SetCheck(m_nCurrentColor == 3);
-//}
-
 void HF_MainFrame::OnUpdateColorUI(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetRadio( m_nCurrentColor == (pCmdUI->m_nID - IDM_COLOR_RED) );
 }
-
 
 void HF_MainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 {
@@ -402,7 +365,6 @@ void HF_MainFrame::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemSt
 	lpMeasureItemStruct->itemHeight = width;
 	CFrameWndEx::OnMeasureItem(nIDCtl, lpMeasureItemStruct);
 }
-
 
 void HF_MainFrame::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
 {

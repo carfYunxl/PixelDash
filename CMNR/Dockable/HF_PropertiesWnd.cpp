@@ -164,7 +164,6 @@ void HF_PropertiesWnd::InitPropList()
 
 	m_wndPropList.AddProperty(pGroup1);
 
-
 	CMFCPropertyGridProperty* pSize = new CMFCPropertyGridProperty(_T("窗口大小"), 0, TRUE);
 
 	pProp = new CMFCPropertyGridProperty(_T("高度"), (_variant_t)250l, _T("指定窗口的高度"));
