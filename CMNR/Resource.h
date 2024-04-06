@@ -54,6 +54,21 @@
 #define IDB_PNG_DISCONNECT              342
 #define IDB_PNG7                        343
 #define IDB_PNG_FOLD                    343
+#define IDI_ICONCONNECT                 350
+#define IDI_ICON_CONNECT                350
+#define IDI_ICON_DISCONNECT             351
+#define IDI_ICON_GREEN                  352
+#define IDI_ICON4                       353
+#define IDI_ICON_RED                    353
+#define IDI_ICON5                       354
+#define IDI_ICON_YELLOW                 354
+#define IDB_BITMAP_CONNECT              357
+#define IDB_BITMAP_DIS_CONNECT          358
+#define IDB_BITMAP_DIS_CONNECT1         359
+#define IDB_BITMAP_ISP                  359
+#define IDB_BITMAP_CONNECT64            360
+#define IDB_BITMAP1                     361
+#define IDB_BITMAP_TEST_LIST            361
 #define IDC_BUTTON1                     1000
 #define IDC_BUTTON2                     1001
 #define IDC_EDIT1                       1001
@@ -122,7 +137,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        344
+#define _APS_NEXT_RESOURCE_VALUE        362
 #define _APS_NEXT_COMMAND_VALUE         32829
 #define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           310

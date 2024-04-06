@@ -246,12 +246,28 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap_c.bmp" />
+    <Image Include="res\bitmap_d.bmp" />
+    <Image Include="res\bitmap_g.bmp" />
+    <Image Include="res\bitmap_r.bmp" />
     <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\bmp00002 - 副本.bmp" />
+    <Image Include="res\bmp00002.bmp" />
+    <Image Include="res\bmp00003.bmp" />
+    <Image Include="res\bmp00004.bmp" />
+    <Image Include="res\bmp_connect.bmp" />
+    <Image Include="res\bmp_disconnect.bmp" />
+    <Image Include="res\bmp_isp.bmp" />
     <Image Include="res\Center.png" />
     <Image Include="res\CMNR.ico" />
+    <Image Include="res\Connect.ico" />
     <Image Include="res\connect.png" />
+    <Image Include="res\DisConnect (122).bmp" />
+    <Image Include="res\DisConnect.bmp" />
+    <Image Include="res\DisConnect.ico" />
     <Image Include="res\disconnect.png" />
     <Image Include="res\Fold.png" />
+    <Image Include="res\green_circle.ico" />
     <Image Include="res\green_circle.png" />
     <Image Include="res\IC_Fold.png" />
     <Image Include="res\IC_More.png" />
@@ -261,11 +277,13 @@
     <Image Include="res\MoveLeft.png" />
     <Image Include="res\MoveRight.png" />
     <Image Include="res\MoveUp.png" />
+    <Image Include="res\red_circle.ico" />
     <Image Include="res\red_circle.png" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\toolbar1.bmp" />
     <Image Include="res\Toolbar256.bmp" />
     <Image Include="res\userimages.bmp" />
+    <Image Include="res\yellow_circle.ico" />
     <Image Include="res\yellow_circle.png" />
   </ItemGroup>
   <ItemGroup>

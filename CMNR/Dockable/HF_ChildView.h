@@ -10,10 +10,7 @@ class HF_ChildView : public CWnd
 public:
 	HF_ChildView();
 
-protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-
-public:
 	virtual			~HF_ChildView();
 	virtual BOOL	PreTranslateMessage(MSG* pMsg);
 
@@ -49,17 +46,16 @@ private:
 	CComboBox	m_ComboI2cAddr;
 	CStatic		m_StaBridge;
 	CComboBox	m_ComboBridge;
-	HF_IcInfoDlg m_IcInfoDlg;
 
 	UINT		m_nColor{0};
 	UINT		m_nShape{0};
 public:
 	inline static const COLORREF m_clrColors[5] = {
-	RGB(255, 0, 0),
-	RGB(255, 255, 0),
-	RGB(0, 255, 0),
-	RGB(0, 255, 255),
-	RGB(0, 0, 255)
+		RGB(255, 0, 0),
+		RGB(255, 255, 0),
+		RGB(0, 255, 0),
+		RGB(0, 255, 255),
+		RGB(0, 0, 255)
 	};
 };
 

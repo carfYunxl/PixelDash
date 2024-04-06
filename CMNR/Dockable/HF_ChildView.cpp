@@ -131,9 +131,6 @@ void HF_ChildView::OnPaint()
 
 		m_BtnCenter.Create(_T(""), WS_CHILD | WS_VISIBLE, recCenter, this, IDC_BUTTON_VIEW_DOWN);
 		m_BtnCenter.SetImage(IDB_PNG_CENTER);
-
-		m_IcInfoDlg.Create(IDD_DIALOG_IC_VIEW);
-		m_IcInfoDlg.SetWindowPos( nullptr, 300, 300, 0, 0, SWP_SHOWWINDOW | SWP_NOSIZE );
 	}
 	else
 	{
@@ -187,14 +184,6 @@ int HF_ChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void HF_ChildView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	//CRect rect;
-	//m_IcInfoDlg.GetClientRect(&rect);
-
-	//if (rect.PtInRect(point))
-	//{
-	//	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
-	//	pMainWnd->Log(LogType::WARN, _T("Mouse Move In Info Dialog!!!!!!!!!!!"));
-	//}
 	CWnd::OnMouseMove(nFlags, point);
 }
 

@@ -31,7 +31,6 @@ public:
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = nullptr, CCreateContext* pContext = nullptr);
 
-public:
 	virtual ~HF_MainFrame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -68,18 +67,13 @@ protected:
 	afx_msg void	OnViewMachine();
 	afx_msg void	OnViewOutput();
 	afx_msg void	OnColor(UINT nID);
-	//afx_msg void	OnUpdateColorBlack(CCmdUI* pCmdUI);
-	//afx_msg void	OnUpdateColorGreen(CCmdUI* pCmdUI);
-	//afx_msg void	OnUpdateColorRed(CCmdUI* pCmdUI);
-	//afx_msg void	OnUpdateColorYellow(CCmdUI* pCmdUI);
+	afx_msg void	OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
+	afx_msg void	OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct);
 	afx_msg void	OnUpdateColorUI(CCmdUI* pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
 private:
-	UINT m_nCurrentColor;
-public:
-	afx_msg void OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-	afx_msg void OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct);
+	UINT m_nCurrentColor{0};
 };
 #endif //__HF_MAINFRAM_H__
 

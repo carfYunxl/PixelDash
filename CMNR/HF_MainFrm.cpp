@@ -26,10 +26,6 @@ BEGIN_MESSAGE_MAP(HF_MainFrame, CFrameWndEx)
 	ON_COMMAND(ID_VIEW_OUTPUT, &HF_MainFrame::OnViewOutput)
 
 	ON_COMMAND_RANGE(IDM_COLOR_RED, IDM_COLOR_YELLOW, &HF_MainFrame::OnColor)
-	//ON_UPDATE_COMMAND_UI(IDM_COLOR_BLACK, &HF_MainFrame::OnUpdateColorBlack)
-	//ON_UPDATE_COMMAND_UI(IDM_COLOR_GREEN, &HF_MainFrame::OnUpdateColorGreen)
-	//ON_UPDATE_COMMAND_UI(IDM_COLOR_RED, &HF_MainFrame::OnUpdateColorRed)
-	//ON_UPDATE_COMMAND_UI(IDM_COLOR_YELLOW, &HF_MainFrame::OnUpdateColorYellow)
 
 	ON_UPDATE_COMMAND_UI_RANGE(IDM_COLOR_RED, IDM_COLOR_YELLOW, &HF_MainFrame::OnUpdateColorUI)
 	ON_WM_MEASUREITEM()
@@ -294,7 +290,14 @@ BOOL HF_MainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pPare
 
 void HF_MainFrame::OnButtonIc()
 {
-	MessageBox(_T("Show IC Info"));
+	m_wndStatusBar.SetPaneBackgroundColor(4, RGB(230, 230, 230));
+	m_wndStatusBar.SetPaneInfo(4, ID_INDICATOR_CAPS, SBPS_NORMAL, 200);
+	//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
+	m_wndStatusBar.SetPaneIcon(4, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_CONNECT64)), TRUE);
+	m_wndStatusBar.SetPaneText(4, _T("ISP Status！"), TRUE);
+	m_wndStatusBar.SetPaneTextColor(4, RGB(255, 255, 255), TRUE);
+	
+	RecalcLayout();
 }
 
 void HF_MainFrame::OnButtonCon()
