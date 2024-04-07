@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34723.18
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_ConnectionLayer", "HFST_ConnectionLayer\HFST_Connector.vcxproj", "{A9261353-9AC9-46DF-825D-BBF7C9FABC30}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CMNR", "CMNR\CMNR.vcxproj", "{39C9FF22-36BF-499A-9CEB-D5E5E7C3D7C0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HFST_D2D", "HFST_D2D\HFST_D2D.vcxproj", "{741682C5-C741-4CC0-AA72-29379CB07C40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,14 @@ Global
 		{39C9FF22-36BF-499A-9CEB-D5E5E7C3D7C0}.Release|x64.Build.0 = Release|x64
 		{39C9FF22-36BF-499A-9CEB-D5E5E7C3D7C0}.Release|x86.ActiveCfg = Release|Win32
 		{39C9FF22-36BF-499A-9CEB-D5E5E7C3D7C0}.Release|x86.Build.0 = Release|Win32
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Debug|x64.ActiveCfg = Debug|x64
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Debug|x64.Build.0 = Debug|x64
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Debug|x86.ActiveCfg = Debug|Win32
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Debug|x86.Build.0 = Debug|Win32
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Release|x64.ActiveCfg = Release|x64
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Release|x64.Build.0 = Release|x64
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Release|x86.ActiveCfg = Release|Win32
+		{741682C5-C741-4CC0-AA72-29379CB07C40}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

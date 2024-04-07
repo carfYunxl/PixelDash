@@ -37,6 +37,8 @@ protected:
 	afx_msg void	OnColor(UINT id);
 	afx_msg void	OnShapeUI(CCmdUI* pCmd);
 	afx_msg void	OnColorUI(CCmdUI* pCmd);
+	afx_msg void	OnSize(UINT nType, int cx, int cy);
+	afx_msg LRESULT OnDraw2D(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -57,14 +59,6 @@ private:
 
 	UINT		m_nColor{0};
 	UINT		m_nShape{0};
-
-	CD2DTextFormat* m_pTextFormat;
-	CD2DSolidColorBrush* m_pBlackBrush;
-	CD2DLinearGradientBrush* m_pLinearGradientBrush;
-public:
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-protected:
-	afx_msg LRESULT OnDraw2D(WPARAM wParam, LPARAM lParam);
 };
 
 #endif //__HF_CHILD_VIEW_H__

@@ -2,48 +2,15 @@
 #include "CMNR.h"
 #include "HF_ChildView.h"
 #include "HF_MainFrm.h"
+#include "HFST_RendererD2D.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-HF_ChildView::HF_ChildView(){
+HF_ChildView::HF_ChildView()
+{
 	EnableD2DSupport();
-	
-	m_pBlackBrush = new CD2DSolidColorBrush(
-		GetRenderTarget(),
-		D2D1::ColorF(D2D1::ColorF::Black)
-	);
-
-	m_pTextFormat = new CD2DTextFormat(
-		GetRenderTarget(),
-		_T("Verdana"),
-		50
-	);
-
-	m_pTextFormat->Get()->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	m_pTextFormat->Get()->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-
-	D2D1_GRADIENT_STOP gradientStop[3];
-
-	gradientStop[0].color =
-		D2D1::ColorF(D2D1::ColorF::White);
-	gradientStop[0].position = 0.f;
-
-	gradientStop[1].color =
-		D2D1::ColorF(D2D1::ColorF::Black);
-	gradientStop[1].position = 0.5f;
-
-	gradientStop[2].color =
-		D2D1::ColorF(D2D1::ColorF::Red);
-	gradientStop[2].position = 1.f;
-
-	m_pLinearGradientBrush = new CD2DLinearGradientBrush(
-		GetRenderTarget(),
-		gradientStop,
-		ARRAYSIZE(gradientStop),
-		D2D1::LinearGradientBrushProperties( D2D1::Point2F(10,0), D2D1::Point2F(0,0) )
-	);
 }
 
 HF_ChildView::~HF_ChildView(){
@@ -333,36 +300,14 @@ void HF_ChildView::OnColorUI(CCmdUI* pCmd)
 	pCmd->SetCheck(m_nColor == (pCmd->m_nID - IDM_SHAPE_RED));
 }
 
-
 void HF_ChildView::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
-
-	m_pLinearGradientBrush->SetEndPoint(CPoint(cx, cy));
 }
 
 LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 {
-	CHwndRenderTarget* pRenderTarget = (CHwndRenderTarget*)lParam;
-	ASSERT_VALID(pRenderTarget);
-
-	CRect rect;
-	GetClientRect(rect);
-
-	pRenderTarget->FillRectangle(rect, m_pLinearGradientBrush);
-	pRenderTarget->DrawText(
-		_T("Hello, World!"),
-		rect,
-		m_pBlackBrush,
-		m_pTextFormat
-	);
-
-	CD2DSolidColorBrush red_brush(pRenderTarget, D2D1::ColorF(D2D1::ColorF::Red));
-	CD2DSolidColorBrush green_brush(pRenderTarget, D2D1::ColorF(D2D1::ColorF::GreenYellow));
-	pRenderTarget->DrawRectangle(CD2DRectF(100.0f, 100.0f, 800.0f, 800.0f), &red_brush);
-	pRenderTarget->FillRectangle(CD2DRectF(100.0f, 100.0f, 800.0f, 800.0f), &green_brush);
-
-	pRenderTarget->DrawLine(D2D1::Point2F(850,100), D2D1::Point2F(850, 1000), &red_brush, 5.0f); 
-
+	HFST::RendererD2D renderer;
+	renderer.Initialize(this);
 	return TRUE;
 }
