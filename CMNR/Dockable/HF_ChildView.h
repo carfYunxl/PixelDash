@@ -59,6 +59,9 @@ private:
 
 	UINT		m_nColor{0};
 	UINT		m_nShape{0};
+
+	int m_cnt{0};
+	COLORREF m_Clor{ RGB(255,255,255) };
 };
 
 #endif //__HF_CHILD_VIEW_H__
