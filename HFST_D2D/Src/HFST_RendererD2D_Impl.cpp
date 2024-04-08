@@ -12,58 +12,95 @@ namespace HFST
 
     }
 
-    void RendererD2D_Impl::DrawAxis(int Count, COLORREF Color)
+    void RendererD2D_Impl::DrawBgColor( const D2D1::ColorF& bgColor )
     {
         CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
 
         pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-        //pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::LightCoral));
-        pRenderTarget->Clear(D2D1::ColorF(Color));
+        pRenderTarget->Clear( D2D1::ColorF(bgColor) );
+    }
 
-        CD2DSolidColorBrush black_brush( pRenderTarget, D2D1::ColorF(D2D1::ColorF::Black) );
-        CD2DSolidColorBrush blue_brush( pRenderTarget, D2D1::ColorF(D2D1::ColorF::Blue) );
-        CD2DSolidColorBrush red_brush( pRenderTarget, D2D1::ColorF(D2D1::ColorF::Red) );
+    void RendererD2D_Impl::DrawTpArea( 
+        const CD2DRectF& rect, 
+        const D2D1::ColorF& bgColor, 
+        const D2D1::ColorF& gridColor, 
+        float gap 
+    )
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
 
-        CD2DSizeF size = pRenderTarget->GetSize();
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-        pRenderTarget->DrawLine( CD2DPointF(0, size.height / 2 ), CD2DPointF(size.width, size.height/2), &black_brush );
-        pRenderTarget->DrawLine( CD2DPointF(size.width/2, 0), CD2DPointF(size.width/2, size.height), &black_brush );
+        CD2DSolidColorBrush bgBrush( pRenderTarget, D2D1::ColorF(bgColor) );
+        CD2DSolidColorBrush gridBrush( pRenderTarget, D2D1::ColorF(gridColor) );
 
-        CD2DPointF ptOld( CD2DPointF(0, size.height / 2) );
+        pRenderTarget->FillRectangle( rect, &bgBrush );
 
-        for ( float x = 0.0f; x < size.width; x++ )
+        float nCenterX = rect.left + (rect.right - rect.left)  / 2.0f ;
+        float nCenterY = rect.top  + (rect.bottom - rect.top)  / 2.0f ;
+
+        // Vertical
+        for ( float i = nCenterX; i < rect.right; i+=gap )
         {
-            CD2DPointF ptNew( CD2DPointF(x, size.height / 2 + 200.0f * sinf(x / 8)) );
+            CD2DPointF ptStart( i, rect.top     );
+            CD2DPointF ptStop ( i, rect.bottom  );
 
-            pRenderTarget->DrawLine(ptOld, ptNew, &blue_brush);
-
-            ptOld = ptNew;
+            pRenderTarget->DrawLine( ptStart, ptStop, &gridBrush );
         }
 
-        CD2DTextFormat format( m_pWnd.GetRenderTarget(), _T("Î¢ÈíÑÅºÚ"), 16.0f);
-        format.Get()->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-        format.Get()->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+        for ( float i = nCenterX - gap; i > rect.left; i -= gap )
+        {
+            CD2DPointF ptStart( i, rect.top     );
+            CD2DPointF ptStop ( i, rect.bottom  );
 
-        constexpr int GAP = 10;
-        constexpr int WIDTH = 150;
+            pRenderTarget->DrawLine( ptStart, ptStop, &gridBrush );
+        }
 
-        CD2DRectF recPane(size.width - WIDTH, 2.0f, size.width, 100.0f);
-        pRenderTarget->FillRectangle(recPane, &black_brush);
+        // Horizental
+        for ( float i = nCenterY; i < rect.bottom; i += gap )
+        {
+            CD2DPointF ptStart( rect.left,  i );
+            CD2DPointF ptStop ( rect.right, i );
 
-        CD2DRectF recInfo( size.width - WIDTH, GAP, size.width, 30 );
+            pRenderTarget->DrawLine(ptStart, ptStop, &gridBrush);
+        }
 
-        CD2DSizeF sizef = pRenderTarget->GetDpi();
+        for ( float i = nCenterY - gap; i > rect.top; i -= gap)
+        {
+            CD2DPointF ptStart( rect.left,  i );
+            CD2DPointF ptStop ( rect.right, i );
 
-        CString str;
-        str.Format( _T("[%d - %d : %d ]"), Count, (int)sizef.width, (int)sizef.height );
-        
-        pRenderTarget->DrawTextW(
-            str,
-            recInfo,
-            &red_brush,
-            &format
-            );
+            pRenderTarget->DrawLine(ptStart, ptStop, &gridBrush);
+        }
+    }
 
+    void RendererD2D_Impl::DrawLine(
+        const CD2DPointF& start,
+        const CD2DPointF& end,
+        const D2D1::ColorF& color, 
+        float opacity, 
+        float line_width
+    )
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DBrushProperties properties(opacity);
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color), &properties );
+
+        pRenderTarget->DrawLine(start, end, &brush, line_width);
+    }
+
+    void RendererD2D_Impl::DrawRect( const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width )
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush( pRenderTarget, D2D1::ColorF(line_Color) );
+        pRenderTarget->DrawRectangle( rect, &brush, line_width );
     }
 }

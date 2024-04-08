@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(HF_ChildView, CWnd)
 	ON_WM_CONTEXTMENU()
 	ON_WM_SIZE()
 	ON_REGISTERED_MESSAGE(AFX_WM_DRAW2D, &HF_ChildView::OnDraw2D)
+	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 BOOL HF_ChildView::PreCreateWindow(CREATESTRUCT& cs)
@@ -52,127 +53,6 @@ BOOL HF_ChildView::PreCreateWindow(CREATESTRUCT& cs)
 void HF_ChildView::OnPaint()
 {
 	CPaintDC dc(this);
-	//CRect rect;
-	//GetClientRect(&rect);
-
-	//constexpr int WIDTH = 180;
-	//constexpr int BTN_WIDTH = 40;
-	//constexpr int GAP = 10;
-	//int nCenterX = rect.right - WIDTH / 2;
-	//int nCenterY = rect.bottom - WIDTH / 2;
-
-	//CRect recLeft(
-	//	nCenterX - BTN_WIDTH / 2 - BTN_WIDTH,	// left
-	//	nCenterY - BTN_WIDTH / 2,				// top
-	//	nCenterX - BTN_WIDTH / 2,				// right
-	//	nCenterY - BTN_WIDTH / 2 + BTN_WIDTH	// bootm
-	//);
-
-	//CRect recRight(
-	//	nCenterX + BTN_WIDTH / 2,				// left
-	//	nCenterY - BTN_WIDTH / 2,				// top
-	//	nCenterX + BTN_WIDTH / 2 + BTN_WIDTH,	// right
-	//	nCenterY - BTN_WIDTH / 2 + BTN_WIDTH	// bootm
-	//);
-
-	//CRect recFront(
-	//	nCenterX - BTN_WIDTH / 2,				// left
-	//	nCenterY - BTN_WIDTH / 2 - BTN_WIDTH,	// top
-	//	nCenterX - BTN_WIDTH / 2 + BTN_WIDTH,	// right
-	//	nCenterY - BTN_WIDTH / 2				// bootm
-	//);
-
-	//CRect recBack(
-	//	nCenterX - BTN_WIDTH / 2,				// left
-	//	nCenterY + BTN_WIDTH / 2,				// top
-	//	nCenterX - BTN_WIDTH / 2 + BTN_WIDTH,	// right
-	//	nCenterY + BTN_WIDTH / 2 + BTN_WIDTH	// bootm
-	//);
-
-	//CRect recUp(
-	//	nCenterX - BTN_WIDTH * 2,				// left
-	//	nCenterY - BTN_WIDTH * 2,				// top
-	//	nCenterX - BTN_WIDTH,					// right
-	//	nCenterY - BTN_WIDTH					// bootm
-	//);
-
-	//CRect recDown(
-	//	nCenterX + BTN_WIDTH,					// left
-	//	nCenterY - BTN_WIDTH * 2,				// top
-	//	nCenterX + BTN_WIDTH * 2,				// right
-	//	nCenterY - BTN_WIDTH					// bootm
-	//);
-
-	//CRect recCenter(
-	//	nCenterX - 16,				// left
-	//	nCenterY - 16,				// top
-	//	nCenterX + 16,				// right
-	//	nCenterY + 16				// bootm
-	//);
-
-	//if (m_BtnLeft.m_hWnd == NULL)
-	//{
-	//	m_BtnLeft.Create(_T(""), WS_CHILD | WS_VISIBLE, recLeft, this, IDC_BUTTON_VIEW_LEFT);
-	//	m_BtnLeft.SetImage(IDB_PNG_LEFT);
-
-	//	m_BtnRight.Create(_T(""), WS_CHILD | WS_VISIBLE, recRight, this, IDC_BUTTON_VIEW_RIGHT);
-	//	m_BtnRight.SetImage(IDB_PNG_RIGHT);
-
-	//	m_BtnFront.Create(_T(""), WS_CHILD | WS_VISIBLE, recFront, this, IDC_BUTTON_VIEW_FRONT);
-	//	m_BtnFront.SetImage(IDB_PNG_FRONT);
-
-	//	m_BtnBack.Create(_T(""), WS_CHILD | WS_VISIBLE, recBack, this, IDC_BUTTON_VIEW_BACK);
-	//	m_BtnBack.SetImage(IDB_PNG_BACK);
-
-	//	m_BtnUp.Create(_T(""), WS_CHILD | WS_VISIBLE, recUp, this, IDC_BUTTON_VIEW_UP);
-	//	m_BtnUp.SetImage(IDB_PNG_UP);
-
-	//	m_BtnDown.Create(_T(""), WS_CHILD | WS_VISIBLE, recDown, this, IDC_BUTTON_VIEW_DOWN);
-	//	m_BtnDown.SetImage(IDB_PNG_DOWN);
-
-	//	m_BtnCenter.Create(_T(""), WS_CHILD | WS_VISIBLE, recCenter, this, IDC_BUTTON_VIEW_DOWN);
-	//	m_BtnCenter.SetImage(IDB_PNG_CENTER);
-	//}
-	//else
-	//{
-	//	m_BtnLeft.MoveWindow(recLeft);
-	//	m_BtnRight.MoveWindow(recRight);
-	//	m_BtnFront.MoveWindow(recFront);
-	//	m_BtnBack.MoveWindow(recBack);
-	//	m_BtnUp.MoveWindow(recUp);
-	//	m_BtnDown.MoveWindow(recDown);
-	//	m_BtnCenter.MoveWindow(recCenter);
-	//}
-
-	//CPoint points[3];
-
-	//CRect rcClient;
-	//GetClientRect(&rcClient);
-	//int cx = rcClient.Width() / 2;
-	//int cy = rcClient.Height() / 2;
-
-	//CRect rcShape(cx - SZ, cy - SZ, cx + SZ, cy + SZ);
-	//CBrush brush(m_clrColors[m_nColor]);
-	//CBrush* pOldBrush = dc.SelectObject(&brush);
-	//switch (m_nShape)
-	//{
-	//	case 0:
-	//		dc.Ellipse(rcShape);
-	//		break;
-	//	case 1:
-	//		points[0].x = cx - SZ;
-	//		points[0].y = cy + SZ;
-	//		points[1].x = cx;
-	//		points[1].y = cy - SZ;
-	//		points[2].x = cx + SZ;
-	//		points[2].y = cy + SZ;
-	//		dc.Polygon(points, 3);
-	//		break;
-	//	case 2:
-	//		dc.Rectangle(rcShape);
-	//		break;
-	//}
-	//dc.SelectObject(pOldBrush);
 }
 
 int HF_ChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -189,52 +69,30 @@ void HF_ChildView::OnButtonViewLeft()
 {
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::ERR, _T("Move Left"));
-
-	m_cnt++;
-
-	m_Clor = RGB(255,255,0);
-
-	Invalidate();
 }
 
 void HF_ChildView::OnButtonViewRight()
 {
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::INFO, _T("Move Right"));
-
-	m_Clor = RGB(0, 255, 255);
-
-	Invalidate();
 }
 
 void HF_ChildView::OnButtonViewUp()
 {
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::WARN, _T("Move Up"));
-
-	m_Clor = RGB(0, 0, 255);
-
-	Invalidate();
 }
 
 void HF_ChildView::OnButtonViewFront()
 {
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::INFO, _T("Move Front"));
-
-	m_Clor = RGB(255, 0, 255);
-
-	Invalidate();
 }
 
 void HF_ChildView::OnButtonViewDown()
 {
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::ERR, _T("Move Down"));
-
-	m_Clor = RGB(127, 0, 213);
-
-	Invalidate();
 }
 
 void HF_ChildView::OnButtonViewBack()
@@ -327,19 +185,16 @@ void HF_ChildView::OnSize(UINT nType, int cx, int cy)
 	CWnd::OnSize(nType, cx, cy);
 }
 
-LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
+void HF_ChildView::DrawCtrls()
 {
-	HFST::RendererD2D renderer(*this);
-	renderer.Initialize(m_cnt, m_Clor);
-
 	CRect rect;
 	GetClientRect(&rect);
 
-	constexpr int WIDTH = 180;
+	constexpr int WIDTH = 160;
 	constexpr int BTN_WIDTH = 40;
-	constexpr int GAP = 10;
+	constexpr int GAP = 5;
 	int nCenterX = rect.right - WIDTH / 2;
-	int nCenterY = rect.bottom - WIDTH / 2;
+	int nCenterY = rect.bottom - WIDTH / 2 + 20;
 
 	CRect recLeft(
 		nCenterX - BTN_WIDTH / 2 - BTN_WIDTH,	// left
@@ -455,5 +310,60 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	dc.SelectObject(pOldBrush);
+
+
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+	pMainWnd->Log(LogType::INFO, _T("OnDraw"));
+}
+
+LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
+{
+	CRect rect;
+	GetClientRect(&rect);
+
+	HFST::RendererD2D renderer(*this);
+	renderer.DrawBgColor( D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f) );
+
+	constexpr int OFFSET = 100;
+	renderer.DrawTpArea(
+		CD2DRectF( float(rect.left + OFFSET), float(rect.top + OFFSET), float(rect.right - OFFSET), float(rect.bottom - OFFSET)),
+		D2D1::ColorF(0.0f, 0.0f, 0.0f, 1.0f),
+		D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f),
+		m_nGap * m_fRatio
+	);
+
+	renderer.DrawLine(CD2DPointF(float(rect.left + 150), float(rect.top + 150)), 
+		CD2DPointF(float(rect.right - 150), float(rect.bottom - 150)), D2D1::ColorF::Red, 1.0f, 50.0f);
+
+	DrawCtrls();
+	
 	return TRUE;
+}
+
+BOOL HF_ChildView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	if (zDelta > 0)
+	{
+		m_fRatio += 0.1;
+	}
+	else
+	{
+		m_fRatio -= 0.1;
+	}
+
+	if (m_fRatio <= 0.1f)
+	{
+		m_fRatio = 0.1f;
+	}
+
+	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+
+	CString strText;
+	strText.Format( _T("gap = %.2f"), m_nGap * m_fRatio );
+
+	pMainWnd->Log(LogType::INFO, strText);
+
+	Invalidate();
+
+	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
 }

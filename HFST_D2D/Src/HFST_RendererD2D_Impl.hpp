@@ -11,7 +11,11 @@ namespace HFST
         explicit RendererD2D_Impl( CWnd& pWnd );
         ~RendererD2D_Impl();
 
-        void DrawAxis(int Count, COLORREF Color);
+        void DrawTpArea(const CD2DRectF& rect, const D2D1::ColorF& bgColor, const D2D1::ColorF& gridColor, float gap);
+        void DrawBgColor(const D2D1::ColorF& bgColor);
+
+        void DrawLine( const CD2DPointF& start, const CD2DPointF& end, const D2D1::ColorF& color, float opacity, float line_width);
+        void DrawRect( const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width );
     private:
         CWnd& m_pWnd;
     };

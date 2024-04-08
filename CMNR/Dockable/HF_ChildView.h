@@ -39,7 +39,11 @@ protected:
 	afx_msg void	OnColorUI(CCmdUI* pCmd);
 	afx_msg void	OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnDraw2D(WPARAM wParam, LPARAM lParam);
+	afx_msg BOOL	OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	DECLARE_MESSAGE_MAP()
+
+private:
+	void DrawCtrls();
 
 private:
 	CFont		m_Font;
@@ -60,8 +64,10 @@ private:
 	UINT		m_nColor{0};
 	UINT		m_nShape{0};
 
-	int m_cnt{0};
-	COLORREF m_Clor{ RGB(255,255,255) };
+	COLORREF	m_Color{ RGB(255,255,255) };
+
+	float		m_nGap{ 25.0f };
+	float		m_fRatio = 1.0f;
 };
 
 #endif //__HF_CHILD_VIEW_H__

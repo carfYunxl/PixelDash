@@ -30,14 +30,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
@@ -45,14 +45,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
@@ -104,7 +104,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +142,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,7 +161,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\Dependency\include\;$(SolutionDir)$(ProjectName)\Core\;$(SolutionDir)$(ProjectName)\src\;$(SolutionDir)$(ProjectName)\;$(SolutionDir)$(ProjectName)\src\CommandIO;$(SolutionDir)$(ProjectName)\src\RawData;$(SolutionDir)$(ProjectName)\src\Connector;$(SolutionDir)$(ProjectName)\src\UI;$(SolutionDir)$(ProjectName)\src\Canvas;$(SolutionDir)$(ProjectName)\src\Flash;$(SolutionDir)$(ProjectName)\src\Core;$(SolutionDir)$(ProjectName)\src\DLL;$(SolutionDir)$(ProjectName)\src\Connector\Bridge;$(SolutionDir)$(ProjectName)\src\Connector\IC</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
