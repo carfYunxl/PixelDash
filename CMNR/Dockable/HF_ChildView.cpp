@@ -344,11 +344,11 @@ BOOL HF_ChildView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	if (zDelta > 0)
 	{
-		m_fRatio += 0.1;
+		m_fRatio += 0.1f;
 	}
 	else
 	{
-		m_fRatio -= 0.1;
+		m_fRatio -= 0.1f;
 	}
 
 	if (m_fRatio <= 0.1f)

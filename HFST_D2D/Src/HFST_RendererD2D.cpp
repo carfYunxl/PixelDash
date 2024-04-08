@@ -33,4 +33,20 @@ namespace HFST
     {
         m_Impl->DrawRect( rect, line_Color, line_width );
     }
+
+    void RendererD2D::DrawRoundRect(const CD2DRectF& rect,
+        const D2D1::ColorF& line_Color, float line_width, float radius)
+    {
+        m_Impl->DrawRoundRect(rect, line_Color, line_width, radius);
+    }
+
+    void RendererD2D::DrawCircle(const CD2DPointF& center, const D2D1::ColorF& color, float radius)
+    {
+        m_Impl->DrawCircle( center, color, radius );
+    }
+
+    void RendererD2D::DrawEllipse(const CD2DPointF& center, const D2D1::ColorF& color, float radiusX, float radiusY)
+    {
+        m_Impl->DrawEllipse( center, color, radiusX, radiusY );
+    }
 }

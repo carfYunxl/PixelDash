@@ -149,7 +149,46 @@ void HF_PropertiesWnd::InitPropList()
 	m_wndPropList.MarkModifiedProperties();
 	m_wndPropList.SetDescriptionRows(1);
 
+	AddDefaultProperty();
+	
+}
 
+void HF_PropertiesWnd::OnSetFocus(CWnd* pOldWnd)
+{
+	CDockablePane::OnSetFocus(pOldWnd);
+	m_wndPropList.SetFocus();
+}
+
+void HF_PropertiesWnd::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
+{
+	CDockablePane::OnSettingChange(uFlags, lpszSection);
+	SetPropListFont();
+}
+
+void HF_PropertiesWnd::SetPropListFont()
+{
+	::DeleteObject(m_fntPropList.Detach());
+
+	LOGFONT lf;
+	afxGlobalData.fontRegular.GetLogFont(&lf);
+
+	NONCLIENTMETRICS info;
+	info.cbSize = sizeof(info);
+
+	afxGlobalData.GetNonClientMetrics(info);
+
+	lf.lfHeight = info.lfMenuFont.lfHeight;
+	lf.lfWeight = info.lfMenuFont.lfWeight;
+	lf.lfItalic = info.lfMenuFont.lfItalic;
+
+	m_fntPropList.CreateFontIndirect(&lf);
+
+	m_wndPropList.SetFont(&m_fntPropList);
+	m_wndObjectCombo.SetFont(&m_fntPropList);
+}
+
+void HF_PropertiesWnd::AddDefaultProperty()
+{
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("外观"));
 
 	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("三维外观"), (_variant_t)false, _T("指定窗口的字体不使用粗体，并且控件将使用三维边框")));
@@ -224,36 +263,22 @@ void HF_PropertiesWnd::InitPropList()
 	m_wndPropList.AddProperty(pGroup4);
 }
 
-void HF_PropertiesWnd::OnSetFocus(CWnd* pOldWnd)
+void HF_PropertiesWnd::AddLineProperty()
 {
-	CDockablePane::OnSetFocus(pOldWnd);
-	m_wndPropList.SetFocus();
-}
+	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Position"));
 
-void HF_PropertiesWnd::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
-{
-	CDockablePane::OnSettingChange(uFlags, lpszSection);
-	SetPropListFont();
-}
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("X"), (_variant_t)200, _T("X坐标")));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Y"), (_variant_t)200, _T("Y坐标")));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Rotate"), (_variant_t)0, _T("Y坐标")));
+	m_wndPropList.AddProperty(pGroup1);
 
-void HF_PropertiesWnd::SetPropListFont()
-{
-	::DeleteObject(m_fntPropList.Detach());
-
-	LOGFONT lf;
-	afxGlobalData.fontRegular.GetLogFont(&lf);
-
-	NONCLIENTMETRICS info;
-	info.cbSize = sizeof(info);
-
-	afxGlobalData.GetNonClientMetrics(info);
-
-	lf.lfHeight = info.lfMenuFont.lfHeight;
-	lf.lfWeight = info.lfMenuFont.lfWeight;
-	lf.lfItalic = info.lfMenuFont.lfItalic;
-
-	m_fntPropList.CreateFontIndirect(&lf);
-
-	m_wndPropList.SetFont(&m_fntPropList);
-	m_wndObjectCombo.SetFont(&m_fntPropList);
+	CMFCPropertyGridProperty* pGroup2 = new CMFCPropertyGridProperty(_T("Line Property"));
+	CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("线型"), _T("实线"), _T("线型"));
+	pProp->AddOption(_T("实线"));
+	pProp->AddOption(_T("虚线"));
+	pProp->AddOption(_T("点划线"));
+	pProp->AddOption(_T("双点划线"));
+	pGroup2->AddSubItem(pProp);
+	pGroup2->AddSubItem(new CMFCPropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细")));
+	m_wndPropList.AddProperty(pGroup2);
 }

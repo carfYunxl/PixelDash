@@ -20,6 +20,9 @@ namespace HFST
 
         void DrawLine(const CD2DPointF& start, const CD2DPointF& end, D2D1::ColorF color, float opacity = 1.0f, float line_width = 1.0f);
         void DrawRect(const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width);
+        void DrawRoundRect(const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width, float radius);
+        void DrawCircle(const CD2DPointF& center, const D2D1::ColorF& color, float radius);
+        void DrawEllipse(const CD2DPointF& center, const D2D1::ColorF& color, float radiusX, float radiusY);
     private:
         std::unique_ptr<RendererD2D_Impl> m_Impl;
     };

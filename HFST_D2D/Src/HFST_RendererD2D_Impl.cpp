@@ -103,4 +103,40 @@ namespace HFST
         CD2DSolidColorBrush brush( pRenderTarget, D2D1::ColorF(line_Color) );
         pRenderTarget->DrawRectangle( rect, &brush, line_width );
     }
+
+    void RendererD2D_Impl::DrawRoundRect(const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width, float radius)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(line_Color));
+
+        CD2DRoundedRect rectRound(rect, CD2DSizeF(radius, radius));
+        pRenderTarget->DrawRoundedRectangle( rectRound, &brush, line_width );
+    }
+
+    void RendererD2D_Impl::DrawCircle( const CD2DPointF& center, const D2D1::ColorF& color, float radius)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color));
+
+        CD2DEllipse ellipse(center, CD2DSizeF(radius, radius));
+
+        pRenderTarget->DrawEllipse( ellipse, &brush );
+    }
+
+    void RendererD2D_Impl::DrawEllipse(const CD2DPointF& center, const D2D1::ColorF& color, float radiusX, float radiusY)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color));
+
+        CD2DEllipse ellipse( center, CD2DSizeF( radiusX, radiusY ) );
+
+        pRenderTarget->DrawEllipse( ellipse, &brush );
+    }
 }

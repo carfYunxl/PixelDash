@@ -98,6 +98,7 @@
 #define IDR_PROPERTIES                  1125
 #define IDB_PROPERTIES_HC               1126
 #define ID_VIEW_PROPERTIESWND           1127
+#define IDC_TEST_VIEW_TREE              1128
 #define ID_Menu                         32776
 #define ID_BUTTON_CON                   32777
 #define ID_BUTTON_DISCON                32778

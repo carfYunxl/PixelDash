@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "HF_mainfrm.h"
 #include "HF_TestView.h"
+#include "HF_PropertiesWnd.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -24,6 +25,7 @@ BEGIN_MESSAGE_MAP(HF_TestView, CDockablePane)
 	ON_COMMAND(ID_EDIT_CLEAR, OnEditClear)
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
+	ON_NOTIFY(TVN_SELCHANGED, IDC_TEST_VIEW_TREE, &HF_TestView::OnTvnSelchangedTree)
 END_MESSAGE_MAP()
 
 int HF_TestView::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -36,7 +38,7 @@ int HF_TestView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS;
 
-	if (!m_wndTestView.Create(dwViewStyle, rectDummy, this, 4))
+	if (!m_wndTestView.Create(dwViewStyle, rectDummy, this, IDC_TEST_VIEW_TREE))
 	{
 		TRACE0("未能创建文件视图\n");
 		return -1;      // 未能创建
@@ -75,60 +77,26 @@ void HF_TestView::OnSize(UINT nType, int cx, int cy)
 
 void HF_TestView::FillFileView()
 {
-	HTREEITEM hRoot = m_wndTestView.InsertItem(_T("测试选项"), 0, 0);
+	HTREEITEM hRoot = m_wndTestView.InsertItem(_T("图形"), 0, 0);
 	m_wndTestView.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
 
-	HTREEITEM line = m_wndTestView.InsertItem(_T("线性度"), 1, 1, hRoot);
+	HTREEITEM hBasic = m_wndTestView.InsertItem(_T("基本图形"), 1, 1, hRoot);
+	m_wndTestView.InsertItem(	_T("直线"),		1, 1, hBasic	);
+	m_wndTestView.InsertItem(	_T("矩形"),		2, 2, hBasic	);
+	m_wndTestView.InsertItem(	_T("三角形"),	3, 3, hBasic	);
+	m_wndTestView.InsertItem(	_T("圆形"),		4, 4, hBasic	);
+	m_wndTestView.InsertItem(	_T("椭圆"),		5, 5, hBasic	);
 
-	m_wndTestView.InsertItem(_T("直线"),		0, 1, line);
-	m_wndTestView.InsertItem(_T("米字型"),	1, 1, line);
-	m_wndTestView.InsertItem(_T("圆形"),		2, 1, line);
-	m_wndTestView.InsertItem(_T("口字形"),	3, 1, line);
-	m_wndTestView.InsertItem(_T("回字形"),	4, 1, line);
-	m_wndTestView.InsertItem(_T("螺旋"),		5, 1, line);
+	HTREEITEM hUserDefine = m_wndTestView.InsertItem(_T("自定义图形"), 2, 2, hRoot);
+	m_wndTestView.InsertItem(	_T("米字形"),		1, 1, hUserDefine	);
+	m_wndTestView.InsertItem(	_T("口字形"),		2, 2, hUserDefine	);
+	m_wndTestView.InsertItem(	_T("回字形"),		3, 3, hUserDefine	);
+	m_wndTestView.InsertItem(	_T("螺旋形"),		4, 4, hUserDefine	);
+	m_wndTestView.InsertItem(	_T("X字形"),			5, 5, hUserDefine	);
 
-	HTREEITEM accuracy = m_wndTestView.InsertItem(_T("精准度"), 2, 2, hRoot);
-
-	m_wndTestView.InsertItem(_T("直线"),		0, 2, accuracy);
-	m_wndTestView.InsertItem(_T("米字型"),	1, 2, accuracy);
-	m_wndTestView.InsertItem(_T("圆形"),		2, 2, accuracy);
-	m_wndTestView.InsertItem(_T("口字形"),	3, 2, accuracy);
-	m_wndTestView.InsertItem(_T("回字形"),	4, 2, accuracy);
-	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, accuracy);
-
-	HTREEITEM jump = m_wndTestView.InsertItem(_T("抖动性"), 3, 3, hRoot);
-
-	m_wndTestView.InsertItem(_T("直线"),		0, 2, jump);
-	m_wndTestView.InsertItem(_T("米字型"),	1, 2, jump);
-	m_wndTestView.InsertItem(_T("圆形"),		2, 2, jump);
-	m_wndTestView.InsertItem(_T("口字形"),	3, 2, jump);
-	m_wndTestView.InsertItem(_T("回字形"),	4, 2, jump);
-	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, jump);
-
-	HTREEITEM cute = m_wndTestView.InsertItem(_T("灵敏度"), 4, 4, hRoot);
-
-	m_wndTestView.InsertItem(_T("直线"),		0, 2, cute);
-	m_wndTestView.InsertItem(_T("米字型"),	1, 2, cute);
-	m_wndTestView.InsertItem(_T("圆形"),		2, 2, cute);
-	m_wndTestView.InsertItem(_T("口字形"),	3, 2, cute);
-	m_wndTestView.InsertItem(_T("回字形"),	4, 2, cute);
-	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, cute);
-
-	HTREEITEM snr = m_wndTestView.InsertItem(_T("信噪比"), 5, 5, hRoot);
-
-	m_wndTestView.InsertItem(_T("直线"),		0, 2, snr);
-	m_wndTestView.InsertItem(_T("米字型"),	1, 2, snr);
-	m_wndTestView.InsertItem(_T("圆形"),		2, 2, snr);
-	m_wndTestView.InsertItem(_T("口字形"),	3, 2, snr);
-	m_wndTestView.InsertItem(_T("回字形"),	4, 2, snr);
-	m_wndTestView.InsertItem(_T("螺旋"),		5, 2, snr);
-
-	m_wndTestView.Expand(hRoot, TVE_EXPAND);
-	m_wndTestView.Expand(line, TVE_EXPAND);
-	m_wndTestView.Expand(accuracy, TVE_EXPAND);
-	m_wndTestView.Expand(jump, TVE_EXPAND);
-	m_wndTestView.Expand(cute, TVE_EXPAND);
-	m_wndTestView.Expand(snr, TVE_EXPAND);
+	m_wndTestView.Expand( hRoot, TVE_EXPAND );
+	m_wndTestView.Expand( hBasic, TVE_EXPAND );
+	m_wndTestView.Expand( hUserDefine, TVE_EXPAND );
 
 	GetStockObject(NULL_BRUSH);
 }
@@ -267,4 +235,41 @@ void HF_TestView::OnChangeVisualStyle()
 	m_FileViewImages.Add(&bmp, RGB(255, 0, 255));
 
 	m_wndTestView.SetImageList(&m_FileViewImages, TVSIL_NORMAL);
+}
+
+void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+
+	if ( m_pWndProperty && m_pWndProperty->m_hWnd != NULL )
+	{
+		CString strSelectItem = m_wndTestView.GetItemText( pNMTreeView->itemNew.hItem );
+
+		int index = GetIndexByTitle(strSelectItem);
+		if (index == -1)
+			return;
+
+		m_pWndProperty->GetPropertyCtrl().RemoveAll();
+
+		switch ( index )
+		{
+			case 0:
+				m_pWndProperty->AddLineProperty();
+				break;
+		}
+	}
+	
+	*pResult = 0;
+}
+
+int HF_TestView::GetIndexByTitle(const CString& title)
+{
+	auto item = std::find_if(m_sShapeMap.cbegin(), m_sShapeMap.cend(), [&](const std::pair<const CString, int>& pair) {
+			return title == pair.first;
+		});
+
+	if ( item != m_sShapeMap.cend() )
+		return (*item).second;
+
+	return -1;
 }

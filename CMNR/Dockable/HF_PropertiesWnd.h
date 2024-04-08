@@ -28,6 +28,11 @@ public:
 		m_wndPropList.SetGroupNameFullWidth(bSet);
 	}
 
+	CMFCPropertyGridCtrl& GetPropertyCtrl() { return m_wndPropList; }
+
+	void AddDefaultProperty();
+	void AddLineProperty();
+
 protected:
 	CFont					m_fntPropList;
 	CComboBox				m_wndObjectCombo;
@@ -56,7 +61,7 @@ protected:
 
 	void InitPropList();
 	void SetPropListFont();
-
+private:
 	int m_nComboHeight;
 };
 
