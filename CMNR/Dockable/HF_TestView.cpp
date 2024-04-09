@@ -127,7 +127,6 @@ void HF_TestView::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 
 	pWndTree->SetFocus();
-	//theApp.GetContextMenuManager()->ShowPopupMenu(134, point.x, point.y, this, TRUE);
 }
 
 void HF_TestView::AdjustLayout()
@@ -245,15 +244,17 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 	{
 		CString strSelectItem = m_wndTestView.GetItemText( pNMTreeView->itemNew.hItem );
 
-		int index = GetIndexByTitle(strSelectItem);
-		if (index == -1)
+		DRAW_TYPE type = GetIndexByTitle(strSelectItem);
+		if ( type == DRAW_TYPE::NONE )
 			return;
+
+		m_pMainView->SetDrawType( type );
 
 		m_pWndProperty->GetPropertyCtrl().RemoveAll();
 
-		switch ( index )
+		switch ( type )
 		{
-			case 0:
+			case DRAW_TYPE::LINE:
 				m_pWndProperty->AddLineProperty();
 				break;
 		}
@@ -262,14 +263,14 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-int HF_TestView::GetIndexByTitle(const CString& title)
+DRAW_TYPE HF_TestView::GetIndexByTitle(const CString& title)
 {
-	auto item = std::find_if(m_sShapeMap.cbegin(), m_sShapeMap.cend(), [&](const std::pair<const CString, int>& pair) {
+	auto item = std::find_if(m_sShapeMap.cbegin(), m_sShapeMap.cend(), [&](const std::pair<const CString, DRAW_TYPE>& pair) {
 			return title == pair.first;
 		});
 
 	if ( item != m_sShapeMap.cend() )
 		return (*item).second;
 
-	return -1;
+	return DRAW_TYPE::NONE;
 }

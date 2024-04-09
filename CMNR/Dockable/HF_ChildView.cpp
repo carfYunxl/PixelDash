@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(HF_ChildView, CWnd)
 	ON_WM_SIZE()
 	ON_REGISTERED_MESSAGE(AFX_WM_DRAW2D, &HF_ChildView::OnDraw2D)
 	ON_WM_MOUSEWHEEL()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 BOOL HF_ChildView::PreCreateWindow(CREATESTRUCT& cs)
@@ -332,8 +333,13 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 		m_nGap * m_fRatio
 	);
 
-	renderer.DrawLine(CD2DPointF(float(rect.left + 150), float(rect.top + 150)), 
-		CD2DPointF(float(rect.right - 150), float(rect.bottom - 150)), D2D1::ColorF::Red, 1.0f, 50.0f);
+	/*for ( const auto& line : lines )
+	{
+		renderer.DrawLine(CD2DPointF(startX, startY),
+			CD2DPointF(endX, endY), D2D1::ColorF::Red, 1.0f, 50.0f);
+	}*/
+	renderer.DrawLine(CD2DPointF(startX, startY),
+		CD2DPointF(endX, endY), D2D1::ColorF::Red, 1.0f, 50.0f);
 
 	DrawCtrls();
 	
@@ -366,4 +372,54 @@ BOOL HF_ChildView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	Invalidate();
 
 	return CWnd::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+void HF_ChildView::SetPropertyValue(int id, COleVariant value)
+{
+	switch (m_emDrawType)
+	{
+		case DRAW_TYPE::LINE:
+		{
+			AssignLineProperty( id, value );
+			break;
+		}
+	}
+
+	Invalidate();
+}
+
+void HF_ChildView::AssignLineProperty(int id, COleVariant value)
+{
+	HF_PropertiesWnd::LINE pro = static_cast<HF_PropertiesWnd::LINE>(id);
+	switch (pro)
+	{
+		case HF_PropertiesWnd::LINE::START_X:
+		{
+			startX = value.fltVal;
+			break;
+		}
+		case HF_PropertiesWnd::LINE::START_Y:
+		{
+			startY = value.fltVal;
+			break;
+		}
+		case HF_PropertiesWnd::LINE::END_X:
+		{
+			endX = value.fltVal;
+			break;
+		}
+		case HF_PropertiesWnd::LINE::END_Y:
+		{
+			endY = value.fltVal;
+			break;
+		}
+	}
+}
+
+
+void HF_ChildView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// 在此处判断是否存在有支线处在选中状态
+
+	CWnd::OnLButtonDown(nFlags, point);
 }

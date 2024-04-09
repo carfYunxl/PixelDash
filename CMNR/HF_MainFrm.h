@@ -32,11 +32,11 @@ public:
 #endif
 
 	CMFCMenuBar       m_wndMenuBar;
+	HF_ChildView	  m_wndView;
 protected:
 	CMFCToolBar       m_wndToolBar;
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
-	HF_ChildView	  m_wndView;
 	HF_TestView		  m_wndTestView;
 	HF_OutputWnd      m_wndOutput;
 

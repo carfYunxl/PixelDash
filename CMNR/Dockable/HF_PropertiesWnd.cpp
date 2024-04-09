@@ -2,6 +2,7 @@
 #include "HF_PropertiesWnd.h"
 #include "HF_MainFrm.h"
 #include "CMNR.h"
+#include "HF_ChildView.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -23,6 +24,7 @@ BEGIN_MESSAGE_MAP(HF_PropertiesWnd, CDockablePane)
 	ON_WM_SIZE()
 	ON_WM_SETFOCUS()
 	ON_WM_SETTINGCHANGE()
+	ON_REGISTERED_MESSAGE(AFX_WM_PROPERTY_CHANGED, &HF_PropertiesWnd::OnWmPropertyChanged)
 END_MESSAGE_MAP()
 
 void HF_PropertiesWnd::AdjustLayout()
@@ -267,18 +269,67 @@ void HF_PropertiesWnd::AddLineProperty()
 {
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Position"));
 
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("X"), (_variant_t)200, _T("X坐标")));
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Y"), (_variant_t)200, _T("Y坐标")));
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Rotate"), (_variant_t)0, _T("Y坐标")));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Start X"), (_variant_t)150.0f, _T("起点X坐标"),	static_cast<int>(LINE::START_X) ));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Start Y"), (_variant_t)150.0f, _T("起点Y坐标"),	static_cast<int>(LINE::START_Y) ));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("End X"),	(_variant_t)550.0f, _T("终点X坐标"),	static_cast<int>(LINE::END_X)   ));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("End Y"),	(_variant_t)550.0f, _T("终点Y坐标"),	static_cast<int>(LINE::END_Y)   ));
+	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Rotate"),	(_variant_t)0.0f,	_T("旋转角度"),	static_cast<int>(LINE::ROTATE)  ));
 	m_wndPropList.AddProperty(pGroup1);
 
 	CMFCPropertyGridProperty* pGroup2 = new CMFCPropertyGridProperty(_T("Line Property"));
-	CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("线型"), _T("实线"), _T("线型"));
+	CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("线型"), _T("实线"), _T("线型"), static_cast<int>(LINE::TYPE));
 	pProp->AddOption(_T("实线"));
 	pProp->AddOption(_T("虚线"));
 	pProp->AddOption(_T("点划线"));
 	pProp->AddOption(_T("双点划线"));
 	pGroup2->AddSubItem(pProp);
-	pGroup2->AddSubItem(new CMFCPropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细")));
+	pGroup2->AddSubItem(new CMFCPropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细"), static_cast<int>(LINE::WIDTH)));
 	m_wndPropList.AddProperty(pGroup2);
+}
+
+LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)
+{
+	CMFCPropertyGridProperty* pProp = (CMFCPropertyGridProperty*)lparam;
+	int pID = pProp->GetData();
+
+	CString str = pProp->GetName();
+	COleVariant i = pProp->GetValue();
+
+	//below is the code to change COleVariant to other variable type
+	LPVARIANT pVar = (LPVARIANT)i;
+	int x;
+	short y;
+	double d;
+	float f;
+	bool status;
+	CString str1;
+	switch (pVar->vt)
+	{
+		case VT_I2:    // short
+			y = pVar->iVal;
+			break;
+		case VT_I4:     // int
+			x = pVar->lVal;
+			break;
+		case VT_R4:    // float
+			f = pVar->fltVal;
+			break;
+		case VT_R8:    // double
+			d = pVar->dblVal;
+			break;
+		case VT_INT:
+			x = pVar->lVal;
+			break;
+		case VT_BOOL:
+			status = pVar->boolVal;
+			break;
+		case VT_BSTR:
+			str1 = pVar->bstrVal;
+			break;
+			// etc.
+	}
+
+	m_pMainView->SetPropertyValue(pID, i);
+
+	return 0;
 }

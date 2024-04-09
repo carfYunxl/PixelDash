@@ -2,6 +2,7 @@
 #define __HF_FILE_VIEW_H__
 
 #include "HF_ViewTree.h"
+#include "HF_Header.h"
 #include <map>
 
 class HF_PropertiesWnd;
@@ -19,18 +20,17 @@ class HF_TestViewToolBar : public CMFCToolBar
 class HF_TestView : public CDockablePane
 {
 public:
-
-	inline static std::map<const CString, int> m_sShapeMap{
-		{ _T("直线"),	0},
-		{ _T("矩形"),	1},
-		{ _T("三角形"),	2},
-		{ _T("圆形"),	3},
-		{ _T("椭圆"),	4},
-		{ _T("米字形"),	5},
-		{ _T("口字形"),	6},
-		{ _T("回字形"),	7},
-		{ _T("螺旋形"),	8},
-		{ _T("字形"),	9},
+	inline static std::map<const CString, DRAW_TYPE> m_sShapeMap{
+		{ _T("直线"),	DRAW_TYPE::LINE},
+		{ _T("矩形"),	DRAW_TYPE::RECTANGLE},
+		{ _T("三角形"),	DRAW_TYPE::TRIANGLE},
+		{ _T("圆形"),	DRAW_TYPE::CIRCLE},
+		{ _T("椭圆"),	DRAW_TYPE::ELLIPSE},
+		{ _T("米字形"),	DRAW_TYPE::MI},
+		{ _T("口字形"),	DRAW_TYPE::KOU},
+		{ _T("回字形"),	DRAW_TYPE::HUI},
+		{ _T("螺旋形"),	DRAW_TYPE::LUO},
+		{ _T("字形"),	DRAW_TYPE::X}
 	};
 
 	HF_TestView() noexcept;
@@ -39,6 +39,10 @@ public:
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 	void SetPropertyWnd(HF_PropertiesWnd* pWndProperty) { m_pWndProperty = pWndProperty; }
+
+	void SetMainView(HF_ChildView* pMainView) {
+		m_pMainView = pMainView;
+	}
 protected:
 
 	CViewTree			m_wndTestView;
@@ -66,9 +70,10 @@ protected:
 	void FillFileView();
 
 private:
-	int GetIndexByTitle(const CString& title);
+	DRAW_TYPE GetIndexByTitle(const CString& title);
 private:
-	HF_PropertiesWnd* m_pWndProperty{ nullptr };
+	HF_PropertiesWnd*	m_pWndProperty{ nullptr };
+	HF_ChildView*		m_pMainView{ nullptr };
 };
 
 #endif //__HF_FILE_VIEW_H__

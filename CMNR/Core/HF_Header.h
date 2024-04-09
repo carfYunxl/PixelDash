@@ -8,4 +8,19 @@ enum class LogType
 	ERR
 };
 
+enum class DRAW_TYPE
+{
+	NONE = -1,
+	LINE,
+	RECTANGLE,
+	TRIANGLE,
+	CIRCLE,
+	ELLIPSE,
+	MI,
+	KOU,
+	HUI,
+	LUO,
+	X
+};
+
 #endif //__HF_HEADER_HPP__

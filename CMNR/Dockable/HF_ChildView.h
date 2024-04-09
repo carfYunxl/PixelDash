@@ -2,6 +2,7 @@
 #define __HF_CHILD_VIEW_H__
 
 #include "HF_IcInfoDlg.h"
+#include "HF_Header.h"
 
 constexpr int SZ = 200;
 
@@ -22,6 +23,10 @@ public:
 	virtual			~HF_ChildView();
 	virtual BOOL	PreTranslateMessage(MSG* pMsg);
 
+	void SetDrawType(DRAW_TYPE type) { m_emDrawType = type; }
+	DRAW_TYPE GetDrawType() const { return m_emDrawType; }
+	
+	void SetPropertyValue(int id, COleVariant value);
 protected:
 	afx_msg void	OnPaint();
 	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -44,7 +49,7 @@ protected:
 
 private:
 	void DrawCtrls();
-
+	void AssignLineProperty(int id, COleVariant value);
 private:
 	CFont		m_Font;
 	CMFCButton	m_BtnLeft;
@@ -68,6 +73,15 @@ private:
 
 	float		m_nGap{ 25.0f };
 	float		m_fRatio = 1.0f;
+
+	DRAW_TYPE	m_emDrawType{ DRAW_TYPE::NONE };
+
+	float		startX{150.0f};
+	float		startY{150.0f};
+	float		endX{550.0f};
+	float		endY{550.0f};
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #endif //__HF_CHILD_VIEW_H__
