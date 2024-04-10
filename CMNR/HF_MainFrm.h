@@ -16,33 +16,20 @@ public:
 
 	HF_MainFrame() noexcept;
 	virtual ~HF_MainFrame();
-protected:
-	DECLARE_DYNAMIC(HF_MainFrame)
-
-	//CSplitterWnd m_wndSplitter;
-public:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = nullptr, CCreateContext* pContext = nullptr);
 
+protected:
+	DECLARE_DYNAMIC(HF_MainFrame)
+
+	//CSplitterWnd m_wndSplitter;
+public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-
-	CMFCMenuBar       m_wndMenuBar;
-	HF_ChildView	  m_wndView;
-protected:
-	CMFCToolBar       m_wndToolBar;
-	CMFCStatusBar     m_wndStatusBar;
-	CMFCToolBarImages m_UserImages;
-	HF_TestView		  m_wndTestView;
-	HF_OutputWnd      m_wndOutput;
-
-	CMFCToolBar       m_NewToolBar;
-	HF_PropertiesWnd  m_wndProperty;
-	CFont			  m_Font;
 protected:
 	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void	OnSetFocus(CWnd* pOldWnd);
@@ -67,7 +54,21 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	void Log(LogType type, const CString& message);
+
+public:
+	CMFCMenuBar       m_wndMenuBar;
+	HF_ChildView	  m_wndView;
+	HF_PropertiesWnd  m_wndProperty;
+	CMFCToolBar       m_wndToolBar;
+	CMFCStatusBar     m_wndStatusBar;
+	HF_OutputWnd      m_wndOutput;
+	HF_TestView		  m_wndTestView;
+
 private:
+	CMFCToolBarImages m_UserImages;
+	CMFCToolBar       m_NewToolBar;
+	CFont			  m_Font;
+
 	UINT m_nCurrentColor{0};
 };
 #endif //__HF_MAINFRAM_H__

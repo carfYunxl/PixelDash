@@ -139,10 +139,6 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndProperty);
 	DockPane(&m_wndTestView);
 
-	m_wndTestView.SetPropertyWnd(&m_wndProperty);
-	m_wndTestView.SetMainView(&m_wndView);
-	m_wndProperty.SetMainView(&m_wndView);
-
 	CDockingManager::SetDockingMode(DT_SMART);
 	EnableAutoHidePanes(CBRS_ALIGN_ANY);
 	//EnablePaneMenu(TRUE, ID_VIEW_CUSTOMIZE, strCustomize, ID_VIEW_TOOLBAR);

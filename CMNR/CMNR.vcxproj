@@ -238,7 +238,7 @@
     <ClInclude Include="Dockable\HF_ListBox.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HF_MainFrm.h" />
-    <ClInclude Include="HF_SettingDlg.h" />
+    <ClInclude Include="Dockable\HF_SettingDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -257,7 +257,7 @@
     <ClCompile Include="Dockable\HF_ViewTree.cpp" />
     <ClCompile Include="Dockable\HF_ListBox.cpp" />
     <ClCompile Include="HF_MainFrm.cpp" />
-    <ClCompile Include="HF_SettingDlg.cpp" />
+    <ClCompile Include="Dockable\HF_SettingDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

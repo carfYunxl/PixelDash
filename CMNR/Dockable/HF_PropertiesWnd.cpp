@@ -329,7 +329,7 @@ LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)
 			// etc.
 	}
 
-	m_pMainView->SetPropertyValue(pID, i);
+	((HF_MainFrame*)theApp.m_pMainWnd)->m_wndView.SetPropertyValue(pID, i);
 
 	return 0;
 }

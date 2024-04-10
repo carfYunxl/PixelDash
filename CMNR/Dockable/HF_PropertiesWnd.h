@@ -1,8 +1,6 @@
 ﻿#ifndef __HF_PROPERTIES_WND_H__
 #define __HF_PROPERTIES_WND_H__
 
-class HF_ChildView;
-
 class HF_PropertiesToolBar : public CMFCToolBar
 {
 public:
@@ -29,36 +27,15 @@ public:
 		WIDTH
 	};
 	HF_PropertiesWnd() noexcept;
-
+	virtual ~HF_PropertiesWnd();
+private:
 	void AdjustLayout();
-
-	// 特性
-public:
-	void SetVSDotNetLook(BOOL bSet)
-	{
+	void SetVSDotNetLook(BOOL bSet) {
 		m_wndPropList.SetVSDotNetLook(bSet);
 		m_wndPropList.SetGroupNameFullWidth(bSet);
 	}
-
-	CMFCPropertyGridCtrl& GetPropertyCtrl() { return m_wndPropList; }
-
-	void AddDefaultProperty();
-	void AddLineProperty();
-
-protected:
-	CFont					m_fntPropList;
-	CComboBox				m_wndObjectCombo;
-	HF_PropertiesToolBar	m_wndToolBar;
-	CMFCPropertyGridCtrl	m_wndPropList;
-
-	// 实现
-public:
-	virtual ~HF_PropertiesWnd();
-
-	void SetMainView(HF_ChildView* pMainView) {
-		m_pMainView = pMainView;
-	}
-
+	void InitPropList();
+	void SetPropListFont();
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -76,11 +53,16 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-	void InitPropList();
-	void SetPropListFont();
+public:
+	CMFCPropertyGridCtrl& GetPropertyCtrl() { return m_wndPropList; }
+	void AddDefaultProperty();
+	void AddLineProperty();
 private:
-	int m_nComboHeight;
-	HF_ChildView* m_pMainView{ nullptr };
+	CFont					m_fntPropList;
+	CComboBox				m_wndObjectCombo;
+	HF_PropertiesToolBar	m_wndToolBar;
+	CMFCPropertyGridCtrl	m_wndPropList;
+	int						m_nComboHeight;
 };
 
 #endif //__HF_PROPERTIES_WND_H__

@@ -30,7 +30,7 @@ public:
 		{ _T("口字形"),	DRAW_TYPE::KOU},
 		{ _T("回字形"),	DRAW_TYPE::HUI},
 		{ _T("螺旋形"),	DRAW_TYPE::LUO},
-		{ _T("字形"),	DRAW_TYPE::X}
+		{ _T("1000点"),	DRAW_TYPE::X}
 	};
 
 	HF_TestView() noexcept;
@@ -38,11 +38,6 @@ public:
 
 	void AdjustLayout();
 	void OnChangeVisualStyle();
-	void SetPropertyWnd(HF_PropertiesWnd* pWndProperty) { m_pWndProperty = pWndProperty; }
-
-	void SetMainView(HF_ChildView* pMainView) {
-		m_pMainView = pMainView;
-	}
 protected:
 
 	CViewTree			m_wndTestView;
@@ -72,8 +67,6 @@ protected:
 private:
 	DRAW_TYPE GetIndexByTitle(const CString& title);
 private:
-	HF_PropertiesWnd*	m_pWndProperty{ nullptr };
-	HF_ChildView*		m_pMainView{ nullptr };
 };
 
 #endif //__HF_FILE_VIEW_H__

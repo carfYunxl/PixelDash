@@ -92,7 +92,7 @@ void HF_TestView::FillFileView()
 	m_wndTestView.InsertItem(	_T("口字形"),		2, 2, hUserDefine	);
 	m_wndTestView.InsertItem(	_T("回字形"),		3, 3, hUserDefine	);
 	m_wndTestView.InsertItem(	_T("螺旋形"),		4, 4, hUserDefine	);
-	m_wndTestView.InsertItem(	_T("X字形"),			5, 5, hUserDefine	);
+	m_wndTestView.InsertItem(	_T("1000点"),		5, 5, hUserDefine	);
 
 	m_wndTestView.Expand( hRoot, TVE_EXPAND );
 	m_wndTestView.Expand( hBasic, TVE_EXPAND );
@@ -240,7 +240,8 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 
-	if ( m_pWndProperty && m_pWndProperty->m_hWnd != NULL )
+	HF_MainFrame* pWndFrame = (HF_MainFrame*)theApp.m_pMainWnd;
+	if ( pWndFrame )
 	{
 		CString strSelectItem = m_wndTestView.GetItemText( pNMTreeView->itemNew.hItem );
 
@@ -248,14 +249,13 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 		if ( type == DRAW_TYPE::NONE )
 			return;
 
-		m_pMainView->SetDrawType( type );
-
-		m_pWndProperty->GetPropertyCtrl().RemoveAll();
+		pWndFrame->m_wndView.SetDrawType(type);
+		pWndFrame->m_wndProperty.GetPropertyCtrl().RemoveAll();
 
 		switch ( type )
 		{
 			case DRAW_TYPE::LINE:
-				m_pWndProperty->AddLineProperty();
+				pWndFrame->m_wndProperty.AddLineProperty();
 				break;
 		}
 	}

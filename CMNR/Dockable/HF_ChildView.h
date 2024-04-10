@@ -45,6 +45,7 @@ protected:
 	afx_msg void	OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnDraw2D(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL	OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void	OnLButtonDown(UINT nFlags, CPoint point);
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -81,7 +82,6 @@ private:
 	float		endX{550.0f};
 	float		endY{550.0f};
 public:
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #endif //__HF_CHILD_VIEW_H__
