@@ -21,10 +21,10 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\HFST_RendererD2D.hpp">
+    <ClInclude Include="src\HFST_RendererD2D.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\HFST_RendererD2D_Impl.hpp">
+    <ClInclude Include="src\HFST_RendererD2D_Impl.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\HFST_RendererD2D.cpp">
+    <ClCompile Include="src\HFST_RendererD2D.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\HFST_RendererD2D_Impl.cpp">
+    <ClCompile Include="src\HFST_RendererD2D_Impl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
