@@ -6,6 +6,11 @@
 
 constexpr int SZ = 200;
 
+namespace HFST
+{
+	class RendererD2D;
+}
+
 class HF_ChildView : public CWnd
 {
 public:
@@ -52,6 +57,8 @@ private:
 	void DrawCtrls();
 	void AssignLineProperty(int id, COleVariant value);
 private:
+	std::unique_ptr<HFST::RendererD2D> m_pRender2D;
+
 	CFont		m_Font;
 	CMFCButton	m_BtnLeft;
 	CMFCButton	m_BtnRight;

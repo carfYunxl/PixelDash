@@ -48,7 +48,7 @@ int HF_TestView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_FileViewImages.Create(IDB_BITMAP_TREE_VIEW, 20, 0, RGB(255, 0, 255));
 	m_wndTestView.SetImageList(&m_FileViewImages, TVSIL_NORMAL);
 
-	m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, 134);
+	m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_TEST_VIEW_TOOL_BAR);
 	m_wndToolBar.LoadToolBar(IDR_MAINFRAME, 0, 0, TRUE);
 
 	OnChangeVisualStyle();

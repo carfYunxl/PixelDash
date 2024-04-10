@@ -295,7 +295,6 @@ LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)
 	CString str = pProp->GetName();
 	COleVariant i = pProp->GetValue();
 
-	//below is the code to change COleVariant to other variable type
 	LPVARIANT pVar = (LPVARIANT)i;
 	int x;
 	short y;

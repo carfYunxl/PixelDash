@@ -20,6 +20,7 @@
 #define IDR_MAINFRAME                   128
 #define IDR_MAINFRAME_256               129
 #define IDR_CMNRTYPE                    130
+#define IDR_TEST_VIEW_TOOL_BAR          134
 #define ID_VIEW_OUTPUTWND               149
 #define IDR_OUTPUT_POPUP                182
 #define IDS_EDIT_MENU                   306

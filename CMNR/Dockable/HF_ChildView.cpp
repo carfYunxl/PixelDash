@@ -10,7 +10,7 @@
 
 HF_ChildView::HF_ChildView()
 {
-	EnableD2DSupport();
+	m_pRender2D = std::make_unique<HFST::RendererD2D>(*this);
 }
 
 HF_ChildView::~HF_ChildView(){
@@ -322,11 +322,10 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 	CRect rect;
 	GetClientRect(&rect);
 
-	HFST::RendererD2D renderer(*this);
-	renderer.DrawBgColor( D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f) );
+	m_pRender2D->DrawBgColor( D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f) );
 
 	constexpr int OFFSET = 100;
-	renderer.DrawTpArea(
+	m_pRender2D->DrawTpArea(
 		CD2DRectF( float(rect.left + OFFSET), float(rect.top + OFFSET), float(rect.right - OFFSET), float(rect.bottom - OFFSET)),
 		D2D1::ColorF(0.0f, 0.0f, 0.0f, 1.0f),
 		D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f),
@@ -338,8 +337,12 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 		renderer.DrawLine(CD2DPointF(startX, startY),
 			CD2DPointF(endX, endY), D2D1::ColorF::Red, 1.0f, 50.0f);
 	}*/
-	renderer.DrawLine(CD2DPointF(startX, startY),
+	m_pRender2D->DrawLine(CD2DPointF(startX, startY),
 		CD2DPointF(endX, endY), D2D1::ColorF::Red, 1.0f, 50.0f);
+
+	m_pRender2D->DrawCircle(CD2DPointF(100,100), D2D1::ColorF::Green, 25);
+
+	m_pRender2D->DrawPoint(CD2DPointF(600, 200), D2D1::ColorF::Red, 25);
 
 	DrawCtrls();
 	
@@ -350,16 +353,16 @@ BOOL HF_ChildView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	if (zDelta > 0)
 	{
-		m_fRatio += 0.1f;
+		m_fRatio += 0.02f;
 	}
 	else
 	{
-		m_fRatio -= 0.1f;
+		m_fRatio -= 0.02f;
 	}
 
-	if (m_fRatio <= 0.1f)
+	if (m_fRatio <= 0.02f)
 	{
-		m_fRatio = 0.1f;
+		m_fRatio = 0.02f;
 	}
 
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;

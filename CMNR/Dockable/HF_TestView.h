@@ -67,6 +67,7 @@ protected:
 private:
 	DRAW_TYPE GetIndexByTitle(const CString& title);
 private:
+
 };
 
 #endif //__HF_FILE_VIEW_H__
