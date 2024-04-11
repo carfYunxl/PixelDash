@@ -5,7 +5,7 @@ namespace HFST
 {
     RendererD2D_Impl::RendererD2D_Impl( CWnd& pWnd )
         : m_pWnd(pWnd) {
-
+        pWnd.EnableD2DSupport();
     }
 
     RendererD2D_Impl::~RendererD2D_Impl() {
@@ -139,4 +139,57 @@ namespace HFST
 
         pRenderTarget->DrawEllipse( ellipse, &brush );
     }
+
+    void RendererD2D_Impl::FillRect(const CD2DRectF& rect, const D2D1::ColorF& color)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color));
+        pRenderTarget->FillRectangle(rect, &brush);
+    }
+
+    void RendererD2D_Impl::FillRoundRect(const CD2DRectF& rect, const D2D1::ColorF& color, float radius)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color));
+
+        CD2DRoundedRect rectRound(rect, CD2DSizeF(radius, radius));
+        pRenderTarget->FillRoundedRectangle(rectRound, &brush);
+    }
+
+    void RendererD2D_Impl::FillCircle(const CD2DPointF& center, const D2D1::ColorF& color, float radius)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color));
+
+        CD2DEllipse ellipse(center, CD2DSizeF(radius, radius));
+
+        pRenderTarget->FillEllipse(ellipse, &brush);
+    }
+
+    void RendererD2D_Impl::FillEllipse(const CD2DPointF& center, const D2D1::ColorF& color, float radiusX, float radiusY)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF(color));
+
+        CD2DEllipse ellipse(center, CD2DSizeF(radiusX, radiusY));
+
+        pRenderTarget->FillEllipse(ellipse, &brush);
+    }
+
+    void RendererD2D_Impl::DrawPoint(const CD2DPointF& pt, const D2D1::ColorF& color, float radius)
+    {
+        FillCircle(pt, color, radius);
+    }
+
+
 }
