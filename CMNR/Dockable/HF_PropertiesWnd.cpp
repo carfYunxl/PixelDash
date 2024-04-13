@@ -191,6 +191,7 @@ void HF_PropertiesWnd::SetPropListFont()
 
 void HF_PropertiesWnd::AddDefaultProperty()
 {
+#if 0
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("外观"));
 
 	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("三维外观"), (_variant_t)false, _T("指定窗口的字体不使用粗体，并且控件将使用三维边框")));
@@ -263,33 +264,43 @@ void HF_PropertiesWnd::AddDefaultProperty()
 
 	pGroup4->Expand(FALSE);
 	m_wndPropList.AddProperty(pGroup4);
-}
+#endif
 
-void HF_PropertiesWnd::AddLineProperty()
-{
-	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("Position"));
+	HF_PropertyGridProperty* pGroup1 = new HF_PropertyGridProperty(_T("Position"), static_cast<int>(LINE_GROUP::POSITION));
 
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Start X"), (_variant_t)150.0f, _T("起点X坐标"),	static_cast<int>(LINE::START_X) ));
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Start Y"), (_variant_t)150.0f, _T("起点Y坐标"),	static_cast<int>(LINE::START_Y) ));
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("End X"),	(_variant_t)550.0f, _T("终点X坐标"),	static_cast<int>(LINE::END_X)   ));
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("End Y"),	(_variant_t)550.0f, _T("终点Y坐标"),	static_cast<int>(LINE::END_Y)   ));
-	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("Rotate"),	(_variant_t)0.0f,	_T("旋转角度"),	static_cast<int>(LINE::ROTATE)  ));
 	m_wndPropList.AddProperty(pGroup1);
 
-	CMFCPropertyGridProperty* pGroup2 = new CMFCPropertyGridProperty(_T("Line Property"));
-	CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("线型"), _T("实线"), _T("线型"), static_cast<int>(LINE::TYPE));
+	HF_PropertyGridProperty* pGroup2 = new HF_PropertyGridProperty(_T("Style"), static_cast<int>(LINE_GROUP::STYLE));
+	m_wndPropList.AddProperty(pGroup2);
+}
+
+void HF_PropertiesWnd::AddStypeProperty()
+{
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::STYLE));
+	HF_PropertyGridProperty* pProp = new HF_PropertyGridProperty(_T("线型"), _T("实线"), _T("线型"), static_cast<int>(LINE::TYPE));
 	pProp->AddOption(_T("实线"));
 	pProp->AddOption(_T("虚线"));
 	pProp->AddOption(_T("点划线"));
 	pProp->AddOption(_T("双点划线"));
-	pGroup2->AddSubItem(pProp);
-	pGroup2->AddSubItem(new CMFCPropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细"), static_cast<int>(LINE::WIDTH)));
-	m_wndPropList.AddProperty(pGroup2);
+	pGroup->AddSubItem(pProp);
+	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细"), static_cast<int>(LINE::WIDTH)));
+}
+
+void HF_PropertiesWnd::AddPositionProperty()
+{
+	return;
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::POSITION));
+
+	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("Start X"), (_variant_t)150.0f, _T("起点X坐标"),	static_cast<int>(LINE::START_X) ));
+	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("Start Y"), (_variant_t)150.0f, _T("起点Y坐标"),	static_cast<int>(LINE::START_Y) ));
+	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("End X"),	(_variant_t)550.0f, _T("终点X坐标"),	static_cast<int>(LINE::END_X)   ));
+	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("End Y"),	(_variant_t)550.0f, _T("终点Y坐标"),	static_cast<int>(LINE::END_Y)   ));
+	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("Rotate"),	(_variant_t)0.0f,	_T("旋转角度"),	static_cast<int>(LINE::ROTATE)  ));
 }
 
 LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)
 {
-	CMFCPropertyGridProperty* pProp = (CMFCPropertyGridProperty*)lparam;
+	HF_PropertyGridProperty* pProp = (HF_PropertyGridProperty*)lparam;
 	int pID = pProp->GetData();
 
 	CString str = pProp->GetName();

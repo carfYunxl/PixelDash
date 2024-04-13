@@ -255,7 +255,7 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 		switch ( type )
 		{
 			case DRAW_TYPE::LINE:
-				pWndFrame->m_wndProperty.AddLineProperty();
+				pWndFrame->m_wndProperty.AddDefaultProperty();
 				break;
 		}
 	}

@@ -2,7 +2,7 @@
 #include "CMNR.h"
 #include "HF_ChildView.h"
 #include "HF_MainFrm.h"
-#include "HFST_RendererD2D.hpp"
+#include "HF_Components.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -10,7 +10,7 @@
 
 HF_ChildView::HF_ChildView()
 {
-	m_pRender2D = std::make_unique<HFST::RendererD2D>(*this);
+	m_pScene = std::make_unique<HF_Scene>(*this);
 }
 
 HF_ChildView::~HF_ChildView(){
@@ -322,27 +322,9 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 	CRect rect;
 	GetClientRect(&rect);
 
-	m_pRender2D->DrawBgColor( D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f) );
-
-	constexpr int OFFSET = 100;
-	m_pRender2D->DrawTpArea(
-		CD2DRectF( float(rect.left + OFFSET), float(rect.top + OFFSET), float(rect.right - OFFSET), float(rect.bottom - OFFSET)),
-		D2D1::ColorF(0.0f, 0.0f, 0.0f, 1.0f),
-		D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f),
-		m_nGap * m_fRatio
-	);
-
-	/*for ( const auto& line : lines )
-	{
-		renderer.DrawLine(CD2DPointF(startX, startY),
-			CD2DPointF(endX, endY), D2D1::ColorF::Red, 1.0f, 50.0f);
-	}*/
-	m_pRender2D->DrawLine(CD2DPointF(startX, startY),
-		CD2DPointF(endX, endY), D2D1::ColorF::Red, 1.0f, 50.0f);
-
-	m_pRender2D->DrawCircle(CD2DPointF(100,100), D2D1::ColorF::Green, 25);
-
-	m_pRender2D->DrawPoint(CD2DPointF(600, 200), D2D1::ColorF::Red, 25);
+	m_pScene->FillSceneBackground( D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f) );
+	m_pScene->CreateEntity(DRAW_TYPE::LINE);
+	m_pScene->OnDraw();
 
 	DrawCtrls();
 	

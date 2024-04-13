@@ -3,13 +3,8 @@
 
 #include "HF_IcInfoDlg.h"
 #include "HF_Header.h"
-
+#include "HF_Scene.hpp"
 constexpr int SZ = 200;
-
-namespace HFST
-{
-	class RendererD2D;
-}
 
 class HF_ChildView : public CWnd
 {
@@ -57,7 +52,7 @@ private:
 	void DrawCtrls();
 	void AssignLineProperty(int id, COleVariant value);
 private:
-	std::unique_ptr<HFST::RendererD2D> m_pRender2D;
+	std::unique_ptr<HF_Scene> m_pScene;
 
 	CFont		m_Font;
 	CMFCButton	m_BtnLeft;
