@@ -50,6 +50,8 @@ public:
 	entt::entity GetHandleID() const { return m_EntityHandle; }
 
 	bool isValid() const { return m_EntityHandle != entt::null; }
+
+	HF_Scene* GetScene() const { return m_Scene; }
 private:
 	entt::entity	m_EntityHandle{ entt::null };
 	HF_Scene*		m_Scene{ nullptr };

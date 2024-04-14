@@ -33,6 +33,18 @@ struct LineComponent
 	}
 };
 
+struct RectangleComponent
+{
+	CD2DPointF m_LeftTop{ 100.0f, 100.0f };
+	CD2DPointF m_RightBottom{ 400.0f, 400.0f };
+
+	RectangleComponent() = default;
+	RectangleComponent(const CD2DPointF& left_top, const CD2DPointF& right_bottom)
+		: m_LeftTop(left_top), m_RightBottom(right_bottom) {
+
+	}
+};
+
 struct PosComponent
 {
 	std::string Tag;

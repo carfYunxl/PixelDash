@@ -10,9 +10,7 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-HF_PropertiesWnd::HF_PropertiesWnd() noexcept
-{
-	m_nComboHeight = 0;
+HF_PropertiesWnd::HF_PropertiesWnd() noexcept {
 }
 
 HF_PropertiesWnd::~HF_PropertiesWnd()
@@ -39,9 +37,8 @@ void HF_PropertiesWnd::AdjustLayout()
 
 	int cyTlb = m_wndToolBar.CalcFixedLayout(FALSE, TRUE).cy;
 
-	m_wndObjectCombo.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), m_nComboHeight, SWP_NOACTIVATE | SWP_NOZORDER);
-	m_wndToolBar.SetWindowPos(nullptr, rectClient.left, rectClient.top + m_nComboHeight, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
-	m_wndPropList.SetWindowPos(nullptr, rectClient.left, rectClient.top + m_nComboHeight + cyTlb, rectClient.Width(), rectClient.Height() - (m_nComboHeight + cyTlb), SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndToolBar.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndPropList.SetWindowPos(nullptr, rectClient.left, rectClient.top + cyTlb, rectClient.Width(), rectClient.Height() - cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
 
 	RecalcLayout();
 }
@@ -56,21 +53,6 @@ int HF_PropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// 创建组合: 
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | WS_BORDER | CBS_SORT | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-
-	if (!m_wndObjectCombo.Create(dwViewStyle, rectDummy, this, 1))
-	{
-		TRACE0("未能创建属性组合 \n");
-		return -1;      // 未能创建
-	}
-
-	m_wndObjectCombo.AddString(_T("应用程序"));
-	m_wndObjectCombo.AddString(_T("属性窗口"));
-	m_wndObjectCombo.SetCurSel(0);
-
-	CRect rectCombo;
-	m_wndObjectCombo.GetClientRect(&rectCombo);
-
-	m_nComboHeight = rectCombo.Height();
 
 	if (!m_wndPropList.Create(WS_VISIBLE | WS_CHILD, rectDummy, this, 2))
 	{
@@ -186,7 +168,7 @@ void HF_PropertiesWnd::SetPropListFont()
 	m_fntPropList.CreateFontIndirect(&lf);
 
 	m_wndPropList.SetFont(&m_fntPropList);
-	m_wndObjectCombo.SetFont(&m_fntPropList);
+	//m_wndObjectCombo.SetFont(&m_fntPropList);
 }
 
 void HF_PropertiesWnd::AddDefaultProperty()
@@ -265,42 +247,87 @@ void HF_PropertiesWnd::AddDefaultProperty()
 	pGroup4->Expand(FALSE);
 	m_wndPropList.AddProperty(pGroup4);
 #endif
-
-	HF_PropertyGridProperty* pGroup1 = new HF_PropertyGridProperty(_T("Position"), static_cast<int>(LINE_GROUP::POSITION));
-
+	HF_PropertyGridProperty* pGroup1 = new HF_PropertyGridProperty(_T("位置"), static_cast<int>(LINE_GROUP::POSITION));
 	m_wndPropList.AddProperty(pGroup1);
 
-	HF_PropertyGridProperty* pGroup2 = new HF_PropertyGridProperty(_T("Style"), static_cast<int>(LINE_GROUP::STYLE));
+	HF_PropertyGridProperty* pGroup2 = new HF_PropertyGridProperty(_T("样式"), static_cast<int>(LINE_GROUP::STYLE));
 	m_wndPropList.AddProperty(pGroup2);
+
+	HF_PropertyGridProperty* pGroup3 = new HF_PropertyGridProperty(_T("线粗"), static_cast<int>(LINE_GROUP::LINE_WIDTH));
+	m_wndPropList.AddProperty(pGroup3);
+
+	HF_PropertyGridProperty* pGroup4 = new HF_PropertyGridProperty(_T("线型"), static_cast<int>(LINE_GROUP::LINE_STYLE));
+	m_wndPropList.AddProperty(pGroup4);
+
+	HF_PropertyGridProperty* pGroup5 = new HF_PropertyGridProperty(_T("边框颜色"), static_cast<int>(LINE_GROUP::LINE_COLOR));
+	m_wndPropList.AddProperty(pGroup5);
+
+	HF_PropertyGridProperty* pGroup6 = new HF_PropertyGridProperty(_T("填充颜色"), static_cast<int>(LINE_GROUP::FILL_color));
+	m_wndPropList.AddProperty(pGroup6);
 }
 
-void HF_PropertiesWnd::AddStypeProperty()
+void HF_PropertiesWnd::AddStyleProperty()
 {
 	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::STYLE));
-	HF_PropertyGridProperty* pProp = new HF_PropertyGridProperty(_T("线型"), _T("实线"), _T("线型"), static_cast<int>(LINE::TYPE));
-	pProp->AddOption(_T("实线"));
-	pProp->AddOption(_T("虚线"));
-	pProp->AddOption(_T("点划线"));
-	pProp->AddOption(_T("双点划线"));
-	pGroup->AddSubItem(pProp);
-	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细"), static_cast<int>(LINE::WIDTH)));
+
+	if (pGroup->GetSubItemsCount() == 0)
+	{
+		//CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("线型"), _T("实线"), _T("线型"), static_cast<int>(LINE::TYPE));
+		//pProp->AddOption(_T("实线"));
+		//pProp->AddOption(_T("虚线"));
+		//pProp->AddOption(_T("点划线"));
+		//pProp->AddOption(_T("双点划线"));
+		//pGroup->AddSubItem(pProp);
+		//pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细"), static_cast<int>(LINE::WIDTH)));
+	}
 }
 
-void HF_PropertiesWnd::AddPositionProperty()
+void HF_PropertiesWnd::AddLineProperty(HF_Entity entity)
 {
-	return;
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::POSITION));
+	int nCnt = pGroup->GetSubItemsCount();
+	if (nCnt != 0)
+	{
+		for (int i = nCnt-1; i >= 0; --i)
+		{
+			auto item = pGroup->GetSubItem(i);
+			pGroup->RemoveSubItem(item);
+		}
+	}
+
+	auto& Line = HFST::GetComponent<LineComponent>(entity.GetScene(), entity.GetHandleID());
+
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("起点 X"), (_variant_t)Line.m_Start.x,		_T("起点X坐标"), static_cast<int>(LINE::START_X)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("起点 Y"), (_variant_t)Line.m_Start.y,		_T("起点Y坐标"), static_cast<int>(LINE::START_Y)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("终点 X"), (_variant_t)Line.m_End.x,			_T("终点X坐标"), static_cast<int>(LINE::END_X)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("终点 Y"), (_variant_t)Line.m_End.y,			_T("终点Y坐标"), static_cast<int>(LINE::END_Y)));
+}
+
+void HF_PropertiesWnd::AddRectangleProperty(HF_Entity entity)
+{
 	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::POSITION));
 
-	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("Start X"), (_variant_t)150.0f, _T("起点X坐标"),	static_cast<int>(LINE::START_X) ));
-	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("Start Y"), (_variant_t)150.0f, _T("起点Y坐标"),	static_cast<int>(LINE::START_Y) ));
-	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("End X"),	(_variant_t)550.0f, _T("终点X坐标"),	static_cast<int>(LINE::END_X)   ));
-	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("End Y"),	(_variant_t)550.0f, _T("终点Y坐标"),	static_cast<int>(LINE::END_Y)   ));
-	pGroup->AddSubItem(new HF_PropertyGridProperty(_T("Rotate"),	(_variant_t)0.0f,	_T("旋转角度"),	static_cast<int>(LINE::ROTATE)  ));
+	int nCnt = pGroup->GetSubItemsCount();
+	if ( nCnt != 0 )
+	{
+		for ( int i = nCnt-1; i >= 0; --i )
+		{
+			auto item = pGroup->GetSubItem(i);
+			pGroup->RemoveSubItem(item);
+		}	
+	}
+
+	auto& rectangle = HFST::GetComponent<RectangleComponent>(entity.GetScene(), entity.GetHandleID());
+
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Left"),		(_variant_t)rectangle.m_LeftTop.x,		_T("起点X坐标"), static_cast<int>(RECTANGLE::LEFT)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Top"),		(_variant_t)rectangle.m_LeftTop.y,		_T("起点Y坐标"), static_cast<int>(RECTANGLE::TOP)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Right"),	(_variant_t)rectangle.m_RightBottom.x,	_T("终点X坐标"), static_cast<int>(RECTANGLE::RIGHT)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Bottom"),	(_variant_t)rectangle.m_RightBottom.y,	_T("终点Y坐标"), static_cast<int>(RECTANGLE::BOTTOM)));
 }
 
 LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)
 {
-	HF_PropertyGridProperty* pProp = (HF_PropertyGridProperty*)lparam;
+	CMFCPropertyGridProperty* pProp = (CMFCPropertyGridProperty*)lparam;
 	int pID = pProp->GetData();
 
 	CString str = pProp->GetName();
@@ -338,7 +365,6 @@ LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)
 			break;
 			// etc.
 	}
-
 	((HF_MainFrame*)theApp.m_pMainWnd)->m_wndView.SetPropertyValue(pID, i);
 
 	return 0;

@@ -19,14 +19,16 @@ public:
 
 	HF_ChildView();
 
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual BOOL	PreCreateWindow(CREATESTRUCT& cs);
 	virtual			~HF_ChildView();
 	virtual BOOL	PreTranslateMessage(MSG* pMsg);
 
-	void SetDrawType(DRAW_TYPE type) { m_emDrawType = type; }
-	DRAW_TYPE GetDrawType() const { return m_emDrawType; }
+	void		SetDrawType(DRAW_TYPE type) { m_emDrawType = type; }
+	DRAW_TYPE	GetDrawType() const { return m_emDrawType; }
 	
 	void SetPropertyValue(int id, COleVariant value);
+
+	void NewEntity(DRAW_TYPE type);
 protected:
 	afx_msg void	OnPaint();
 	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -51,8 +53,10 @@ protected:
 private:
 	void DrawCtrls();
 	void AssignLineProperty(int id, COleVariant value);
+	void AssignRectangleProperty(int id, COleVariant value);
 private:
 	std::unique_ptr<HF_Scene> m_pScene;
+	HF_Entity m_Entity;
 
 	CFont		m_Font;
 	CMFCButton	m_BtnLeft;
@@ -74,15 +78,10 @@ private:
 
 	COLORREF	m_Color{ RGB(255,255,255) };
 
-	float		m_nGap{ 25.0f };
+	float		m_nGap{ 5.0f };
 	float		m_fRatio = 1.0f;
 
 	DRAW_TYPE	m_emDrawType{ DRAW_TYPE::NONE };
-
-	float		startX{150.0f};
-	float		startY{150.0f};
-	float		endX{550.0f};
-	float		endY{550.0f};
 public:
 };
 

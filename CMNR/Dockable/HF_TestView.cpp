@@ -249,15 +249,8 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 		if ( type == DRAW_TYPE::NONE )
 			return;
 
-		pWndFrame->m_wndView.SetDrawType(type);
-		pWndFrame->m_wndProperty.GetPropertyCtrl().RemoveAll();
-
-		switch ( type )
-		{
-			case DRAW_TYPE::LINE:
-				pWndFrame->m_wndProperty.AddDefaultProperty();
-				break;
-		}
+		pWndFrame->m_wndView.NewEntity(type);
+		pWndFrame->m_wndProperty.GetPropertyCtrl().ExpandAll(FALSE);
 	}
 	
 	*pResult = 0;

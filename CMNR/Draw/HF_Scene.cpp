@@ -21,9 +21,23 @@ HF_Entity HF_Scene::CreateEntity(DRAW_TYPE type)
 	switch (type)
 	{
 		case DRAW_TYPE::LINE:
-			auto& line = HFST::AddComponent<LineComponent>(this, ent);
+		{
+			if ( !HFST::HasComponent<LineComponent>(this, ent) )
+			{
+				HFST::AddComponent<LineComponent>(this, ent);
+				((HF_MainFrame*)(theApp.m_pMainWnd))->m_wndProperty.AddLineProperty({ent, this});
+			}
 			break;
-		//TO DO
+		}
+		case DRAW_TYPE::RECTANGLE:
+		{
+			if (!HFST::HasComponent<RectangleComponent>(this, ent))
+			{
+				HFST::AddComponent<RectangleComponent>(this, ent);
+				((HF_MainFrame*)(theApp.m_pMainWnd))->m_wndProperty.AddRectangleProperty({ ent, this });
+			}
+			break;
+		}
 	}
 
 	return { ent, this };
@@ -38,10 +52,13 @@ void HF_Scene::OnDraw()
 		if ( HFST::HasComponent<LineComponent>(this, ent) )
 		{
 			auto& line = HFST::GetComponent<LineComponent>(this, ent);
-			//((HF_MainFrame*)(theApp.m_pMainWnd))->m_wndProperty.GetPropertyCtrl().remove
-			((HF_MainFrame*)(theApp.m_pMainWnd))->m_wndProperty.AddPositionProperty();
-			((HF_MainFrame*)(theApp.m_pMainWnd))->m_wndProperty.AddStypeProperty();
 			m_renderer->DrawLine(line.m_Start, line.m_End, D2D1::ColorF::Red);
+		}
+
+		if ( HFST::HasComponent<RectangleComponent>(this, ent) )
+		{
+			auto& rect = HFST::GetComponent<RectangleComponent>(this, ent);
+			m_renderer->DrawRect(CRect(rect.m_LeftTop, rect.m_RightBottom), D2D1::ColorF::Red, 1.0f);
 		}
 
 		if ( HFST::HasComponent<PosComponent>(this, ent) )
@@ -67,38 +84,29 @@ void HF_Scene::OnDraw()
 		// TO DO
 		// Other Component you want to add
 	}
-
-	//m_Registry.each([&](auto entityID)
-	//{
-	//	HF_Entity entity{ entityID, this };
-	//	if ( entity.HasComponent<PosComponent>() )
-	//	{
-	//		// Draw PosComponent UI
-	//	}
-
-	//	if ( entity.HasComponent<LineColorComponent>() )
-	//	{
-	//		// Draw LineColorComponent UI
-	//	}
-
-	//	if ( entity.HasComponent<FillColorComponent>() )
-	//	{
-	//		// Draw FillColorComponent UI
-	//	}
-
-	//	if ( entity.HasComponent<TransformComponent>() )
-	//	{
-	//		// Draw TransformComponent UI
-	//	}
-
-	//	// TO DO
-	//	// Other Component you want to add
-	//});
 }
 
-void HF_Scene::DestroyEntity(HF_Entity entity)
-
+void HF_Scene::DestroyEntity(HF_Entity entity, DRAW_TYPE type)
 {
+	switch (type)
+	{
+		case DRAW_TYPE::LINE:
+		{
+			if ( HFST::HasComponent<LineComponent>(this, entity.GetHandleID()) )
+			{
+				HFST::RemoveComponent<LineComponent>(this, entity.GetHandleID());
+			}
+			break;
+		}
+		case DRAW_TYPE::RECTANGLE:
+		{
+			if ( HFST::HasComponent<RectangleComponent>(this, entity.GetHandleID()) )
+			{
+				HFST::RemoveComponent<RectangleComponent>(this, entity.GetHandleID());
+			}
+			break;
+		}
+	}
 	m_Registry.destroy(entity.GetHandleID());
 }
 

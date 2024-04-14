@@ -1,5 +1,6 @@
 ﻿#ifndef __HF_PROPERTIES_WND_H__
 #define __HF_PROPERTIES_WND_H__
+#include "HF_Components.hpp"
 
 class HF_PropertiesToolBar : public CMFCToolBar
 {
@@ -12,12 +13,13 @@ public:
 	virtual BOOL AllowShowOnList() const { return FALSE; }
 };
 
-class HF_PropertyGridProperty : public CMFCPropertyGridProperty
+class HF_PropertyGridProperty final : public CMFCPropertyGridProperty
 {
 public:
 	HF_PropertyGridProperty(const CString& strGroupName, DWORD_PTR dwData = 0, BOOL bIsValueList = FALSE)
 		: CMFCPropertyGridProperty(strGroupName, dwData, bIsValueList)
-	{}
+	{
+	}
 	HF_PropertyGridProperty(
 		const CString& strName, 
 		const COleVariant& varValue, 
@@ -27,84 +29,138 @@ public:
 		LPCTSTR lpszEditTemplate = NULL, 
 		LPCTSTR lpszValidChars = NULL)
 		: CMFCPropertyGridProperty(strName, varValue, lpszDescr, dwData, lpszEditMask, lpszEditTemplate, lpszValidChars)
-	{}
+	{
+	}
 
-	virtual BOOL HasButton() const {
+	virtual BOOL HasButton() const override {
 		return TRUE;
 	}
 
-	virtual void OnClickButton(CPoint point)
-	{
-		CMFCPropertyGridProperty::OnClickButton(point);
-
-		if(IsGroup())
-			AfxMessageBox(L"Button clicked!");
+	~HF_PropertyGridProperty() {
 	}
 
-	virtual void OnDrawButton(CDC* pDC, CRect rect)
+	virtual void OnDrawButton(CDC* pDC, CRect rect) override
 	{
-		CMFCPropertyGridProperty::OnDrawButton( pDC, rect);
-		if (/*IsGroup() || */GetHierarchyLevel() == 0)
+		if (GetHierarchyLevel() == 0)
 		{
-			CBrush brush(RGB(155, 155, 155));
-
 			CRect rec = rect;
 			rec.left -= rect.Width() * 2;
 
-			pDC->FillRect(rec, CBrush::FromHandle(GetSysColorBrush(COLOR_BTNFACE)));
+			m_recButton = rec;
 
+			CBrush brush(m_GroupBkColor);
+			pDC->FillRect(rec, &brush);
+
+			auto old_color = pDC->SetTextColor(RGB(255,255,255));
 			if(GetSubItemsCount() == 0)
-				pDC->DrawText(_T("添加") , rec, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+				pDC->DrawText(_T("Add") , rec, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 			else
-				pDC->DrawText(_T("删除"), rec, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+				pDC->DrawText(_T("Delete"), rec, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+			pDC->SetTextColor(old_color);
 		}
 	}
 
-	virtual HBRUSH OnCtlColor(CDC* pDC, UINT nCtlColor)
+	virtual void OnClickName(CPoint point) override
 	{
-		CMFCPropertyGridProperty::OnCtlColor(pDC, nCtlColor);
-
-		if (IsGroup() && !HasValueField())
-		{
-			static CBrush brush(RGB(155, 155, 155));
-			pDC->SetBkColor(RGB(155, 155, 155));
-			return(HBRUSH)brush;
+		if ( m_recButton.IsRectNull() || !m_recButton.PtInRect(point) ) {
+			return;
 		}
-		return NULL;
+
+		auto group_property = HitTest(point);
+
+		if (!group_property) {
+			return;
+		}
+
+		auto id = group_property->GetData();
+		if ( group_property->GetSubItemsCount() == 0 )
+		{
+			// Add Component
+			switch (static_cast<LINE_GROUP>(id))
+			{
+				case LINE_GROUP::POSITION:
+					break;
+				case LINE_GROUP::STYLE:
+					break;
+				case LINE_GROUP::LINE_COLOR:
+					break;
+				case LINE_GROUP::LINE_WIDTH:
+					break;
+				case LINE_GROUP::LINE_STYLE:
+					break;
+				case LINE_GROUP::FILL_color:
+					break;
+			}
+			// Add UI
+		}
+		else
+		{
+			// Remove Component
+
+			// Remove UI
+		}
+
 	}
 
-	void OnDrawName(CDC* pDC, CRect rect)
+	virtual BOOL HasValueField() const override { return FALSE; }
+
+	virtual void OnDrawName(CDC* pDC, CRect rect) override
 	{
-		CMFCPropertyGridProperty::OnDrawName(pDC, rect);
+		ASSERT_VALID(this);
+		ASSERT_VALID(pDC);
+		ASSERT_VALID(m_pWndList);
 
-		if (IsGroup()/* && !HasValueField()*/)
+		COLORREF clrTextOld = (COLORREF)-1;
+		if ( IsSelected() )
 		{
-			pDC->SetTextColor(RGB(255,0,0));
+			CRect rectFill = rect;
+			rectFill.top++;
+
+			clrTextOld = pDC->SetTextColor(GetGlobalData()->clrTextHilite);
+
+			CBrush brush(m_GroupBkColor);
+			pDC->FillRect(rectFill, &brush);
+		}
+
+		if ( m_pParent != NULL )
+		{
+			rect.left += rect.Height();
+		}
+
+		rect.DeflateRect(AFX_TEXT_MARGIN, 0);
+
+		int nTextHeight = pDC->DrawText(m_strName, rect, DT_LEFT | DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX | DT_END_ELLIPSIS);
+
+		m_bNameIsTruncated = pDC->GetTextExtent(m_strName).cx > rect.Width();
+
+		if ( IsSelected() )
+		{
+			CRect rectFocus = rect;
+			rectFocus.top = rectFocus.CenterPoint().y - nTextHeight / 2;
+			rectFocus.bottom = rectFocus.top + nTextHeight;
+			rectFocus.right = min(rect.right, rectFocus.left + pDC->GetTextExtent(m_strName).cx);
+			rectFocus.InflateRect(2, 0);
+
+			COLORREF clrShadow = GetGlobalData()->clrBarShadow;
+
+			pDC->Draw3dRect(rectFocus, clrShadow, clrShadow);
+		}
+
+		if (clrTextOld != (COLORREF)-1)
+		{
+			pDC->SetTextColor(clrTextOld);
 		}
 	}
+
+private:
+	CRect		m_recButton;
+	COLORREF	m_GroupBkColor{ RGB(27,103,160) };
 };
 
 class HF_PropertiesWnd : public CDockablePane
 {
 	// 构造
 public:
-
-	enum class LINE_GROUP
-	{
-		POSITION = 0,
-		STYLE
-	};
-
-	enum class LINE
-	{
-		START_X = 10,
-		START_Y,
-		END_X,
-		END_Y,
-		ROTATE,
-		TYPE,
-		WIDTH
-	};
 	HF_PropertiesWnd() noexcept;
 	virtual ~HF_PropertiesWnd();
 private:
@@ -135,14 +191,13 @@ protected:
 public:
 	CMFCPropertyGridCtrl& GetPropertyCtrl() { return m_wndPropList; }
 	void AddDefaultProperty();
-	void AddPositionProperty();
-	void AddStypeProperty();
+	void AddLineProperty(HF_Entity entity);
+	void AddRectangleProperty(HF_Entity entity);
+	void AddStyleProperty();
 private:
 	CFont					m_fntPropList;
-	CComboBox				m_wndObjectCombo;
 	HF_PropertiesToolBar	m_wndToolBar;
 	CMFCPropertyGridCtrl	m_wndPropList;
-	int						m_nComboHeight;
 };
 
 #endif //__HF_PROPERTIES_WND_H__

@@ -322,8 +322,14 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 	CRect rect;
 	GetClientRect(&rect);
 
-	m_pScene->FillSceneBackground( D2D1::ColorF(0.8f, 0.8f, 0.8f, 1.0f) );
-	m_pScene->CreateEntity(DRAW_TYPE::LINE);
+	m_pScene->FillSceneBackground( D2D1::ColorF(0.8f, 0.8f, 0.3f, 1.0f) );
+	m_pScene->DrawTpArea(
+		CRect(rect.left+100, rect.top+100,rect.right-100,rect.bottom-100),
+		D2D1::ColorF::Black, 
+		D2D1::ColorF::Gray, 
+		m_nGap * m_fRatio
+	);
+
 	m_pScene->OnDraw();
 
 	DrawCtrls();
@@ -368,6 +374,11 @@ void HF_ChildView::SetPropertyValue(int id, COleVariant value)
 			AssignLineProperty( id, value );
 			break;
 		}
+		case DRAW_TYPE::RECTANGLE:
+		{
+			AssignRectangleProperty( id, value );
+			break;
+		}
 	}
 
 	Invalidate();
@@ -375,36 +386,78 @@ void HF_ChildView::SetPropertyValue(int id, COleVariant value)
 
 void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 {
-	HF_PropertiesWnd::LINE pro = static_cast<HF_PropertiesWnd::LINE>(id);
+	auto& Line = HFST::GetComponent<LineComponent>(m_pScene.get(), m_Entity.GetHandleID());
+	LINE pro = static_cast<LINE>(id);
 	switch (pro)
 	{
-		case HF_PropertiesWnd::LINE::START_X:
+		case LINE::START_X:
 		{
-			startX = value.fltVal;
+			Line.m_Start.x = value.fltVal;
 			break;
 		}
-		case HF_PropertiesWnd::LINE::START_Y:
+		case LINE::START_Y:
 		{
-			startY = value.fltVal;
+			Line.m_Start.y = value.fltVal;
 			break;
 		}
-		case HF_PropertiesWnd::LINE::END_X:
+		case LINE::END_X:
 		{
-			endX = value.fltVal;
+			Line.m_End.x = value.fltVal;
 			break;
 		}
-		case HF_PropertiesWnd::LINE::END_Y:
+		case LINE::END_Y:
 		{
-			endY = value.fltVal;
+			Line.m_End.y = value.fltVal;
 			break;
 		}
 	}
 }
 
+void HF_ChildView::AssignRectangleProperty(int id, COleVariant value)
+{
+	auto& rect = HFST::GetComponent<RectangleComponent>(m_pScene.get(), m_Entity.GetHandleID());
+	RECTANGLE rec = static_cast<RECTANGLE>(id);
+	switch (rec)
+	{
+		case RECTANGLE::LEFT:
+		{
+			rect.m_LeftTop.x = value.fltVal;
+			break;
+		}
+		case RECTANGLE::TOP:
+		{
+			rect.m_LeftTop.y = value.fltVal;
+			break;
+		}
+		case RECTANGLE::RIGHT:
+		{
+			rect.m_RightBottom.x = value.fltVal;
+			break;
+		}
+		case RECTANGLE::BOTTOM:
+		{
+			rect.m_RightBottom.y = value.fltVal;
+			break;
+		}
+	}
+}
 
 void HF_ChildView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// 在此处判断是否存在有支线处在选中状态
 
 	CWnd::OnLButtonDown(nFlags, point);
+}
+
+void HF_ChildView::NewEntity(DRAW_TYPE type)
+{
+	if (m_Entity.isValid())
+	{
+		m_pScene->DestroyEntity( m_Entity, m_emDrawType);
+	}
+
+	m_emDrawType = type;
+	m_Entity = m_pScene->CreateEntity(m_emDrawType);
+
+	Invalidate();
 }

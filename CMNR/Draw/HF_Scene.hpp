@@ -19,9 +19,15 @@ public:
 
 	void OnDraw();
 
-	void DestroyEntity(HF_Entity entity);
+	void DestroyEntity(HF_Entity entity,DRAW_TYPE type);
 
 	void FillSceneBackground(const D2D1::ColorF& bgColor);
+	void DrawTpArea(const CD2DRectF& rect, D2D1::ColorF bgColor, D2D1::ColorF gridColor, float gap) {
+		CRect recClient;
+		m_pWnd.GetClientRect(&recClient);
+
+		m_renderer->DrawTpArea(rect, bgColor, gridColor, gap);
+	}
 
 	entt::registry& Registry() { return m_Registry; }
 
