@@ -381,15 +381,19 @@ void HF_ChildView::SetPropertyValue(int id, COleVariant value)
 		}
 	}
 
+	
+
 	Invalidate();
 }
 
 void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 {
-	auto& Line = HFST::GetComponent<LineComponent>(m_pScene.get(), m_Entity.GetHandleID());
-	LINE pro = static_cast<LINE>(id);
-	switch (pro)
+	if ( id < 30 )
 	{
+		auto& Line = HFST::GetComponent<LineComponent>(m_pScene.get(), m_Entity.GetHandleID());
+		LINE pro = static_cast<LINE>(id);
+		switch (pro)
+		{
 		case LINE::START_X:
 		{
 			Line.m_Start.x = value.fltVal;
@@ -410,34 +414,83 @@ void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 			Line.m_End.y = value.fltVal;
 			break;
 		}
+		}
+	}
+	else
+	{
+		auto& border_color = HFST::GetComponent<BorderColorComponent>(m_pScene.get(), m_Entity.GetHandleID());
+		NORMAL_PROPERTY rd = static_cast<NORMAL_PROPERTY>(id);
+		switch (rd)
+		{
+			case NORMAL_PROPERTY::BORDER_COLOR:
+			{
+				border_color.m_BorderColor.r = float((value.lVal) & 0xFF) / (float)255;
+				border_color.m_BorderColor.g = float((value.lVal >> 8) & 0x00FF) / (float)255;
+				border_color.m_BorderColor.b = float((value.lVal >> 16) & 0x0000FF) / (float)255;
+				border_color.m_BorderColor.a = 1.0f;
+				break;
+			}
+			case NORMAL_PROPERTY::BORDER_WIDTH:
+			{
+				auto& border_width = HFST::GetComponent<BorderWidthComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				border_width.m_BorderWidth = value.uintVal;
+				break;
+			}
+		}
 	}
 }
 
 void HF_ChildView::AssignRectangleProperty(int id, COleVariant value)
 {
-	auto& rect = HFST::GetComponent<RectangleComponent>(m_pScene.get(), m_Entity.GetHandleID());
-	RECTANGLE rec = static_cast<RECTANGLE>(id);
-	switch (rec)
+	if ( id < 30 )
 	{
-		case RECTANGLE::LEFT:
+		auto& rect = HFST::GetComponent<RectangleComponent>(m_pScene.get(), m_Entity.GetHandleID());
+		RECTANGLE rec = static_cast<RECTANGLE>(id);
+		switch (rec)
 		{
-			rect.m_LeftTop.x = value.fltVal;
-			break;
+			case RECTANGLE::LEFT:
+			{
+				rect.m_LeftTop.x = value.fltVal;
+				break;
+			}
+			case RECTANGLE::TOP:
+			{
+				rect.m_LeftTop.y = value.fltVal;
+				break;
+			}
+			case RECTANGLE::RIGHT:
+			{
+				rect.m_RightBottom.x = value.fltVal;
+				break;
+			}
+			case RECTANGLE::BOTTOM:
+			{
+				rect.m_RightBottom.y = value.fltVal;
+				break;
+			}
 		}
-		case RECTANGLE::TOP:
+	}
+	else
+	{
+		NORMAL_PROPERTY rd = static_cast<NORMAL_PROPERTY>(id);
+		switch (rd)
 		{
-			rect.m_LeftTop.y = value.fltVal;
-			break;
-		}
-		case RECTANGLE::RIGHT:
-		{
-			rect.m_RightBottom.x = value.fltVal;
-			break;
-		}
-		case RECTANGLE::BOTTOM:
-		{
-			rect.m_RightBottom.y = value.fltVal;
-			break;
+			case NORMAL_PROPERTY::BORDER_COLOR:
+			{
+				auto& border_color = HFST::GetComponent<BorderColorComponent>(m_pScene.get(), m_Entity.GetHandleID());
+
+				border_color.m_BorderColor.r = float((value.lVal) & 0xFF) / (float)255;
+				border_color.m_BorderColor.g = float((value.lVal >> 8) & 0x00FF) / (float)255;
+				border_color.m_BorderColor.b = float((value.lVal >> 16) & 0x0000FF) / (float)255;
+				border_color.m_BorderColor.a = 1.0f;
+				break;
+			}
+			case NORMAL_PROPERTY::BORDER_WIDTH:
+			{
+				auto& border_width = HFST::GetComponent<BorderWidthComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				border_width.m_BorderWidth = value.uintVal;
+				break;
+			}
 		}
 	}
 }

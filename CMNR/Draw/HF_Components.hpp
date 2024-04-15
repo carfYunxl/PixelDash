@@ -45,35 +45,45 @@ struct RectangleComponent
 	}
 };
 
-struct PosComponent
-{
-	std::string Tag;
-
-	PosComponent() = default;
-	PosComponent(const PosComponent&) = default;
-	PosComponent(const std::string& tag)
-		: Tag(tag) 
-	{
-
-	}
-};
-
 struct TransformComponent
 {
 	TransformComponent() = default;
 };
 
-
-struct LineColorComponent
+struct BorderColorComponent
 {
-	LineColorComponent() = default;
-	D2D1::ColorF line_color;
+	D2D1::ColorF m_BorderColor{ D2D1::ColorF::Black };
+
+	BorderColorComponent() = default;
+	BorderColorComponent(const D2D1::ColorF& color)
+		: m_BorderColor(color) {}
+};
+
+struct BorderWidthComponent
+{
+	float m_BorderWidth{ 1.0f };
+
+	BorderWidthComponent() = default;
+	BorderWidthComponent(float width)
+		: m_BorderWidth(width) {}
+};
+
+struct OpacityComponent
+{
+	float m_Opacity{ 1.0f };
+
+	OpacityComponent() = default;
+	OpacityComponent(float opacity)
+		: m_Opacity(opacity) {}
 };
 
 struct FillColorComponent
 {
+	D2D1::ColorF m_FillColor{ D2D1::ColorF::Black };
+
 	FillColorComponent() = default;
-	D2D1::ColorF fill_color;
+	FillColorComponent(const D2D1::ColorF& color)
+		: m_FillColor(color) {}
 };
 
 namespace HFST

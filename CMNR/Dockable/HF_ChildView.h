@@ -29,6 +29,9 @@ public:
 	void SetPropertyValue(int id, COleVariant value);
 
 	void NewEntity(DRAW_TYPE type);
+
+	HF_Scene* GetScene() const { return m_pScene.get(); }
+	HF_Entity GetEntity() const { return m_Entity; }
 protected:
 	afx_msg void	OnPaint();
 	afx_msg int		OnCreate(LPCREATESTRUCT lpCreateStruct);

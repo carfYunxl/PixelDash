@@ -229,7 +229,6 @@ void HF_TestView::OnChangeVisualStyle()
 	/*nFlags |= (theApp.m_bHiColorIcons) ? ILC_COLOR24 : ILC_COLOR4;*/
 	nFlags |= ILC_COLOR24;
 
-	//m_FileViewImages.Create(16, bmpObj.bmHeight, nFlags, 0, 0);
 	m_FileViewImages.Create(20, bmpObj.bmHeight, nFlags, 0, 0);
 	m_FileViewImages.Add(&bmp, RGB(255, 0, 255));
 
@@ -249,7 +248,11 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 		if ( type == DRAW_TYPE::NONE )
 			return;
 
+		pWndFrame->m_wndProperty.GetPropertyCtrl().RemoveAll();
+		pWndFrame->m_wndProperty.AddDefaultProperty();
+
 		pWndFrame->m_wndView.NewEntity(type);
+
 		pWndFrame->m_wndProperty.GetPropertyCtrl().ExpandAll(FALSE);
 	}
 	

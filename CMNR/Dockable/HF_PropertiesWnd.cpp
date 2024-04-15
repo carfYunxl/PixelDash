@@ -253,13 +253,13 @@ void HF_PropertiesWnd::AddDefaultProperty()
 	HF_PropertyGridProperty* pGroup2 = new HF_PropertyGridProperty(_T("样式"), static_cast<int>(LINE_GROUP::STYLE));
 	m_wndPropList.AddProperty(pGroup2);
 
-	HF_PropertyGridProperty* pGroup3 = new HF_PropertyGridProperty(_T("线粗"), static_cast<int>(LINE_GROUP::LINE_WIDTH));
+	HF_PropertyGridProperty* pGroup3 = new HF_PropertyGridProperty(_T("线粗"), static_cast<int>(LINE_GROUP::BORDER_WIDTH));
 	m_wndPropList.AddProperty(pGroup3);
 
 	HF_PropertyGridProperty* pGroup4 = new HF_PropertyGridProperty(_T("线型"), static_cast<int>(LINE_GROUP::LINE_STYLE));
 	m_wndPropList.AddProperty(pGroup4);
 
-	HF_PropertyGridProperty* pGroup5 = new HF_PropertyGridProperty(_T("边框颜色"), static_cast<int>(LINE_GROUP::LINE_COLOR));
+	HF_PropertyGridProperty* pGroup5 = new HF_PropertyGridProperty(_T("边框颜色"), static_cast<int>(LINE_GROUP::BORDER_COLOR));
 	m_wndPropList.AddProperty(pGroup5);
 
 	HF_PropertyGridProperty* pGroup6 = new HF_PropertyGridProperty(_T("填充颜色"), static_cast<int>(LINE_GROUP::FILL_color));
@@ -301,6 +301,69 @@ void HF_PropertiesWnd::AddLineProperty(HF_Entity entity)
 	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("起点 Y"), (_variant_t)Line.m_Start.y,		_T("起点Y坐标"), static_cast<int>(LINE::START_Y)));
 	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("终点 X"), (_variant_t)Line.m_End.x,			_T("终点X坐标"), static_cast<int>(LINE::END_X)));
 	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("终点 Y"), (_variant_t)Line.m_End.y,			_T("终点Y坐标"), static_cast<int>(LINE::END_Y)));
+}
+
+void HF_PropertiesWnd::AddBorderColorProperty(HF_Entity entity)
+{
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::BORDER_COLOR));
+	int nCnt = pGroup->GetSubItemsCount();
+	if (nCnt != 0)
+	{
+		for (int i = nCnt - 1; i >= 0; --i)
+		{
+			auto item = pGroup->GetSubItem(i);
+			pGroup->RemoveSubItem(item);
+		}
+	}
+
+	if ( HFST::HasComponent<BorderColorComponent>(entity.GetScene(), entity.GetHandleID()) )
+	{
+		auto& border_color = HFST::GetComponent<BorderColorComponent>(entity.GetScene(), entity.GetHandleID());
+
+		CMFCPropertyGridColorProperty* pColorProp = new CMFCPropertyGridColorProperty(
+			_T("窗口颜色"),
+			RGB(border_color.m_BorderColor.r * 255, border_color.m_BorderColor.g * 255, border_color.m_BorderColor.b * 255),
+			nullptr,
+			_T("指定默认的窗口颜色"),
+			static_cast<int>(NORMAL_PROPERTY::BORDER_COLOR)
+		);
+
+		pColorProp->EnableOtherButton(_T("其他..."));
+		pColorProp->EnableAutomaticButton(_T("默认"), ::GetSysColor(COLOR_3DFACE));
+		pGroup->AddSubItem(pColorProp);
+	}
+
+	m_wndPropList.ExpandAll(FALSE);
+}
+
+void HF_PropertiesWnd::AddBorderWidthProperty(HF_Entity entity)
+{
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::BORDER_WIDTH));
+	int nCnt = pGroup->GetSubItemsCount();
+	if (nCnt != 0)
+	{
+		for (int i = nCnt - 1; i >= 0; --i)
+		{
+			auto item = pGroup->GetSubItem(i);
+			pGroup->RemoveSubItem(item);
+		}
+	}
+
+	if ( HFST::HasComponent<BorderWidthComponent>(entity.GetScene(), entity.GetHandleID()) )
+	{
+		auto& border_width = HFST::GetComponent<BorderWidthComponent>(entity.GetScene(), entity.GetHandleID());
+
+		CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(
+			_T("线宽"),
+			(_variant_t)(int)border_width.m_BorderWidth, 
+			_T("线宽"), 
+			static_cast<int>(NORMAL_PROPERTY::BORDER_WIDTH)
+		);
+		pProp->EnableSpinControl(TRUE, 1, 50);
+		pGroup->AddSubItem(pProp);
+	}
+
+	m_wndPropList.ExpandAll(FALSE);
 }
 
 void HF_PropertiesWnd::AddRectangleProperty(HF_Entity entity)

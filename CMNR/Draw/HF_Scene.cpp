@@ -49,40 +49,45 @@ void HF_Scene::OnDraw()
 
 	for (auto ent : view)
 	{
-		if ( HFST::HasComponent<LineComponent>(this, ent) )
-		{
-			auto& line = HFST::GetComponent<LineComponent>(this, ent);
-			m_renderer->DrawLine(line.m_Start, line.m_End, D2D1::ColorF::Red);
-		}
+		D2D1::ColorF border_color{ D2D1::ColorF::Black };
+		D2D1::ColorF fill_color{ D2D1::ColorF::Black };
+		float border_width{ 1.0f };
+		float opacity{ 1.0f };
 
-		if ( HFST::HasComponent<RectangleComponent>(this, ent) )
+		if (HFST::HasComponent<BorderColorComponent>(this, ent))
 		{
-			auto& rect = HFST::GetComponent<RectangleComponent>(this, ent);
-			m_renderer->DrawRect(CRect(rect.m_LeftTop, rect.m_RightBottom), D2D1::ColorF::Red, 1.0f);
-		}
-
-		if ( HFST::HasComponent<PosComponent>(this, ent) )
-		{
-			// Draw PosComponent UI
-		}
-
-		if (HFST::HasComponent<LineColorComponent>(this, ent))
-		{
-			// Draw LineColorComponent UI
+			auto& BorderColor = HFST::GetComponent<BorderColorComponent>(this, ent);
+			border_color = BorderColor.m_BorderColor;
 		}
 
 		if (HFST::HasComponent<FillColorComponent>(this, ent))
 		{
-			// Draw FillColorComponent UI
+			auto& FillColor = HFST::GetComponent<FillColorComponent>(this, ent);
+			fill_color = FillColor.m_FillColor;
 		}
 
-		if (HFST::HasComponent<TransformComponent>(this, ent))
+		if (HFST::HasComponent<BorderWidthComponent>(this, ent))
 		{
-			// Draw TransformComponent UI
+			auto& BorderWidth = HFST::GetComponent<BorderWidthComponent>(this, ent);
+			border_width = BorderWidth.m_BorderWidth;
 		}
 
-		// TO DO
-		// Other Component you want to add
+		if (HFST::HasComponent<OpacityComponent>(this, ent))
+		{
+			auto& Opacity = HFST::GetComponent<OpacityComponent>(this, ent);
+			opacity = Opacity.m_Opacity;
+		}
+
+		if ( HFST::HasComponent<LineComponent>(this, ent) )
+		{
+			auto& line = HFST::GetComponent<LineComponent>(this, ent);
+			m_renderer->DrawLine(line.m_Start, line.m_End, border_color, opacity, border_width);
+		} 
+		else if ( HFST::HasComponent<RectangleComponent>(this, ent) )
+		{
+			auto& rect = HFST::GetComponent<RectangleComponent>(this, ent);
+			m_renderer->DrawRect(CRect(rect.m_LeftTop, rect.m_RightBottom), border_color, border_width);
+		}
 	}
 }
 
@@ -92,10 +97,14 @@ void HF_Scene::DestroyEntity(HF_Entity entity, DRAW_TYPE type)
 	{
 		case DRAW_TYPE::LINE:
 		{
+			// ÒÆ³ý Component
 			if ( HFST::HasComponent<LineComponent>(this, entity.GetHandleID()) )
 			{
 				HFST::RemoveComponent<LineComponent>(this, entity.GetHandleID());
 			}
+
+			// ÒÆ³ýUI
+
 			break;
 		}
 		case DRAW_TYPE::RECTANGLE:
@@ -107,6 +116,17 @@ void HF_Scene::DestroyEntity(HF_Entity entity, DRAW_TYPE type)
 			break;
 		}
 	}
+
+	if ( HFST::HasComponent<BorderColorComponent>(this, entity.GetHandleID()) )
+	{
+		HFST::RemoveComponent<BorderColorComponent>(this, entity.GetHandleID());
+	}
+
+	if (HFST::HasComponent<BorderWidthComponent>(this, entity.GetHandleID()))
+	{
+		HFST::RemoveComponent<BorderWidthComponent>(this, entity.GetHandleID());
+	}
+
 	m_Registry.destroy(entity.GetHandleID());
 }
 

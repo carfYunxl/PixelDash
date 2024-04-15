@@ -230,6 +230,7 @@
     <ClInclude Include="Dockable\HF_IcInfoDlg.h" />
     <ClInclude Include="Dockable\HF_ChildView.h" />
     <ClInclude Include="Dockable\HF_MachineView.h" />
+    <ClInclude Include="Dockable\HF_PropertyGridProperty.hpp" />
     <ClInclude Include="Dockable\HF_TestView.h" />
     <ClInclude Include="Dockable\HF_OutputWnd.h" />
     <ClInclude Include="Dockable\HF_PropertiesWnd.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="Dockable\HF_Clipboard.cpp" />
     <ClCompile Include="Dockable\HF_IcInfoDlg.cpp" />
     <ClCompile Include="Dockable\HF_ChildView.cpp" />
+    <ClCompile Include="Dockable\HF_PropertyGridProperty.cpp" />
     <ClCompile Include="Dockable\HF_TestView.cpp" />
     <ClCompile Include="Dockable\HF_OutputWnd.cpp" />
     <ClCompile Include="Dockable\HF_PropertiesWnd.cpp" />

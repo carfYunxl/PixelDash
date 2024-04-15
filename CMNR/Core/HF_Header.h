@@ -27,9 +27,9 @@ enum class LINE_GROUP
 {
 	POSITION = 0,
 	STYLE,
-	LINE_WIDTH,
+	BORDER_WIDTH,
 	LINE_STYLE,
-	LINE_COLOR,
+	BORDER_COLOR,
 	FILL_color
 };
 
@@ -47,6 +47,14 @@ enum class RECTANGLE
 	TOP,
 	RIGHT,
 	BOTTOM
+};
+
+enum class NORMAL_PROPERTY
+{
+	BORDER_COLOR = 30,
+	BORDER_WIDTH,
+	FILL_COLOR,
+	OPACITY
 };
 
 #endif //__HF_HEADER_HPP__
