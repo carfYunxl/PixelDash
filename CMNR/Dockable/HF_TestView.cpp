@@ -254,6 +254,7 @@ void HF_TestView::OnTvnSelchangedTree(NMHDR* pNMHDR, LRESULT* pResult)
 		pWndFrame->m_wndView.NewEntity(type);
 
 		pWndFrame->m_wndProperty.GetPropertyCtrl().ExpandAll(FALSE);
+		pWndFrame->m_wndProperty.GetPropertyCtrl().ExpandAll(TRUE);
 	}
 	
 	*pResult = 0;

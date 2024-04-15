@@ -334,6 +334,7 @@ void HF_PropertiesWnd::AddBorderColorProperty(HF_Entity entity)
 	}
 
 	m_wndPropList.ExpandAll(FALSE);
+	m_wndPropList.ExpandAll(TRUE);
 }
 
 void HF_PropertiesWnd::AddBorderWidthProperty(HF_Entity entity)
@@ -364,6 +365,7 @@ void HF_PropertiesWnd::AddBorderWidthProperty(HF_Entity entity)
 	}
 
 	m_wndPropList.ExpandAll(FALSE);
+	m_wndPropList.ExpandAll(TRUE);
 }
 
 void HF_PropertiesWnd::AddRectangleProperty(HF_Entity entity)
