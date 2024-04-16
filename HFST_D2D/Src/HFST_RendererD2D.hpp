@@ -18,7 +18,7 @@ namespace HFST
         void DrawTpArea(const CD2DRectF& rect, D2D1::ColorF bgColor, D2D1::ColorF gridColor, float gap);
         void DrawBgColor(D2D1::ColorF bgColor);
 
-        void DrawLine(const CD2DPointF& start, const CD2DPointF& end, D2D1::ColorF color, float opacity = 1.0f, float line_width = 1.0f);
+        void DrawLine(const CD2DPointF& start, const CD2DPointF& end, const D2D1::Matrix3x2F& transform, D2D1::ColorF color, float opacity = 1.0f, float line_width = 1.0f);
         void DrawRect(const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width);
         void DrawRoundRect(const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width, float radius);
         void DrawCircle(const CD2DPointF& center, const D2D1::ColorF& color, float radius);

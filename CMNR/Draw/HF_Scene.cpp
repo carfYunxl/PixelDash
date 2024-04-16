@@ -54,6 +54,8 @@ void HF_Scene::OnDraw()
 		float border_width{ 1.0f };
 		float opacity{ 1.0f };
 
+		D2D1::Matrix3x2F transform;
+
 		if (HFST::HasComponent<BorderColorComponent>(this, ent))
 		{
 			auto& BorderColor = HFST::GetComponent<BorderColorComponent>(this, ent);
@@ -72,6 +74,14 @@ void HF_Scene::OnDraw()
 			border_width = BorderWidth.m_BorderWidth;
 		}
 
+		if (HFST::HasComponent<TransformComponent>(this, ent))
+		{
+			auto& trans = HFST::GetComponent<TransformComponent>(this, ent);
+			transform.Translation(trans.m_Trans);
+			transform.Scale(trans.m_Scale, trans.m_Center);
+			transform.Rotation(trans.m_Rotate, trans.m_Center);
+		}
+
 		if (HFST::HasComponent<OpacityComponent>(this, ent))
 		{
 			auto& Opacity = HFST::GetComponent<OpacityComponent>(this, ent);
@@ -81,7 +91,7 @@ void HF_Scene::OnDraw()
 		if ( HFST::HasComponent<LineComponent>(this, ent) )
 		{
 			auto& line = HFST::GetComponent<LineComponent>(this, ent);
-			m_renderer->DrawLine(line.m_Start, line.m_End, border_color, opacity, border_width);
+			m_renderer->DrawLine(line.m_Start, line.m_End, transform, border_color, opacity, border_width);
 		} 
 		else if ( HFST::HasComponent<RectangleComponent>(this, ent) )
 		{

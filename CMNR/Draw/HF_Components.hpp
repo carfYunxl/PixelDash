@@ -47,7 +47,14 @@ struct RectangleComponent
 
 struct TransformComponent
 {
+	CD2DSizeF	m_Trans { 0.0f, 0.0f };
+	CD2DSizeF	m_Scale { 1.0f, 1.0f };
+	CD2DPointF	m_Center{ 0.0f, 0.0f };
+	float		m_Rotate{ 0.0f };
+
 	TransformComponent() = default;
+	TransformComponent(const CD2DSizeF& trans, const CD2DSizeF& scale, float angle, const CD2DPointF& center)
+		: m_Trans(trans), m_Scale(scale), m_Rotate(angle), m_Center(center) {}
 };
 
 struct BorderColorComponent

@@ -78,6 +78,7 @@ namespace HFST
     void RendererD2D_Impl::DrawLine(
         const CD2DPointF& start,
         const CD2DPointF& end,
+        const D2D1::Matrix3x2F& transform,
         const D2D1::ColorF& color, 
         float opacity, 
         float line_width
@@ -85,7 +86,7 @@ namespace HFST
     {
         CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
 
-        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+        pRenderTarget->SetTransform(transform);
 
         CD2DBrushProperties properties(opacity);
 
