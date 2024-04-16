@@ -250,10 +250,10 @@ void HF_PropertiesWnd::AddDefaultProperty()
 	HF_PropertyGridProperty* pGroup1 = new HF_PropertyGridProperty(_T("位置"), static_cast<int>(LINE_GROUP::POSITION));
 	m_wndPropList.AddProperty(pGroup1);
 
-	HF_PropertyGridProperty* pGroup2 = new HF_PropertyGridProperty(_T("样式"), static_cast<int>(LINE_GROUP::STYLE));
+	HF_PropertyGridProperty* pGroup2 = new HF_PropertyGridProperty(_T("变换"), static_cast<int>(LINE_GROUP::TRANSFORM));
 	m_wndPropList.AddProperty(pGroup2);
 
-	HF_PropertyGridProperty* pGroup3 = new HF_PropertyGridProperty(_T("线粗"), static_cast<int>(LINE_GROUP::BORDER_WIDTH));
+	HF_PropertyGridProperty* pGroup3 = new HF_PropertyGridProperty(_T("线宽"), static_cast<int>(LINE_GROUP::BORDER_WIDTH));
 	m_wndPropList.AddProperty(pGroup3);
 
 	HF_PropertyGridProperty* pGroup4 = new HF_PropertyGridProperty(_T("线型"), static_cast<int>(LINE_GROUP::LINE_STYLE));
@@ -266,20 +266,31 @@ void HF_PropertiesWnd::AddDefaultProperty()
 	m_wndPropList.AddProperty(pGroup6);
 }
 
-void HF_PropertiesWnd::AddStyleProperty()
+void HF_PropertiesWnd::AddTransformProperty(HF_Entity entity)
 {
-	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::STYLE));
-
-	if (pGroup->GetSubItemsCount() == 0)
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::TRANSFORM));
+	int nCnt = pGroup->GetSubItemsCount();
+	if (nCnt != 0)
 	{
-		//CMFCPropertyGridProperty* pProp = new CMFCPropertyGridProperty(_T("线型"), _T("实线"), _T("线型"), static_cast<int>(LINE::TYPE));
-		//pProp->AddOption(_T("实线"));
-		//pProp->AddOption(_T("虚线"));
-		//pProp->AddOption(_T("点划线"));
-		//pProp->AddOption(_T("双点划线"));
-		//pGroup->AddSubItem(pProp);
-		//pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("粗细"), (_variant_t)_T("粗"), _T("指定线的粗细"), static_cast<int>(LINE::WIDTH)));
+		for (int i = nCnt - 1; i >= 0; --i)
+		{
+			auto item = pGroup->GetSubItem(i);
+			pGroup->RemoveSubItem(item);
+		}
 	}
+
+	auto& Trans = HFST::GetComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
+
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Center X"), (_variant_t)Trans.m_Center.x,		_T("旋转/缩放中心的X坐标"),	static_cast<int>(NORMAL_PROPERTY::TRANSFORM_CENTER_X)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Cneter Y"), (_variant_t)Trans.m_Center.y,		_T("旋转/缩放中心的Y坐标"),	static_cast<int>(NORMAL_PROPERTY::TRANSFORM_CENTER_Y)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Offset X"), (_variant_t)Trans.m_Trans.width,	_T("X方向偏移量"),			static_cast<int>(NORMAL_PROPERTY::TRANSFORM_OFFSET_X)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Offset Y"), (_variant_t)Trans.m_Trans.height,	_T("Y方向偏移量"),			static_cast<int>(NORMAL_PROPERTY::TRANSFORM_OFFSET_Y)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Scale X"),	(_variant_t)Trans.m_Scale.width,	_T("X方向缩放比例"),			static_cast<int>(NORMAL_PROPERTY::TRANSFORM_SCALE_X)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Scale Y"),	(_variant_t)Trans.m_Scale.height,	_T("Y方向缩放bilibili"),		static_cast<int>(NORMAL_PROPERTY::TRANSFORM_SCALE_Y)));
+	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Rotate"),	(_variant_t)Trans.m_Rotate,			_T("旋转角度"),				static_cast<int>(NORMAL_PROPERTY::TRANSFORM_ROTATE)));
+
+	m_wndPropList.ExpandAll(FALSE);
+	m_wndPropList.ExpandAll(TRUE);
 }
 
 void HF_PropertiesWnd::AddLineProperty(HF_Entity entity)
@@ -301,6 +312,9 @@ void HF_PropertiesWnd::AddLineProperty(HF_Entity entity)
 	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("起点 Y"), (_variant_t)Line.m_Start.y,		_T("起点Y坐标"), static_cast<int>(LINE::START_Y)));
 	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("终点 X"), (_variant_t)Line.m_End.x,			_T("终点X坐标"), static_cast<int>(LINE::END_X)));
 	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("终点 Y"), (_variant_t)Line.m_End.y,			_T("终点Y坐标"), static_cast<int>(LINE::END_Y)));
+
+	m_wndPropList.ExpandAll(FALSE);
+	m_wndPropList.ExpandAll(TRUE);
 }
 
 void HF_PropertiesWnd::AddBorderColorProperty(HF_Entity entity)

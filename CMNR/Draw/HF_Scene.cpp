@@ -47,15 +47,15 @@ void HF_Scene::OnDraw()
 {
 	auto view = m_Registry.view<entt::entity>();
 
+	D2D1::ColorF border_color{ D2D1::ColorF::Black };
+	D2D1::ColorF fill_color{ D2D1::ColorF::Black };
+	float border_width{ 1.0f };
+	float opacity{ 1.0f };
+
+	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Identity();
+
 	for (auto ent : view)
 	{
-		D2D1::ColorF border_color{ D2D1::ColorF::Black };
-		D2D1::ColorF fill_color{ D2D1::ColorF::Black };
-		float border_width{ 1.0f };
-		float opacity{ 1.0f };
-
-		D2D1::Matrix3x2F transform;
-
 		if (HFST::HasComponent<BorderColorComponent>(this, ent))
 		{
 			auto& BorderColor = HFST::GetComponent<BorderColorComponent>(this, ent);
@@ -77,9 +77,12 @@ void HF_Scene::OnDraw()
 		if (HFST::HasComponent<TransformComponent>(this, ent))
 		{
 			auto& trans = HFST::GetComponent<TransformComponent>(this, ent);
-			transform.Translation(trans.m_Trans);
-			transform.Scale(trans.m_Scale, trans.m_Center);
-			transform.Rotation(trans.m_Rotate, trans.m_Center);
+
+			const auto translate = D2D1::Matrix3x2F::Translation(trans.m_Trans.width, trans.m_Trans.height);
+			const auto scale = D2D1::Matrix3x2F::Scale(trans.m_Scale.width, trans.m_Scale.height, trans.m_Center);
+			const auto rotate = D2D1::Matrix3x2F::Rotation(trans.m_Rotate, trans.m_Center);
+
+			transform = rotate * scale * translate;
 		}
 
 		if (HFST::HasComponent<OpacityComponent>(this, ent))
@@ -96,7 +99,7 @@ void HF_Scene::OnDraw()
 		else if ( HFST::HasComponent<RectangleComponent>(this, ent) )
 		{
 			auto& rect = HFST::GetComponent<RectangleComponent>(this, ent);
-			m_renderer->DrawRect(CRect(rect.m_LeftTop, rect.m_RightBottom), border_color, border_width);
+			m_renderer->DrawRect(CRect(rect.m_LeftTop, rect.m_RightBottom), transform, border_color, border_width);
 		}
 	}
 }

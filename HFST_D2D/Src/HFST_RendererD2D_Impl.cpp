@@ -95,11 +95,11 @@ namespace HFST
         pRenderTarget->DrawLine(start, end, &brush, line_width);
     }
 
-    void RendererD2D_Impl::DrawRect( const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width )
+    void RendererD2D_Impl::DrawRect( const CD2DRectF& rect, const D2D1::Matrix3x2F& transform, const D2D1::ColorF& line_Color, float line_width )
     {
         CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
 
-        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+        pRenderTarget->SetTransform(transform);
 
         CD2DSolidColorBrush brush( pRenderTarget, D2D1::ColorF(line_Color) );
         pRenderTarget->DrawRectangle( rect, &brush, line_width );

@@ -3,6 +3,7 @@
 #include "HF_ChildView.h"
 #include "HF_MainFrm.h"
 #include "HF_Components.hpp"
+#include "HFST_RendererD2D.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -330,6 +331,9 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 		m_nGap * m_fRatio
 	);
 
+	/*HFST::RendererD2D render(*this);
+
+	render.DrawLine(CD2DPointF(100,100), CD2DPointF(500, 500), mat, D2D1::ColorF::Red, 1.0f, 2.0f);*/
 	m_pScene->OnDraw();
 
 	DrawCtrls();
@@ -381,8 +385,6 @@ void HF_ChildView::SetPropertyValue(int id, COleVariant value)
 		}
 	}
 
-	
-
 	Invalidate();
 }
 
@@ -418,12 +420,54 @@ void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 	}
 	else
 	{
-		auto& border_color = HFST::GetComponent<BorderColorComponent>(m_pScene.get(), m_Entity.GetHandleID());
 		NORMAL_PROPERTY rd = static_cast<NORMAL_PROPERTY>(id);
 		switch (rd)
 		{
+			case NORMAL_PROPERTY::TRANSFORM_CENTER_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Center.x = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_CENTER_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Center.y = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_OFFSET_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Trans.width = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_OFFSET_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Trans.height = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_SCALE_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Scale.width = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_SCALE_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Scale.height = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_ROTATE:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Rotate = value.fltVal;
+				break;
+			}
 			case NORMAL_PROPERTY::BORDER_COLOR:
 			{
+				auto& border_color = HFST::GetComponent<BorderColorComponent>(m_pScene.get(), m_Entity.GetHandleID());
 				border_color.m_BorderColor.r = float((value.lVal) & 0xFF) / (float)255;
 				border_color.m_BorderColor.g = float((value.lVal >> 8) & 0x00FF) / (float)255;
 				border_color.m_BorderColor.b = float((value.lVal >> 16) & 0x0000FF) / (float)255;
@@ -433,7 +477,7 @@ void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 			case NORMAL_PROPERTY::BORDER_WIDTH:
 			{
 				auto& border_width = HFST::GetComponent<BorderWidthComponent>(m_pScene.get(), m_Entity.GetHandleID());
-				border_width.m_BorderWidth = value.uintVal;
+				border_width.m_BorderWidth = (float)value.uintVal;
 				break;
 			}
 		}
@@ -475,6 +519,48 @@ void HF_ChildView::AssignRectangleProperty(int id, COleVariant value)
 		NORMAL_PROPERTY rd = static_cast<NORMAL_PROPERTY>(id);
 		switch (rd)
 		{
+			case NORMAL_PROPERTY::TRANSFORM_CENTER_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Center.x = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_CENTER_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Center.y = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_OFFSET_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Trans.width = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_OFFSET_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Trans.height = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_SCALE_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Scale.width = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_SCALE_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Scale.height = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_ROTATE:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Rotate = value.fltVal;
+				break;
+			}
 			case NORMAL_PROPERTY::BORDER_COLOR:
 			{
 				auto& border_color = HFST::GetComponent<BorderColorComponent>(m_pScene.get(), m_Entity.GetHandleID());
@@ -488,7 +574,7 @@ void HF_ChildView::AssignRectangleProperty(int id, COleVariant value)
 			case NORMAL_PROPERTY::BORDER_WIDTH:
 			{
 				auto& border_width = HFST::GetComponent<BorderWidthComponent>(m_pScene.get(), m_Entity.GetHandleID());
-				border_width.m_BorderWidth = value.uintVal;
+				border_width.m_BorderWidth = (float)value.uintVal;
 				break;
 			}
 		}

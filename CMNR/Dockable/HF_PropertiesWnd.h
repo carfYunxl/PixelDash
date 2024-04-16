@@ -50,7 +50,7 @@ public:
 	void AddDefaultProperty();
 	void AddLineProperty(HF_Entity entity);
 	void AddRectangleProperty(HF_Entity entity);
-	void AddStyleProperty();
+	void AddTransformProperty(HF_Entity entity);
 	void AddBorderColorProperty(HF_Entity entity);
 	void AddBorderWidthProperty(HF_Entity entity);
 private:

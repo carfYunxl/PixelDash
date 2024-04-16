@@ -29,9 +29,9 @@ namespace HFST
         m_Impl->DrawLine(start, end, transform, color, opacity, line_width);
     }
 
-    void RendererD2D::DrawRect(const CD2DRectF& rect, const D2D1::ColorF& line_Color, float line_width)
+    void RendererD2D::DrawRect(const CD2DRectF& rect, const D2D1::Matrix3x2F& transform, const D2D1::ColorF& line_Color, float line_width)
     {
-        m_Impl->DrawRect( rect, line_Color, line_width );
+        m_Impl->DrawRect( rect, transform, line_Color, line_width );
     }
 
     void RendererD2D::DrawRoundRect(const CD2DRectF& rect,

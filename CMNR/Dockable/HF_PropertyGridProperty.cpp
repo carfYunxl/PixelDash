@@ -65,8 +65,15 @@ void HF_PropertyGridProperty::OnClickName(CPoint point)
 		{
 			case LINE_GROUP::POSITION:
 				break;
-			case LINE_GROUP::STYLE:
+			case LINE_GROUP::TRANSFORM:
+			{
+				HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
+				HF_Entity entity = pMainFrame->m_wndView.GetEntity();
+				HFST::AddComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
+
+				pMainFrame->m_wndProperty.AddTransformProperty(entity);
 				break;
+			}
 			case LINE_GROUP::BORDER_COLOR:
 			{
 				HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
@@ -98,8 +105,23 @@ void HF_PropertyGridProperty::OnClickName(CPoint point)
 		{
 		case LINE_GROUP::POSITION:
 			break;
-		case LINE_GROUP::STYLE:
+		case LINE_GROUP::TRANSFORM:
+		{
+			HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
+			HF_Entity entity = pMainFrame->m_wndView.GetEntity();
+
+			auto& trans = HFST::GetComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
+			trans.m_Center = {0.0f, 0.0f};
+			trans.m_Trans = {0.0f,0.0f};
+			trans.m_Scale = {1.0f,1.0f};
+			trans.m_Rotate = 0.0f;
+
+			HFST::RemoveComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
+
+			pMainFrame->m_wndProperty.AddTransformProperty(entity);
+			pMainFrame->m_wndView.Invalidate();
 			break;
+		}
 		case LINE_GROUP::BORDER_COLOR:
 		{
 			HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
