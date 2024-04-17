@@ -81,7 +81,7 @@ private:
 
 	COLORREF	m_Color{ RGB(255,255,255) };
 
-	float		m_nGap{ 5.0f };
+	float		m_nGap{ 0.5f };
 	float		m_fRatio = 1.0f;
 
 	DRAW_TYPE	m_emDrawType{ DRAW_TYPE::NONE };

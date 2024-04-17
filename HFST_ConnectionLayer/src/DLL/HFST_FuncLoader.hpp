@@ -1,8 +1,8 @@
 #ifndef __HFST_FUNCTION_LOADER__
 #define __HFST_FUNCTION_LOADER__
 
-#include "HFST_DllLoader.hpp"
-#include "HFST_FunctionExport.hpp"
+#include "DLL/HFST_DllLoader.hpp"
+#include "DLL/HFST_FunctionExport.hpp"
 
 #include <string>
 

@@ -29,14 +29,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -44,14 +44,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -101,12 +101,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw;$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Core;$(SolutionDir)HFST_ConnectionLayer\src\Connector</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib</AdditionalDependencies>
+      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib;HFST_ConnectionLayer.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\CMNR\$(Platform)-$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -131,12 +131,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw;$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Core;$(SolutionDir)HFST_ConnectionLayer\src\Connector</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib</AdditionalDependencies>
+      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib;HFST_ConnectionLayer.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\CMNR\$(Platform)-$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -163,14 +163,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw;$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Core;$(SolutionDir)HFST_ConnectionLayer\src\Connector</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib</AdditionalDependencies>
+      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib;HFST_ConnectionLayer.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\CMNR\$(Platform)-$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -197,14 +197,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)CMNR\Dockable;$(SolutionDir)CMNR;$(SolutionDir)CMNR\Core;$(SolutionDir)HFST_D2D\Src;$(SolutionDir)HFST_D2D\Core;$(SolutionDir)CMNR\vendor\entt;$(SolutionDir)CMNR\Draw;$(SolutionDir)HFST_ConnectionLayer\src;$(SolutionDir)HFST_ConnectionLayer\src\Core;$(SolutionDir)HFST_ConnectionLayer\src\Connector</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib</AdditionalDependencies>
+      <AdditionalDependencies>D2d1.lib;HFST_D2D.lib;HFST_ConnectionLayer.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)bin\CMNR\$(Platform)-$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -320,6 +320,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\CMNR.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HFST_ConnectionLayer\HFST_Connector.vcxproj">
+      <Project>{a9261353-9ac9-46df-825d-bbf7c9fabc30}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

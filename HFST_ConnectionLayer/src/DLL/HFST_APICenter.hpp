@@ -1,7 +1,7 @@
 #ifndef __HFST_API_CENTER__
 #define __HFST_API_CENTER__
 
-#include "HFST_FuncLoader.hpp"
+#include "DLL/HFST_FuncLoader.hpp"
 
 namespace HFST
 {

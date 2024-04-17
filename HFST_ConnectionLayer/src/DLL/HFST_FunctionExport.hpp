@@ -1,6 +1,6 @@
 #ifndef __HFST_FUNCTION_EXPORT_HPP__
 #define __HFST_FUNCTION_EXPORT_HPP__
-#include "HFST_CommonHeader.hpp"
+#include "Core/HFST_CommonHeader.hpp"
 
 namespace HFST
 {

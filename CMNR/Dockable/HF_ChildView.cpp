@@ -280,7 +280,7 @@ void HF_ChildView::DrawCtrls()
 		m_BtnDown.MoveWindow(recDown);
 		m_BtnCenter.MoveWindow(recCenter);
 	}
-
+#if 0
 	CPoint points[3];
 
 	CRect rcClient;
@@ -316,6 +316,7 @@ void HF_ChildView::DrawCtrls()
 
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::INFO, _T("OnDraw"));
+#endif
 }
 
 LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)

@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(HF_MainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(IDM_COLOR_RED, IDM_COLOR_YELLOW, &HF_MainFrame::OnUpdateColorUI)
 	ON_WM_MEASUREITEM()
 	ON_WM_DRAWITEM()
+	ON_WM_DEVICECHANGE()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -42,7 +43,9 @@ static UINT indicators[] =
 };
 
 HF_MainFrame::HF_MainFrame()noexcept 
-	: m_nCurrentColor() {
+	: m_nCurrentColor()
+	, m_pConnector(std::make_unique<HFST::Connector>())
+{
 }
 
 HF_MainFrame::~HF_MainFrame()
@@ -63,10 +66,7 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	m_wndMenuBar.SetPaneStyle(m_wndMenuBar.GetPaneStyle() | CBRS_SIZE_DYNAMIC | CBRS_TOOLTIPS | CBRS_FLYBY);
 
-	// 防止菜单栏在激活时获得焦点
 	CMFCPopupMenu::SetForceMenuFocus(FALSE);
-
-	// 创建一个视图以占用框架的工作区
 	if (!m_wndView.Create(nullptr, nullptr, AFX_WS_DEFAULT_VIEW, CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, nullptr))
 	{
 		return -1;
@@ -113,29 +113,28 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockPane(&m_wndToolBar);
 	DockPane(&m_NewToolBar);
 
-	if (!m_wndProperty.Create(_T("属性窗口"), this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_PROPERTIESWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
+	if (!m_wndProperty.Create(_T("属性"), this, CRect(0, 0, 200, 200), TRUE, ID_VIEW_PROPERTIESWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
 	{
 		return FALSE;
 	}
 
-	if (!m_wndTestView.Create(_T("文件视图"), this, CRect(0, 0, 200, 200), TRUE, 133, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
+	if (!m_wndTestView.Create(_T("图形视图"), this, CRect(0, 0, 200, 200), TRUE, 133, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_LEFT | CBRS_FLOAT_MULTI))
 	{
 		return FALSE;
 	}
 
-	if (!m_wndOutput.Create(_T("输出窗口"), this, CRect(0, 0, 100, 100), TRUE, 1350, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
+	if (!m_wndOutput.Create(_T("输出"), this, CRect(0, 0, 100, 100), TRUE, 1350, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
 	{
 		return FALSE;
 	}
 	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
-	DockPane(&m_wndOutput);
-
 	m_wndTestView.EnableDocking(CBRS_ALIGN_LEFT);
 	//m_wndTestView.SetControlBarStyle(~AFX_CBRS_CLOSE);
 	//m_wndTestView.SetControlBarStyle(AFX_CBRS_RESIZE);
 	m_wndProperty.EnableDocking(CBRS_ALIGN_ANY);
 	//m_wndProperty.SetControlBarStyle(~AFX_CBRS_CLOSE);
 	//m_wndProperty.SetControlBarStyle(AFX_CBRS_RESIZE);
+	DockPane(&m_wndOutput);
 	DockPane(&m_wndProperty);
 	DockPane(&m_wndTestView);
 
@@ -181,6 +180,60 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		pSubMenu->ModifyMenuW(IDM_COLOR_RED + i, MF_OWNERDRAW, IDM_COLOR_RED + i);
 	}
+	m_wndStatusBar.SetPaneBackgroundColor(2, RGB(230, 230, 230));
+	m_wndStatusBar.SetPaneInfo(2, ID_INDICATOR_CAPS, SBPS_NORMAL, 200);
+
+	auto error = m_pConnector->Connect(2.8,1.8);
+	if ( error.value() < 0 )
+	{
+		Log(LogType::ERR, error.message().c_str());
+
+		//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
+		m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_CONNECT)), TRUE);
+		m_wndStatusBar.SetPaneText(2, _T("连接失败"), TRUE);
+		m_wndStatusBar.SetPaneTextColor(2, RGB(0, 0, 0), TRUE);
+	}
+	else
+	{
+		Log(LogType::INFO, _T("IC Connected!"));
+
+		//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
+		m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_DIS_CONNECT)), TRUE);
+		m_wndStatusBar.SetPaneText(2, _T("已连接"), TRUE);
+		m_wndStatusBar.SetPaneTextColor(2, RGB(0, 255, 0), TRUE);
+
+		RecalcLayout();
+	}
+
+	
+	auto ic_info = m_pConnector->IC_GetInfo();
+
+	m_pRawReader = HFST::CreateRawReader(ic_info);
+
+ 	std::thread th([&]() {
+		while (1)
+		{
+			m_ChannelRaw.vecRaw.clear();
+			strShow.Empty();
+			int res = m_pRawReader->ReadChannelRaw(m_ChannelRaw);
+			if (res < 0)
+				continue;
+
+			strShow.Format(_T("%02x %02x %02x "), m_ChannelRaw.nDataType, m_ChannelRaw.nChannelIdx, static_cast<int>(m_ChannelRaw.Type));
+
+			for (int i = 0; i < m_ChannelRaw.vecRaw.size(); ++i)
+			{
+				strShow.AppendFormat(_T("%02x "), m_ChannelRaw.vecRaw.at(i));
+			}
+
+			this->Log(LogType::INFO, strShow);
+
+			Sleep(100);
+		}
+	});
+
+	th.detach();
+
 	return 0;
 }
 
@@ -282,14 +335,6 @@ BOOL HF_MainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pPare
 
 void HF_MainFrame::OnButtonIc()
 {
-	m_wndStatusBar.SetPaneBackgroundColor(2, RGB(230, 230, 230));
-	m_wndStatusBar.SetPaneInfo(2, ID_INDICATOR_CAPS, SBPS_NORMAL, 200);
-	//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
-	m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_ISP)), TRUE);
-	m_wndStatusBar.SetPaneText(2, _T("ISP Status！"), TRUE);
-	m_wndStatusBar.SetPaneTextColor(2, RGB(0, 0, 0), TRUE);
-	
-	RecalcLayout();
 }
 
 void HF_MainFrame::OnButtonCon()
@@ -399,4 +444,29 @@ void HF_MainFrame::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
 	dc.FillRect(rect, pBrush);
 	delete pBrush;
 	dc.Detach();
+}
+
+BOOL HF_MainFrame::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
+{
+	//int ret;
+	CString msg;
+	DEV_BROADCAST_DEVICEINTERFACE* pDevBCDIF;
+
+	switch (nEventType)
+	{
+	case DBT_DEVICEARRIVAL:
+		
+		break;
+	case DBT_DEVICEREMOVECOMPLETE:
+		pDevBCDIF = (DEV_BROADCAST_DEVICEINTERFACE*)dwData;
+		//if (pDevBCDIF->dbcc_classguid == GUID_DEVINTERFACE_ATL)
+		//{
+		//	
+		//}
+		break;
+	default:
+		break;
+	}
+
+	return CFrameWndEx::OnDeviceChange(nEventType, dwData);
 }

@@ -2,10 +2,10 @@
 #define __HFST_CONNECTOR_HPP__
 
 #include <memory>
-#include "HFST_APICenter.hpp"
-#include "HFST_CommonHeader.hpp"
-#include "HFST_RawCollector.hpp"
-#include "HFST_DeviceManager.hpp"
+#include "DLL/HFST_APICenter.hpp"
+#include "Core/HFST_CommonHeader.hpp"
+#include "RawData/HFST_RawCollector.hpp"
+#include "Connector/Bridge/HFST_DeviceManager.hpp"
 
 namespace HFST
 {

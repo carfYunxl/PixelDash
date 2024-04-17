@@ -6,7 +6,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include "HFST_APICenter.hpp"
+#include "DLL/HFST_APICenter.hpp"
 
 namespace HFST
 {

@@ -11,6 +11,15 @@
 #include "CMNR.h"
 #include <filesystem>
 #include "HF_Header.h"
+#include <Dbt.h>
+#include "DLL/HFST_APICenter.hpp"
+#include "Connector/Bridge/HFST_Bridge.hpp"
+#include "Connector/Bridge/HFST_DeviceManager.hpp"
+//#include "RawData/HFST_RawCollector.hpp"
+#include "RawData/HFST_RawReader.hpp"
+#include "Connector/HFST_Connector.hpp"
+
+#include <thread>
 
 extern CCMNRApp theApp;
 

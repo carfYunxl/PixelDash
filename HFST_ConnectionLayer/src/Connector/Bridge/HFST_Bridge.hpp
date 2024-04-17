@@ -9,10 +9,10 @@
 #ifndef __HFST_BRIDGE_IMPL_HPP__
 #define __HFST_BRIDGE_IMPL_HPP__
 
-#include "HFST_CommonHeader.hpp"
-#include "HFST_BulkController.hpp"
+#include "Core/HFST_CommonHeader.hpp"
+#include "Connector/Bridge/HFST_BulkController.hpp"
+#include "Connector/Bridge/HFST_DeviceManager.hpp"
 #include <thread>
-#include "HFST_DeviceManager.hpp"
 #include <memory>
 
 namespace HFST
