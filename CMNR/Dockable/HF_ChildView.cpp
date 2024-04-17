@@ -4,12 +4,16 @@
 #include "HF_MainFrm.h"
 #include "HF_Components.hpp"
 #include "HFST_RendererD2D.hpp"
+#include <mutex>
+
+std::mutex g_mutex;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 HF_ChildView::HF_ChildView()
+	: m_pConnector(std::make_unique<HFST::Connector>())
 {
 	m_pScene = std::make_unique<HF_Scene>(*this);
 }
@@ -59,7 +63,9 @@ void HF_ChildView::OnPaint()
 
 int HF_ChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	return CWnd::OnCreate(lpCreateStruct);
+	CWnd::OnCreate(lpCreateStruct);
+
+	return 0;
 }
 
 void HF_ChildView::OnMouseMove(UINT nFlags, CPoint point)
@@ -71,12 +77,67 @@ void HF_ChildView::OnButtonViewLeft()
 {
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
 	pMainWnd->Log(LogType::ERR, _T("Move Left"));
+
+	auto error = m_pConnector->Connect(2.8, 1.8);
+	if (error.value() < 0)
+	{
+		pMainWnd->Log(LogType::ERR, error.message().c_str());
+
+		//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
+		pMainWnd->m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_CONNECT)), TRUE);
+		pMainWnd->m_wndStatusBar.SetPaneText(2, _T("连接失败"), TRUE);
+		pMainWnd->m_wndStatusBar.SetPaneTextColor(2, RGB(0, 0, 0), TRUE);
+	}
+	else
+	{
+		pMainWnd->Log(LogType::INFO, _T("IC Connected!"));
+
+		//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
+		pMainWnd->m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_DIS_CONNECT)), TRUE);
+		pMainWnd->m_wndStatusBar.SetPaneText(2, _T("已连接"), TRUE);
+		pMainWnd->m_wndStatusBar.SetPaneTextColor(2, RGB(0, 255, 0), TRUE);
+
+		pMainWnd->RecalcLayout();
+	}
+
+	m_IcInfo = m_pConnector->IC_GetInfo();
+
+	m_pRawReader = HFST::CreateRawReader(m_IcInfo);
+
+	std::thread th([&]() {
+
+		HF_MainFrame* MainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
+		m_bRunning = TRUE;
+		while (m_bRunning)
+		{
+			{
+				std::lock_guard<std::mutex> locker(g_mutex);
+				m_ChannelRaw.Clear();
+				strShow.Empty();
+				int res = m_pRawReader->ReadChannelRaw(m_ChannelRaw);
+				if (res < 0)
+					continue;
+			}
+
+			strShow.Format(_T("%02x %02x %02x "), m_ChannelRaw.nDataType, m_ChannelRaw.nChannelIdx, static_cast<int>(m_ChannelRaw.Type));
+
+			for (size_t i = 0; i < m_ChannelRaw.vecRaw.size(); ++i)
+			{
+				strShow.AppendFormat(_T("%4d "), m_ChannelRaw.vecRaw.at(i));
+			}
+
+			MainWnd->Log(LogType::INFO, strShow);
+		}
+	});
+
+	th.detach();
 }
 
 void HF_ChildView::OnButtonViewRight()
 {
+	m_bRunning = FALSE;
 	HF_MainFrame* pMainWnd = (HF_MainFrame*)theApp.m_pMainWnd;
-	pMainWnd->Log(LogType::INFO, _T("Move Right"));
+	pMainWnd->Log(LogType::WARN, _T("Sensing Stop!!!"));
 }
 
 void HF_ChildView::OnButtonViewUp()
@@ -331,10 +392,7 @@ LRESULT HF_ChildView::OnDraw2D(WPARAM wParam, LPARAM lParam)
 		D2D1::ColorF::Gray, 
 		m_nGap * m_fRatio
 	);
-
-	/*HFST::RendererD2D render(*this);
-
-	render.DrawLine(CD2DPointF(100,100), CD2DPointF(500, 500), mat, D2D1::ColorF::Red, 1.0f, 2.0f);*/
+	
 	m_pScene->OnDraw();
 
 	DrawCtrls();
@@ -384,6 +442,11 @@ void HF_ChildView::SetPropertyValue(int id, COleVariant value)
 			AssignRectangleProperty( id, value );
 			break;
 		}
+		case DRAW_TYPE::TEN:
+		{
+			AssignTenProperty(id, value);
+			break;
+		}
 	}
 
 	Invalidate();
@@ -391,7 +454,7 @@ void HF_ChildView::SetPropertyValue(int id, COleVariant value)
 
 void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 {
-	if ( id < 30 )
+	if ( id < 40 )
 	{
 		auto& Line = HFST::GetComponent<LineComponent>(m_pScene.get(), m_Entity.GetHandleID());
 		LINE pro = static_cast<LINE>(id);
@@ -485,9 +548,129 @@ void HF_ChildView::AssignLineProperty(int id, COleVariant value)
 	}
 }
 
+void HF_ChildView::AssignTenProperty(int id, COleVariant value)
+{
+	if (id < 40)
+	{
+		auto& pts = HFST::GetComponent<PointComponent>(m_pScene.get(), m_Entity.GetHandleID());
+		THOUND rec = static_cast<THOUND>(id);
+		switch (rec)
+		{
+			case THOUND::PT_CNT:
+			{
+				break;
+			}
+			case THOUND::CUR_IDX:
+			{
+				pts.m_Index = value.intVal;
+				break;
+			}
+			case THOUND::CUR_X:
+			{
+				pts.m_PtArray[pts.m_Index].x = value.fltVal;
+				break;
+			}
+			case THOUND::CUR_Y:
+			{
+				pts.m_PtArray[pts.m_Index].y = value.fltVal;
+				break;
+			}
+			case THOUND::TP_WIDTH:
+			{
+				pts.m_TpWidth = value.fltVal;
+				pts.UpdatePoint();
+				break;
+			}
+			case THOUND::TP_HEIGHT:
+			{
+				pts.m_TpHeight = value.fltVal;
+				pts.UpdatePoint();
+				break;
+			}
+			case THOUND::CNT_X:
+			{
+				pts.m_CntX = value.intVal;
+				pts.UpdatePoint();
+				break;
+			}
+			case THOUND::CNT_Y:
+			{
+				pts.m_CntY = value.intVal;
+				pts.UpdatePoint();
+				break;
+			}
+		}
+	}
+	else
+	{
+		NORMAL_PROPERTY rd = static_cast<NORMAL_PROPERTY>(id);
+		switch (rd)
+		{
+			case NORMAL_PROPERTY::TRANSFORM_CENTER_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Center.x = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_CENTER_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Center.y = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_OFFSET_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Trans.width = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_OFFSET_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Trans.height = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_SCALE_X:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Scale.width = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_SCALE_Y:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Scale.height = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::TRANSFORM_ROTATE:
+			{
+				auto& trans = HFST::GetComponent<TransformComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				trans.m_Rotate = value.fltVal;
+				break;
+			}
+			case NORMAL_PROPERTY::BORDER_COLOR:
+			{
+				auto& border_color = HFST::GetComponent<BorderColorComponent>(m_pScene.get(), m_Entity.GetHandleID());
+
+				border_color.m_BorderColor.r = float((value.lVal) & 0xFF) / (float)255;
+				border_color.m_BorderColor.g = float((value.lVal >> 8) & 0x00FF) / (float)255;
+				border_color.m_BorderColor.b = float((value.lVal >> 16) & 0x0000FF) / (float)255;
+				border_color.m_BorderColor.a = 1.0f;
+				break;
+			}
+			case NORMAL_PROPERTY::BORDER_WIDTH:
+			{
+				auto& border_width = HFST::GetComponent<BorderWidthComponent>(m_pScene.get(), m_Entity.GetHandleID());
+				border_width.m_BorderWidth = (float)value.uintVal;
+				break;
+			}
+		}
+	}
+}
+
 void HF_ChildView::AssignRectangleProperty(int id, COleVariant value)
 {
-	if ( id < 30 )
+	if ( id < 40 )
 	{
 		auto& rect = HFST::GetComponent<RectangleComponent>(m_pScene.get(), m_Entity.GetHandleID());
 		RECTANGLE rec = static_cast<RECTANGLE>(id);

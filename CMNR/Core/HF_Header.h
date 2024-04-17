@@ -20,7 +20,7 @@ enum class DRAW_TYPE
 	KOU,
 	HUI,
 	LUO,
-	X
+	TEN
 };
 
 enum class LINE_GROUP
@@ -49,9 +49,21 @@ enum class RECTANGLE
 	BOTTOM
 };
 
+enum class THOUND
+{
+	PT_CNT = 25,
+	CUR_IDX,
+	CUR_X,
+	CUR_Y,
+	TP_WIDTH,
+	TP_HEIGHT,
+	CNT_X,
+	CNT_Y
+};
+
 enum class NORMAL_PROPERTY
 {
-	BORDER_COLOR = 30,
+	BORDER_COLOR = 40,
 	BORDER_WIDTH,
 	FILL_COLOR,
 	OPACITY,

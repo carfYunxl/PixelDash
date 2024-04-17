@@ -192,5 +192,13 @@ namespace HFST
         FillCircle(pt, color, radius);
     }
 
+    void RendererD2D_Impl::DrawD2DText(const CString& text, const CD2DRectF& rect)
+    {
+        CHwndRenderTarget* pRenderTarget = m_pWnd.GetRenderTarget();
+        pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
+        CD2DSolidColorBrush brush(pRenderTarget, D2D1::ColorF::Black);
+
+        pRenderTarget->DrawTextW(text, rect, &brush);
+    }
 }

@@ -29,6 +29,8 @@ namespace HFST
         void FillRoundRect(const CD2DRectF& rect, const D2D1::ColorF& color, float radius);
         void FillCircle(const CD2DPointF& center, const D2D1::ColorF& color, float radius);
         void FillEllipse(const CD2DPointF& center, const D2D1::ColorF& color, float radiusX, float radiusY);
+
+        void DrawD2DText(const CString& text, const CD2DRectF& rect);
     private:
         std::unique_ptr<RendererD2D_Impl> m_Impl;
     };

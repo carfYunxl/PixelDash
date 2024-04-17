@@ -40,9 +40,9 @@ int HF_OutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL |
 		WS_TABSTOP;
 
-	if (!m_wndOutputBuild.Create(dwStyle, rectDummy, &m_wndTabs, 2) ||
+	if (!m_wndOutputBuild.Create(dwStyle, rectDummy, &m_wndTabs, 2) /*||
 		!m_wndOutputDebug.Create(dwStyle, rectDummy, &m_wndTabs, 3) ||
-		!m_wndOutputFind.Create(dwStyle, rectDummy, &m_wndTabs, 4))
+		!m_wndOutputFind.Create(dwStyle, rectDummy, &m_wndTabs, 4)*/)
 	{
 		return -1;
 	}
@@ -55,26 +55,26 @@ int HF_OutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	bNameValid = strTabName.LoadString(IDS_BUILD_TAB);
 	ASSERT(bNameValid);
 	m_wndTabs.AddTab(&m_wndOutputBuild, strTabName, (UINT)0);
-	bNameValid = strTabName.LoadString(IDS_DEBUG_TAB);
+	/*bNameValid = strTabName.LoadString(IDS_DEBUG_TAB);
 	ASSERT(bNameValid);
 	m_wndTabs.AddTab(&m_wndOutputDebug, strTabName, (UINT)1);
 	bNameValid = strTabName.LoadString(IDS_FIND_TAB);
 	ASSERT(bNameValid);
-	m_wndTabs.AddTab(&m_wndOutputFind, strTabName, (UINT)2);
+	m_wndTabs.AddTab(&m_wndOutputFind, strTabName, (UINT)2);*/
 
 	// 使用一些虚拟文本填写输出选项卡(无需复杂数据)
 	m_wndOutputBuild.EnableColor(TRUE);
-	m_wndOutputDebug.EnableColor(TRUE);
-	m_wndOutputFind.EnableColor(TRUE);
+	//m_wndOutputDebug.EnableColor(TRUE);
+	//m_wndOutputFind.EnableColor(TRUE);
 
 	m_wndOutputBuild.SetContextMenuId(IDR_XLISTBOX);
-	m_wndOutputDebug.SetContextMenuId(IDR_XLISTBOX);
-	m_wndOutputFind.SetContextMenuId(IDR_XLISTBOX);
+	//m_wndOutputDebug.SetContextMenuId(IDR_XLISTBOX);
+	//m_wndOutputFind.SetContextMenuId(IDR_XLISTBOX);
 
 	m_Font.CreatePointFont(120, _T("Consolas"));
 	m_wndOutputBuild.SetFont(&m_Font);
-	m_wndOutputDebug.SetFont(&m_Font);
-	m_wndOutputFind.SetFont(&m_Font);
+	//m_wndOutputDebug.SetFont(&m_Font);
+	//m_wndOutputFind.SetFont(&m_Font);
 
 	return 0;
 }
@@ -107,8 +107,8 @@ void HF_OutputWnd::AdjustHorzScroll(CListBox& wndListBox)
 void HF_OutputWnd::UpdateFonts()
 {
 	m_wndOutputBuild.SetFont(&afxGlobalData.fontRegular);
-	m_wndOutputDebug.SetFont(&afxGlobalData.fontRegular);
-	m_wndOutputFind.SetFont(&afxGlobalData.fontRegular);
+	//m_wndOutputDebug.SetFont(&afxGlobalData.fontRegular);
+	//m_wndOutputFind.SetFont(&afxGlobalData.fontRegular);
 }
 
 void HF_OutputWnd::AddString(LogType type, const CString& message)

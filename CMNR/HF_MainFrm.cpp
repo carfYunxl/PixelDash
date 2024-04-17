@@ -44,7 +44,6 @@ static UINT indicators[] =
 
 HF_MainFrame::HF_MainFrame()noexcept 
 	: m_nCurrentColor()
-	, m_pConnector(std::make_unique<HFST::Connector>())
 {
 }
 
@@ -182,57 +181,6 @@ int HF_MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	m_wndStatusBar.SetPaneBackgroundColor(2, RGB(230, 230, 230));
 	m_wndStatusBar.SetPaneInfo(2, ID_INDICATOR_CAPS, SBPS_NORMAL, 200);
-
-	auto error = m_pConnector->Connect(2.8,1.8);
-	if ( error.value() < 0 )
-	{
-		Log(LogType::ERR, error.message().c_str());
-
-		//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
-		m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_CONNECT)), TRUE);
-		m_wndStatusBar.SetPaneText(2, _T("连接失败"), TRUE);
-		m_wndStatusBar.SetPaneTextColor(2, RGB(0, 0, 0), TRUE);
-	}
-	else
-	{
-		Log(LogType::INFO, _T("IC Connected!"));
-
-		//m_wndStatusBar.SetPaneIcon(4, LoadIcon(theApp.m_hInstance, MAKEINTRESOURCE(IDR_MAINFRAME)), TRUE);
-		m_wndStatusBar.SetPaneIcon(2, LoadBitmap(theApp.m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_DIS_CONNECT)), TRUE);
-		m_wndStatusBar.SetPaneText(2, _T("已连接"), TRUE);
-		m_wndStatusBar.SetPaneTextColor(2, RGB(0, 255, 0), TRUE);
-
-		RecalcLayout();
-	}
-
-	
-	auto ic_info = m_pConnector->IC_GetInfo();
-
-	m_pRawReader = HFST::CreateRawReader(ic_info);
-
- 	std::thread th([&]() {
-		while (1)
-		{
-			m_ChannelRaw.vecRaw.clear();
-			strShow.Empty();
-			int res = m_pRawReader->ReadChannelRaw(m_ChannelRaw);
-			if (res < 0)
-				continue;
-
-			strShow.Format(_T("%02x %02x %02x "), m_ChannelRaw.nDataType, m_ChannelRaw.nChannelIdx, static_cast<int>(m_ChannelRaw.Type));
-
-			for (int i = 0; i < m_ChannelRaw.vecRaw.size(); ++i)
-			{
-				strShow.AppendFormat(_T("%02x "), m_ChannelRaw.vecRaw.at(i));
-			}
-
-			this->Log(LogType::INFO, strShow);
-
-			Sleep(100);
-		}
-	});
-
-	th.detach();
 
 	return 0;
 }

@@ -38,6 +38,15 @@ HF_Entity HF_Scene::CreateEntity(DRAW_TYPE type)
 			}
 			break;
 		}
+		case DRAW_TYPE::TEN:
+		{
+			if (!HFST::HasComponent<PointComponent>(this, ent))
+			{
+				HFST::AddComponent<PointComponent>(this, ent);
+				((HF_MainFrame*)(theApp.m_pMainWnd))->m_wndProperty.AddPointProperty({ ent, this });
+			}
+			break;
+		}
 	}
 
 	return { ent, this };
@@ -101,6 +110,14 @@ void HF_Scene::OnDraw()
 			auto& rect = HFST::GetComponent<RectangleComponent>(this, ent);
 			m_renderer->DrawRect(CRect(rect.m_LeftTop, rect.m_RightBottom), transform, border_color, border_width);
 		}
+		else if (HFST::HasComponent<PointComponent>(this, ent))
+		{
+			auto& pts = HFST::GetComponent<PointComponent>(this, ent);
+			for (int i = 0;i < pts.m_CntX * pts.m_CntY; ++i)
+			{
+				m_renderer->DrawPoint( pts.m_PtArray[i], border_color, 5.0f);
+			}
+		}
 	}
 }
 
@@ -125,6 +142,14 @@ void HF_Scene::DestroyEntity(HF_Entity entity, DRAW_TYPE type)
 			if ( HFST::HasComponent<RectangleComponent>(this, entity.GetHandleID()) )
 			{
 				HFST::RemoveComponent<RectangleComponent>(this, entity.GetHandleID());
+			}
+			break;
+		}
+		case DRAW_TYPE::TEN:
+		{
+			if (HFST::HasComponent<PointComponent>(this, entity.GetHandleID()))
+			{
+				HFST::RemoveComponent<PointComponent>(this, entity.GetHandleID());
 			}
 			break;
 		}

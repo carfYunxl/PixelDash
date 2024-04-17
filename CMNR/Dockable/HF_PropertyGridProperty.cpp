@@ -103,57 +103,57 @@ void HF_PropertyGridProperty::OnClickName(CPoint point)
 	{
 		switch (static_cast<LINE_GROUP>(id))
 		{
-		case LINE_GROUP::POSITION:
-			break;
-		case LINE_GROUP::TRANSFORM:
-		{
-			HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
-			HF_Entity entity = pMainFrame->m_wndView.GetEntity();
+			case LINE_GROUP::POSITION:
+				break;
+			case LINE_GROUP::TRANSFORM:
+			{
+				HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
+				HF_Entity entity = pMainFrame->m_wndView.GetEntity();
 
-			auto& trans = HFST::GetComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
-			trans.m_Center = {0.0f, 0.0f};
-			trans.m_Trans = {0.0f,0.0f};
-			trans.m_Scale = {1.0f,1.0f};
-			trans.m_Rotate = 0.0f;
+				auto& trans = HFST::GetComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
+				trans.m_Center = {0.0f, 0.0f};
+				trans.m_Trans = {0.0f,0.0f};
+				trans.m_Scale = {1.0f,1.0f};
+				trans.m_Rotate = 0.0f;
 
-			HFST::RemoveComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
+				HFST::RemoveComponent<TransformComponent>(entity.GetScene(), entity.GetHandleID());
 
-			pMainFrame->m_wndProperty.AddTransformProperty(entity);
-			pMainFrame->m_wndView.Invalidate();
-			break;
-		}
-		case LINE_GROUP::BORDER_COLOR:
-		{
-			HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
-			HF_Entity entity = pMainFrame->m_wndView.GetEntity();
+				pMainFrame->m_wndProperty.AddTransformProperty(entity);
+				pMainFrame->m_wndView.Invalidate();
+				break;
+			}
+			case LINE_GROUP::BORDER_COLOR:
+			{
+				HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
+				HF_Entity entity = pMainFrame->m_wndView.GetEntity();
 
-			auto& border_color = HFST::GetComponent<BorderColorComponent>(entity.GetScene(), entity.GetHandleID());
-			border_color.m_BorderColor = D2D1::ColorF::Black;
+				auto& border_color = HFST::GetComponent<BorderColorComponent>(entity.GetScene(), entity.GetHandleID());
+				border_color.m_BorderColor = D2D1::ColorF::Black;
 
-			HFST::RemoveComponent<BorderColorComponent>(entity.GetScene(), entity.GetHandleID());
+				HFST::RemoveComponent<BorderColorComponent>(entity.GetScene(), entity.GetHandleID());
 
-			pMainFrame->m_wndProperty.AddBorderColorProperty(entity);
-			pMainFrame->m_wndView.Invalidate();
-			break;
-		}
-		case LINE_GROUP::BORDER_WIDTH:
-		{
-			HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
-			HF_Entity entity = pMainFrame->m_wndView.GetEntity();
+				pMainFrame->m_wndProperty.AddBorderColorProperty(entity);
+				pMainFrame->m_wndView.Invalidate();
+				break;
+			}
+			case LINE_GROUP::BORDER_WIDTH:
+			{
+				HF_MainFrame* pMainFrame = (HF_MainFrame*)(theApp.m_pMainWnd);
+				HF_Entity entity = pMainFrame->m_wndView.GetEntity();
 
-			auto& border_width = HFST::GetComponent<BorderWidthComponent>(entity.GetScene(), entity.GetHandleID());
-			border_width.m_BorderWidth = 1.0f;
+				auto& border_width = HFST::GetComponent<BorderWidthComponent>(entity.GetScene(), entity.GetHandleID());
+				border_width.m_BorderWidth = 1.0f;
 
-			HFST::RemoveComponent<BorderWidthComponent>(entity.GetScene(), entity.GetHandleID());
+				HFST::RemoveComponent<BorderWidthComponent>(entity.GetScene(), entity.GetHandleID());
 
-			pMainFrame->m_wndProperty.AddBorderWidthProperty(entity);
-			pMainFrame->m_wndView.Invalidate();
-			break;
-		}
-		case LINE_GROUP::LINE_STYLE:
-			break;
-		case LINE_GROUP::FILL_color:
-			break;
+				pMainFrame->m_wndProperty.AddBorderWidthProperty(entity);
+				pMainFrame->m_wndView.Invalidate();
+				break;
+			}
+			case LINE_GROUP::LINE_STYLE:
+				break;
+			case LINE_GROUP::FILL_color:
+				break;
 		}
 	}
 

@@ -70,4 +70,8 @@ namespace HFST
     {
         m_Impl->FillEllipse(center, color, radiusX, radiusY);
     }
+    void RendererD2D::DrawD2DText(const CString& text, const CD2DRectF& rect)
+    {
+        m_Impl->DrawD2DText(text, rect);
+    }
 }

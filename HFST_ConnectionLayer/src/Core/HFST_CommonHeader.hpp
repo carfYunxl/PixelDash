@@ -153,6 +153,14 @@ namespace HFST
                 , Type(TAG_TYPE::AG)
             {}
 
+            void Clear()
+            {
+                nDataType = 0;
+                nChannelIdx = 0;
+                Type = TAG_TYPE::AG;
+                vecRaw.clear();
+            }
+
             ChannelRaw& operator=(const ChannelRaw& rhs)
             {
                 nDataType = rhs.nDataType;

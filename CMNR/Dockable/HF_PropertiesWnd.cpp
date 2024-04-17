@@ -396,12 +396,48 @@ void HF_PropertiesWnd::AddRectangleProperty(HF_Entity entity)
 		}	
 	}
 
-	auto& rectangle = HFST::GetComponent<RectangleComponent>(entity.GetScene(), entity.GetHandleID());
+	if (HFST::HasComponent<RectangleComponent>(entity.GetScene(), entity.GetHandleID()))
+	{
+		auto& rectangle = HFST::GetComponent<RectangleComponent>(entity.GetScene(), entity.GetHandleID());
 
-	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Left"),		(_variant_t)rectangle.m_LeftTop.x,		_T("起点X坐标"), static_cast<int>(RECTANGLE::LEFT)));
-	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Top"),		(_variant_t)rectangle.m_LeftTop.y,		_T("起点Y坐标"), static_cast<int>(RECTANGLE::TOP)));
-	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Right"),	(_variant_t)rectangle.m_RightBottom.x,	_T("终点X坐标"), static_cast<int>(RECTANGLE::RIGHT)));
-	pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Bottom"),	(_variant_t)rectangle.m_RightBottom.y,	_T("终点Y坐标"), static_cast<int>(RECTANGLE::BOTTOM)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Left"), (_variant_t)rectangle.m_LeftTop.x, _T("起点X坐标"), static_cast<int>(RECTANGLE::LEFT)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Top"), (_variant_t)rectangle.m_LeftTop.y, _T("起点Y坐标"), static_cast<int>(RECTANGLE::TOP)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Right"), (_variant_t)rectangle.m_RightBottom.x, _T("终点X坐标"), static_cast<int>(RECTANGLE::RIGHT)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Bottom"), (_variant_t)rectangle.m_RightBottom.y, _T("终点Y坐标"), static_cast<int>(RECTANGLE::BOTTOM)));
+	}
+
+	m_wndPropList.ExpandAll(FALSE);
+	m_wndPropList.ExpandAll(TRUE);
+}
+
+void HF_PropertiesWnd::AddPointProperty(HF_Entity entity)
+{
+	auto pGroup = m_wndPropList.GetProperty(static_cast<int>(LINE_GROUP::POSITION));
+
+	int nCnt = pGroup->GetSubItemsCount();
+	if (nCnt != 0)
+	{
+		for (int i = nCnt - 1; i >= 0; --i)
+		{
+			auto item = pGroup->GetSubItem(i);
+			pGroup->RemoveSubItem(item);
+		}
+	}
+
+	if (HFST::HasComponent<PointComponent>(entity.GetScene(), entity.GetHandleID()))
+	{
+		auto& pts = HFST::GetComponent<PointComponent>(entity.GetScene(), entity.GetHandleID());
+
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("TP宽度"), (_variant_t)pts.m_TpWidth, _T("TP的宽度"), static_cast<int>(THOUND::TP_WIDTH)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("TP高度"), (_variant_t)pts.m_TpHeight, _T("TP的高度"), static_cast<int>(THOUND::TP_HEIGHT)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("X数量"), (_variant_t)pts.m_CntX, _T("数量X"), static_cast<int>(THOUND::CNT_X)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Y数量"), (_variant_t)pts.m_CntY, _T("数量Y"), static_cast<int>(THOUND::CNT_Y)));
+
+		//pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("点数"), (_variant_t)100, _T("点总数"), static_cast<int>(THOUND::PT_CNT)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("当前点"), (_variant_t)pts.m_Index, _T("当前点索引"), static_cast<int>(THOUND::CUR_IDX)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("X坐标"), (_variant_t)pts.m_PtArray[pts.m_Index].x, _T("当前点X坐标"), static_cast<int>(THOUND::CUR_X)));
+		pGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Y坐标"), (_variant_t)pts.m_PtArray[pts.m_Index].y, _T("当前点Y坐标"), static_cast<int>(THOUND::CUR_Y)));
+	}
 }
 
 LRESULT HF_PropertiesWnd::OnWmPropertyChanged(WPARAM wparam, LPARAM lparam)

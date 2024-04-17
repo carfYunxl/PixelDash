@@ -17,8 +17,8 @@ protected:
 	CMFCTabCtrl	m_wndTabs;
 
 	HF_ListBox m_wndOutputBuild;
-	HF_ListBox m_wndOutputDebug;
-	HF_ListBox m_wndOutputFind;
+	//HF_ListBox m_wndOutputDebug;
+	//HF_ListBox m_wndOutputFind;
 
 	CFont	  m_Font;
 

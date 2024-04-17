@@ -53,6 +53,7 @@ public:
 	void AddTransformProperty(HF_Entity entity);
 	void AddBorderColorProperty(HF_Entity entity);
 	void AddBorderWidthProperty(HF_Entity entity);
+	void AddPointProperty(HF_Entity entity);
 private:
 	CFont					m_fntPropList;
 	HF_PropertiesToolBar	m_wndToolBar;

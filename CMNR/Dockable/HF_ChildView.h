@@ -4,7 +4,14 @@
 #include "HF_IcInfoDlg.h"
 #include "HF_Header.h"
 #include "HF_Scene.hpp"
+
 constexpr int SZ = 200;
+
+namespace HFST
+{
+	class Connector;
+	class RawReader;
+}
 
 class HF_ChildView : public CWnd
 {
@@ -25,7 +32,7 @@ public:
 
 	void		SetDrawType(DRAW_TYPE type) { m_emDrawType = type; }
 	DRAW_TYPE	GetDrawType() const { return m_emDrawType; }
-	
+
 	void SetPropertyValue(int id, COleVariant value);
 
 	void NewEntity(DRAW_TYPE type);
@@ -57,6 +64,7 @@ private:
 	void DrawCtrls();
 	void AssignLineProperty(int id, COleVariant value);
 	void AssignRectangleProperty(int id, COleVariant value);
+	void AssignTenProperty(int id, COleVariant value);
 private:
 	std::unique_ptr<HF_Scene> m_pScene;
 	HF_Entity m_Entity;
@@ -76,8 +84,8 @@ private:
 	CStatic		m_StaBridge;
 	CComboBox	m_ComboBridge;
 
-	UINT		m_nColor{0};
-	UINT		m_nShape{0};
+	UINT		m_nColor{ 0 };
+	UINT		m_nShape{ 0 };
 
 	COLORREF	m_Color{ RGB(255,255,255) };
 
@@ -85,7 +93,19 @@ private:
 	float		m_fRatio = 1.0f;
 
 	DRAW_TYPE	m_emDrawType{ DRAW_TYPE::NONE };
+
+	std::unique_ptr<HFST::Connector>	m_pConnector;
+	std::unique_ptr<HFST::RawReader>	m_pRawReader;
+	HFST::RAW::ChannelRaw<short>		m_ChannelRaw;
+	HFST::IC_Info						m_IcInfo;
+	CString								strShow;
+
+	BOOL								m_bRunning{ FALSE };
 public:
+
+	float m_nY = 110.0f;
+	float m_nX = 110.0f;
+	int m_nStartType = 0;
 };
 
 #endif //__HF_CHILD_VIEW_H__

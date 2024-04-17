@@ -7,12 +7,6 @@
 #include "HF_OutputWnd.h"
 #include "HF_PropertiesWnd.h"
 
-namespace HFST
-{
-	class Connector;
-	class RawReader;
-}
-
 class HF_MainFrame : public CFrameWndEx
 {
 public:
@@ -77,12 +71,6 @@ private:
 	CFont			  m_Font;
 
 	UINT m_nCurrentColor{0};
-
-	std::unique_ptr<HFST::Connector> m_pConnector;
-	std::unique_ptr<HFST::RawReader> m_pRawReader;
-
-	HFST::RAW::ChannelRaw<short> m_ChannelRaw;
-	CString strShow;
 };
 #endif //__HF_MAINFRAM_H__
 

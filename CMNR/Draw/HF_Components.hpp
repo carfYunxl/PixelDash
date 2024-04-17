@@ -13,12 +13,59 @@
 
 struct PointComponent
 {
-	CD2DPointF Point;
+	CD2DPointF* m_PtArray{ nullptr };
+	int m_Index{0};
 
-	PointComponent() = default;
-	PointComponent(const CD2DPointF& point) 
-		: Point(point)
-	{}
+	float m_TpWidth = 1000.0f;
+	float m_TpHeight = 600.0f;
+
+	int m_CntX = 40;
+	int m_CntY = 25;
+
+	PointComponent()
+	{
+		m_PtArray = new CD2DPointF[m_CntX * m_CntY];
+
+		UpdatePoint();
+	};
+	PointComponent(int index, int x, int y, int width, int height) 
+		: m_Index(index), m_TpWidth(width), m_TpHeight(height), m_CntX(x), m_CntY(y)
+	{
+		m_PtArray = new CD2DPointF[x*y];
+
+		UpdatePoint();
+	}
+	~PointComponent() {
+		delete[] m_PtArray;
+	}
+
+	void UpdatePoint()
+	{
+		if (m_PtArray)
+		{
+			delete[] m_PtArray;
+
+			m_PtArray = new CD2DPointF[m_CntX * m_CntY];
+		}
+
+		int nPointIdx = 0;
+
+		float nGapX = m_TpWidth / (float(m_CntX - 1));
+		float nGapY = m_TpHeight / (float(m_CntY - 1));
+
+		for (int i = 0; i < m_CntX; ++i)
+		{
+			for (int j = 0; j < m_CntY; ++j)
+			{
+				float x = float(i) * nGapX + 100.0f;
+				float y = float(j) * nGapY + 100.0f;
+
+				m_PtArray[nPointIdx] = CD2DPointF{ x, y };
+
+				nPointIdx++;
+			}
+		}
+	}
 };
 
 struct LineComponent
