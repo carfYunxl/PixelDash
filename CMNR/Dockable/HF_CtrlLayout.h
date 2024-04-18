@@ -1,5 +1,5 @@
-#ifndef __HF_CTRL_LAYOUT_HPP__
-#define __HF_CTRL_LAYOUT_HPP__
+#ifndef __CCTRL_LAYOUT_HPP__
+#define __CCTRL_LAYOUT_HPP__
 
 namespace HFST
 {
@@ -10,16 +10,9 @@ namespace HFST
         CCtrlLayout(const CPoint& start, int CtrlHeight, int Gap);
 
         void Add(CWnd& wnd, int CtrlWidth, int nShow);
-        void NextLine() {
-            m_ptCurPos.x = 0;
-            m_ptCurPos.y += (m_nGap + m_nHeight);
-        }
+        void NextLine();
 
-        void SetStartPoint(const CPoint& start) {
-            m_ptStart = start;
-
-            m_ptCurPos = { 0 , 0 };
-        }
+        void SetStartPoint(const CPoint& start);
 
         void SetCtrlHeight(int height){
             m_nHeight = height;
@@ -28,13 +21,9 @@ namespace HFST
             m_ptCurPos = pos;
         }
 
-        void SetGap(int gap){
-            m_nGap = gap;
-        }
+        void SetGap(int gap);
 
-        void SetIndentOffset(int nIndentOffset) {
-            m_nIndentOffset = nIndentOffset;
-        }
+        void SetIndentOffset(int nIndentOffset);
 
         int GetIndentOffset() const {
             return m_nIndentOffset;
@@ -43,6 +32,13 @@ namespace HFST
         CPoint& GetCurrentPos() {
             return m_ptCurPos;
         }
+
+        const float GetScale() const {
+            return m_Scale;
+        }
+    private:
+        void GetSystemScaleFactor();
+
     private:
         CPoint  m_ptStart;
         CPoint  m_ptCurPos;
@@ -50,7 +46,9 @@ namespace HFST
         int     m_nGap;
 
         int     m_nIndentOffset{ 0 };   // 相对于起始点 x 位置的偏移量，如果设置该值，新行都会偏移该值
+
+        float   m_Scale{1.0f};
     };
 }
 
-#endif //__HF_CTRL_LAYOUT_HPP__
+#endif //__CCTRL_LAYOUT_HPP__
