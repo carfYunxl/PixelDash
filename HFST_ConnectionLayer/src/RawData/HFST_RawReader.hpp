@@ -11,7 +11,7 @@ namespace HFST
     {
     public:
         explicit RawReader(const IC_Info& info) : m_Info(info) {}
-        ~RawReader() {}
+        virtual ~RawReader() {}
 
         virtual int ReadChannelRaw(RAW::ChannelRaw<short>& channel) = 0;
         virtual int ReadFrame(RAW::Frame<short>& frame) = 0;
