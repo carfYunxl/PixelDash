@@ -1,0 +1,79 @@
+#ifndef __Pixel_HEADER_HPP__
+#define __Pixel_HEADER_HPP__
+
+enum class LogType
+{
+	INFO = 0,
+	WARN,
+	ERR
+};
+
+enum class DRAW_TYPE
+{
+	NONE = -1,
+	LINE,
+	RECTANGLE,
+	TRIANGLE,
+	CIRCLE,
+	ELLIPSE,
+	MI,
+	KOU,
+	HUI,
+	LUO,
+	TEN
+};
+
+enum class LINE_GROUP
+{
+	POSITION = 0,
+	TRANSFORM,
+	BORDER_WIDTH,
+	LINE_STYLE,
+	BORDER_COLOR,
+	FILL_color
+};
+
+enum class LINE
+{
+	START_X = 10,
+	START_Y,
+	END_X,
+	END_Y,
+};
+
+enum class RECTANGLE
+{
+	LEFT = 20,
+	TOP,
+	RIGHT,
+	BOTTOM
+};
+
+enum class THOUND
+{
+	PT_CNT = 25,
+	CUR_IDX,
+	CUR_X,
+	CUR_Y,
+	TP_WIDTH,
+	TP_HEIGHT,
+	CNT_X,
+	CNT_Y
+};
+
+enum class NORMAL_PROPERTY
+{
+	BORDER_COLOR = 40,
+	BORDER_WIDTH,
+	FILL_COLOR,
+	OPACITY,
+	TRANSFORM_CENTER_X,
+	TRANSFORM_CENTER_Y,
+	TRANSFORM_OFFSET_X,
+	TRANSFORM_OFFSET_Y,
+	TRANSFORM_SCALE_X,
+	TRANSFORM_SCALE_Y,
+	TRANSFORM_ROTATE
+};
+
+#endif //__Pixel_HEADER_HPP__
